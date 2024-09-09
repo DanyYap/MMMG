@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,12 +14,21 @@ public enum CustomPlayerInput
 public class PlayerController : MonoBehaviour
 {
     private PlayerInput input;
+    private Rigidbody rb;
+    private Vector2 moveVector;
     [SerializeField] private CustomPlayerInput customPlayerInput;
+    [SerializeField] private float moveSpeed = 5f;
 
     private void Awake()
     {
         input = GetComponent<PlayerInput>();
+        rb = GetComponent<Rigidbody>();
         input.SwitchCurrentActionMap(customPlayerInput.ToString());
+    }
+
+    private void FixedUpdate()
+    {
+        Move(moveVector);
     }
 
     public void ShowDebug(InputAction.CallbackContext context)
@@ -29,5 +37,19 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log(context.control.name);
         }
+    }
+
+    private void Move(Vector2 direction)
+    {
+        // Calculate the desired velocity
+        Vector3 moveVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.y) * moveSpeed;
+
+        // Update the Rigidbody's velocity
+        rb.linearVelocity = moveVelocity;
+    }
+
+    public void Move(InputAction.CallbackContext context)
+    {
+        moveVector = context.ReadValue<Vector2>();
     }
 }

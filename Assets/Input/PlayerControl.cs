@@ -25,7 +25,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     ""name"": ""PlayerControl"",
     ""maps"": [
         {
-            ""name"": ""Solo Player"",
+            ""name"": ""SoloPlayer"",
             ""id"": ""530f9e27-5ea0-4399-956d-0d97fd528b25"",
             ""actions"": [
                 {
@@ -163,7 +163,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Multi Player 1"",
+            ""name"": ""MultiPlayer1"",
             ""id"": ""9bd2873f-acf8-4074-9a7b-587093fe11cf"",
             ""actions"": [
                 {
@@ -246,7 +246,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Multi Player 2"",
+            ""name"": ""MultiPlayer2"",
             ""id"": ""33fca7a6-8948-4c3d-a5ad-8bb6703c1888"",
             ""actions"": [
                 {
@@ -387,14 +387,14 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // Solo Player
-        m_SoloPlayer = asset.FindActionMap("Solo Player", throwIfNotFound: true);
+        // SoloPlayer
+        m_SoloPlayer = asset.FindActionMap("SoloPlayer", throwIfNotFound: true);
         m_SoloPlayer_MoveAction = m_SoloPlayer.FindAction("Move Action", throwIfNotFound: true);
-        // Multi Player 1
-        m_MultiPlayer1 = asset.FindActionMap("Multi Player 1", throwIfNotFound: true);
+        // MultiPlayer1
+        m_MultiPlayer1 = asset.FindActionMap("MultiPlayer1", throwIfNotFound: true);
         m_MultiPlayer1_MoveAction = m_MultiPlayer1.FindAction("Move Action", throwIfNotFound: true);
-        // Multi Player 2
-        m_MultiPlayer2 = asset.FindActionMap("Multi Player 2", throwIfNotFound: true);
+        // MultiPlayer2
+        m_MultiPlayer2 = asset.FindActionMap("MultiPlayer2", throwIfNotFound: true);
         m_MultiPlayer2_MoveAction = m_MultiPlayer2.FindAction("Move Action", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
@@ -465,7 +465,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Solo Player
+    // SoloPlayer
     private readonly InputActionMap m_SoloPlayer;
     private List<ISoloPlayerActions> m_SoloPlayerActionsCallbackInterfaces = new List<ISoloPlayerActions>();
     private readonly InputAction m_SoloPlayer_MoveAction;
@@ -511,7 +511,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     }
     public SoloPlayerActions @SoloPlayer => new SoloPlayerActions(this);
 
-    // Multi Player 1
+    // MultiPlayer1
     private readonly InputActionMap m_MultiPlayer1;
     private List<IMultiPlayer1Actions> m_MultiPlayer1ActionsCallbackInterfaces = new List<IMultiPlayer1Actions>();
     private readonly InputAction m_MultiPlayer1_MoveAction;
@@ -557,7 +557,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     }
     public MultiPlayer1Actions @MultiPlayer1 => new MultiPlayer1Actions(this);
 
-    // Multi Player 2
+    // MultiPlayer2
     private readonly InputActionMap m_MultiPlayer2;
     private List<IMultiPlayer2Actions> m_MultiPlayer2ActionsCallbackInterfaces = new List<IMultiPlayer2Actions>();
     private readonly InputAction m_MultiPlayer2_MoveAction;
