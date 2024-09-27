@@ -1,29 +1,27 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[Serializable]
-public enum CustomPlayerInput
-{
-    SoloPlayer,
-    MultiPlayer1,
-    MultiPlayer2
-}
-
-[RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput input;
+    // input
+    private PlayerInputManager inputManager;
+    [SerializeField] private PlayerMode customPlayerMode;
+    
+    // player movement
+    private PlayerMover playerMover;
     private Rigidbody rb;
     private Vector2 moveVector;
-    [SerializeField] private CustomPlayerInput customPlayerInput;
     [SerializeField] private float moveSpeed = 5f;
 
     private void Awake()
     {
-        input = GetComponent<PlayerInput>();
+        inputManager = PlayerInputManager.Instance;
         rb = GetComponent<Rigidbody>();
-        input.SwitchCurrentActionMap(customPlayerInput.ToString());
+    }
+
+    private void Start()
+    {
+        playerMover = new PlayerMover(moveSpeed); 
     }
 
     private void FixedUpdate()
@@ -31,24 +29,19 @@ public class PlayerController : MonoBehaviour
         Move(moveVector);
     }
 
-    public void ShowDebug(InputAction.CallbackContext context)
+    private void Move(Vector2 moveVector)
     {
-        if (context.performed)
+        if (inputManager.IsMobile())
+        {            
+            playerMover.MoveWithRigidbody(rb, inputManager.GetJoystickDirection());
+        }
+        else
         {
-            Debug.Log(context.control.name);
+            playerMover.MoveWithRigidbody(rb, moveVector);
         }
     }
 
-    private void Move(Vector2 direction)
-    {
-        // Calculate the desired velocity
-        Vector3 moveVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.y) * moveSpeed;
-
-        // Update the Rigidbody's velocity
-        rb.linearVelocity = moveVelocity;
-    }
-
-    public void Move(InputAction.CallbackContext context)
+    public void GetMoveVector(InputAction.CallbackContext context)
     {
         moveVector = context.ReadValue<Vector2>();
     }
