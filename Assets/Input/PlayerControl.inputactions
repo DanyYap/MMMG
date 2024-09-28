@@ -2,7 +2,7 @@
     "name": "PlayerControl",
     "maps": [
         {
-            "name": "SoloPlayer",
+            "name": "Solo",
             "id": "530f9e27-5ea0-4399-956d-0d97fd528b25",
             "actions": [
                 {
@@ -132,7 +132,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Gamepad;Mobile",
                     "action": "Move Action",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -140,7 +140,7 @@
             ]
         },
         {
-            "name": "MultiPlayer1",
+            "name": "Multiplayer1",
             "id": "9bd2873f-acf8-4074-9a7b-587093fe11cf",
             "actions": [
                 {
@@ -223,7 +223,7 @@
             ]
         },
         {
-            "name": "MultiPlayer2",
+            "name": "Multiplayer2",
             "id": "33fca7a6-8948-4c3d-a5ad-8bb6703c1888",
             "actions": [
                 {
@@ -357,6 +357,17 @@
             "devices": [
                 {
                     "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Mobile",
+            "bindingGroup": "Mobile",
+            "devices": [
+                {
+                    "devicePath": "<Joystick>",
                     "isOptional": false,
                     "isOR": false
                 }
