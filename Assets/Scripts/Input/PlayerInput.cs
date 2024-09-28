@@ -3,14 +3,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [Serializable]
-public enum PlayerMode
-{
-    Solo,
-    Multiplayer1,
-    Multiplayer2
-}
-
-[Serializable]
 public enum PlatformInput
 {
     KeyboardOrConsole,
@@ -22,11 +14,13 @@ public class PlayerInputManager : MonoBehaviour
 {
     public static PlayerInputManager Instance { get; private set; }
 
-    private PlayerInput playerInputComponent;
-    private FixedJoystick fixedJoystick;
+    [SerializeField] private PlatformCanvasSpawner canvasSpawner;
+    private PlayerInput playerInput;
     private PlatformInput platformInput;
-    [SerializeField] private PlayerMode playerMode;
-    
+    private IInputHandler inputHandler;
+    private Vector2 moveDirection;
+    private CustomPlayerMode customPlayerMode;
+
     private void Awake()
     {
         if (Instance == null)
@@ -41,35 +35,52 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        playerInputComponent.enabled = true;
-    }
-
-    private void OnDisable()
-    {
-        playerInputComponent.enabled = false;
-    }
-
     private void InitializeInput()
     {
-        playerInputComponent = GetComponent<PlayerInput>();
-        platformInput = DeterminePlatformInput();
-        fixedJoystick = FindAnyObjectByType<FixedJoystick>();
-        SwitchActionMap();
+        AssignPlatformInput();
+        playerInput = GetComponent<PlayerInput>();
+        canvasSpawner.SpawnCanvas(platformInput);
+        inputHandler = CreateInputHandler();
+        
+        // (Further changes) later will create an event to trigger this switch player mode
+        customPlayerMode = new CustomPlayerMode(playerInput, PlayerMode.Solo);
     }
 
-    private PlatformInput DeterminePlatformInput()
+    private void AssignPlatformInput()
     {
-        return Application.isMobilePlatform ? PlatformInput.Mobile : PlatformInput.KeyboardOrConsole;
+        if (Application.isMobilePlatform)
+        {
+            platformInput = PlatformInput.Mobile;
+        }
+        else
+        {
+            platformInput = PlatformInput.KeyboardOrConsole;
+        }
     }
 
-    private void SwitchActionMap()
+    private IInputHandler CreateInputHandler()
     {
-        playerInputComponent.SwitchCurrentActionMap(playerMode.ToString());
+        if (platformInput == PlatformInput.Mobile)
+        {
+            // Cache the joystick reference and check for null
+            var joystick = FindAnyObjectByType<FixedJoystick>();
+            if (joystick == null)
+            {
+                Debug.LogError("FixedJoystick not found. Please ensure it is in the scene.");
+                return null; // Handle the error gracefully
+            }
+            return new MobileInputHandler(joystick);
+        }
+        else
+        {
+            return new DesktopInputHandler();
+        }
     }
 
-    public bool IsMobile() => platformInput == PlatformInput.Mobile;
+    public void RecordMoveDirection(InputAction.CallbackContext context)
+    {
+        moveDirection = context.ReadValue<Vector2>();
+    }
 
-    public Vector2 GetJoystickDirection() => fixedJoystick.Direction;
+    public Vector2 GetMoveDirection() => inputHandler.GetMoveDirection(moveDirection);
 }
