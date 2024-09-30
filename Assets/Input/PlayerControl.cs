@@ -25,11 +25,11 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
     ""name"": ""PlayerControl"",
     ""maps"": [
         {
-            ""name"": ""SoloPlayer"",
+            ""name"": ""Solo"",
             ""id"": ""530f9e27-5ea0-4399-956d-0d97fd528b25"",
             ""actions"": [
                 {
-                    ""name"": ""Move Action"",
+                    ""name"": ""GetMoveVector Action"",
                     ""type"": ""Value"",
                     ""id"": ""9718f1b2-7051-4306-b870-0cd40432911b"",
                     ""expectedControlType"": ""Vector2"",
@@ -46,7 +46,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -57,7 +57,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -68,7 +68,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -79,7 +79,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -90,7 +90,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -101,7 +101,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -112,7 +112,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -123,7 +123,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -134,7 +134,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -145,7 +145,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -155,19 +155,19 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": "";Gamepad"",
-                    ""action"": ""Move Action"",
+                    ""groups"": "";Gamepad;Mobile"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
             ]
         },
         {
-            ""name"": ""MultiPlayer1"",
+            ""name"": ""Multiplayer1"",
             ""id"": ""9bd2873f-acf8-4074-9a7b-587093fe11cf"",
             ""actions"": [
                 {
-                    ""name"": ""Move Action"",
+                    ""name"": ""GetMoveVector Action"",
                     ""type"": ""Value"",
                     ""id"": ""5fc799b2-e5ac-42d2-a8c3-3904920fbfe8"",
                     ""expectedControlType"": ""Vector2"",
@@ -184,7 +184,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -195,7 +195,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -206,7 +206,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -217,7 +217,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -228,7 +228,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -239,18 +239,18 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
             ]
         },
         {
-            ""name"": ""MultiPlayer2"",
+            ""name"": ""Multiplayer2"",
             ""id"": ""33fca7a6-8948-4c3d-a5ad-8bb6703c1888"",
             ""actions"": [
                 {
-                    ""name"": ""Move Action"",
+                    ""name"": ""GetMoveVector Action"",
                     ""type"": ""Value"",
                     ""id"": ""8caa6b8c-9adb-481f-88b7-1853c271ae72"",
                     ""expectedControlType"": ""Vector2"",
@@ -267,7 +267,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -278,7 +278,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -289,7 +289,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -300,7 +300,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -311,7 +311,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -322,7 +322,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Move Action"",
+                    ""action"": ""GetMoveVector Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -384,18 +384,29 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Mobile"",
+            ""bindingGroup"": ""Mobile"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Joystick>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
-        // SoloPlayer
-        m_SoloPlayer = asset.FindActionMap("SoloPlayer", throwIfNotFound: true);
-        m_SoloPlayer_MoveAction = m_SoloPlayer.FindAction("Move Action", throwIfNotFound: true);
-        // MultiPlayer1
-        m_MultiPlayer1 = asset.FindActionMap("MultiPlayer1", throwIfNotFound: true);
-        m_MultiPlayer1_MoveAction = m_MultiPlayer1.FindAction("Move Action", throwIfNotFound: true);
-        // MultiPlayer2
-        m_MultiPlayer2 = asset.FindActionMap("MultiPlayer2", throwIfNotFound: true);
-        m_MultiPlayer2_MoveAction = m_MultiPlayer2.FindAction("Move Action", throwIfNotFound: true);
+        // Solo
+        m_Solo = asset.FindActionMap("Solo", throwIfNotFound: true);
+        m_Solo_MoveAction = m_Solo.FindAction("GetMoveVector Action", throwIfNotFound: true);
+        // Multiplayer1
+        m_Multiplayer1 = asset.FindActionMap("Multiplayer1", throwIfNotFound: true);
+        m_Multiplayer1_MoveAction = m_Multiplayer1.FindAction("GetMoveVector Action", throwIfNotFound: true);
+        // Multiplayer2
+        m_Multiplayer2 = asset.FindActionMap("Multiplayer2", throwIfNotFound: true);
+        m_Multiplayer2_MoveAction = m_Multiplayer2.FindAction("GetMoveVector Action", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -403,9 +414,9 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
 
     ~@PlayerControl()
     {
-        Debug.Assert(!m_SoloPlayer.enabled, "This will cause a leak and performance issues, PlayerControl.SoloPlayer.Disable() has not been called.");
-        Debug.Assert(!m_MultiPlayer1.enabled, "This will cause a leak and performance issues, PlayerControl.MultiPlayer1.Disable() has not been called.");
-        Debug.Assert(!m_MultiPlayer2.enabled, "This will cause a leak and performance issues, PlayerControl.MultiPlayer2.Disable() has not been called.");
+        Debug.Assert(!m_Solo.enabled, "This will cause a leak and performance issues, PlayerControl.Solo.Disable() has not been called.");
+        Debug.Assert(!m_Multiplayer1.enabled, "This will cause a leak and performance issues, PlayerControl.Multiplayer1.Disable() has not been called.");
+        Debug.Assert(!m_Multiplayer2.enabled, "This will cause a leak and performance issues, PlayerControl.Multiplayer2.Disable() has not been called.");
         Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerControl.UI.Disable() has not been called.");
     }
 
@@ -465,143 +476,143 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // SoloPlayer
-    private readonly InputActionMap m_SoloPlayer;
-    private List<ISoloPlayerActions> m_SoloPlayerActionsCallbackInterfaces = new List<ISoloPlayerActions>();
-    private readonly InputAction m_SoloPlayer_MoveAction;
-    public struct SoloPlayerActions
+    // Solo
+    private readonly InputActionMap m_Solo;
+    private List<ISoloActions> m_SoloActionsCallbackInterfaces = new List<ISoloActions>();
+    private readonly InputAction m_Solo_MoveAction;
+    public struct SoloActions
     {
         private @PlayerControl m_Wrapper;
-        public SoloPlayerActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveAction => m_Wrapper.m_SoloPlayer_MoveAction;
-        public InputActionMap Get() { return m_Wrapper.m_SoloPlayer; }
+        public SoloActions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MoveAction => m_Wrapper.m_Solo_MoveAction;
+        public InputActionMap Get() { return m_Wrapper.m_Solo; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(SoloPlayerActions set) { return set.Get(); }
-        public void AddCallbacks(ISoloPlayerActions instance)
+        public static implicit operator InputActionMap(SoloActions set) { return set.Get(); }
+        public void AddCallbacks(ISoloActions instance)
         {
-            if (instance == null || m_Wrapper.m_SoloPlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_SoloPlayerActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_SoloActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SoloActionsCallbackInterfaces.Add(instance);
             @MoveAction.started += instance.OnMoveAction;
             @MoveAction.performed += instance.OnMoveAction;
             @MoveAction.canceled += instance.OnMoveAction;
         }
 
-        private void UnregisterCallbacks(ISoloPlayerActions instance)
+        private void UnregisterCallbacks(ISoloActions instance)
         {
             @MoveAction.started -= instance.OnMoveAction;
             @MoveAction.performed -= instance.OnMoveAction;
             @MoveAction.canceled -= instance.OnMoveAction;
         }
 
-        public void RemoveCallbacks(ISoloPlayerActions instance)
+        public void RemoveCallbacks(ISoloActions instance)
         {
-            if (m_Wrapper.m_SoloPlayerActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_SoloActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(ISoloPlayerActions instance)
+        public void SetCallbacks(ISoloActions instance)
         {
-            foreach (var item in m_Wrapper.m_SoloPlayerActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_SoloActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_SoloPlayerActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_SoloActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public SoloPlayerActions @SoloPlayer => new SoloPlayerActions(this);
+    public SoloActions @Solo => new SoloActions(this);
 
-    // MultiPlayer1
-    private readonly InputActionMap m_MultiPlayer1;
-    private List<IMultiPlayer1Actions> m_MultiPlayer1ActionsCallbackInterfaces = new List<IMultiPlayer1Actions>();
-    private readonly InputAction m_MultiPlayer1_MoveAction;
-    public struct MultiPlayer1Actions
+    // Multiplayer1
+    private readonly InputActionMap m_Multiplayer1;
+    private List<IMultiplayer1Actions> m_Multiplayer1ActionsCallbackInterfaces = new List<IMultiplayer1Actions>();
+    private readonly InputAction m_Multiplayer1_MoveAction;
+    public struct Multiplayer1Actions
     {
         private @PlayerControl m_Wrapper;
-        public MultiPlayer1Actions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveAction => m_Wrapper.m_MultiPlayer1_MoveAction;
-        public InputActionMap Get() { return m_Wrapper.m_MultiPlayer1; }
+        public Multiplayer1Actions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MoveAction => m_Wrapper.m_Multiplayer1_MoveAction;
+        public InputActionMap Get() { return m_Wrapper.m_Multiplayer1; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MultiPlayer1Actions set) { return set.Get(); }
-        public void AddCallbacks(IMultiPlayer1Actions instance)
+        public static implicit operator InputActionMap(Multiplayer1Actions set) { return set.Get(); }
+        public void AddCallbacks(IMultiplayer1Actions instance)
         {
-            if (instance == null || m_Wrapper.m_MultiPlayer1ActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MultiPlayer1ActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_Multiplayer1ActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_Multiplayer1ActionsCallbackInterfaces.Add(instance);
             @MoveAction.started += instance.OnMoveAction;
             @MoveAction.performed += instance.OnMoveAction;
             @MoveAction.canceled += instance.OnMoveAction;
         }
 
-        private void UnregisterCallbacks(IMultiPlayer1Actions instance)
+        private void UnregisterCallbacks(IMultiplayer1Actions instance)
         {
             @MoveAction.started -= instance.OnMoveAction;
             @MoveAction.performed -= instance.OnMoveAction;
             @MoveAction.canceled -= instance.OnMoveAction;
         }
 
-        public void RemoveCallbacks(IMultiPlayer1Actions instance)
+        public void RemoveCallbacks(IMultiplayer1Actions instance)
         {
-            if (m_Wrapper.m_MultiPlayer1ActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_Multiplayer1ActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMultiPlayer1Actions instance)
+        public void SetCallbacks(IMultiplayer1Actions instance)
         {
-            foreach (var item in m_Wrapper.m_MultiPlayer1ActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_Multiplayer1ActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MultiPlayer1ActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_Multiplayer1ActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MultiPlayer1Actions @MultiPlayer1 => new MultiPlayer1Actions(this);
+    public Multiplayer1Actions @Multiplayer1 => new Multiplayer1Actions(this);
 
-    // MultiPlayer2
-    private readonly InputActionMap m_MultiPlayer2;
-    private List<IMultiPlayer2Actions> m_MultiPlayer2ActionsCallbackInterfaces = new List<IMultiPlayer2Actions>();
-    private readonly InputAction m_MultiPlayer2_MoveAction;
-    public struct MultiPlayer2Actions
+    // Multiplayer2
+    private readonly InputActionMap m_Multiplayer2;
+    private List<IMultiplayer2Actions> m_Multiplayer2ActionsCallbackInterfaces = new List<IMultiplayer2Actions>();
+    private readonly InputAction m_Multiplayer2_MoveAction;
+    public struct Multiplayer2Actions
     {
         private @PlayerControl m_Wrapper;
-        public MultiPlayer2Actions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveAction => m_Wrapper.m_MultiPlayer2_MoveAction;
-        public InputActionMap Get() { return m_Wrapper.m_MultiPlayer2; }
+        public Multiplayer2Actions(@PlayerControl wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MoveAction => m_Wrapper.m_Multiplayer2_MoveAction;
+        public InputActionMap Get() { return m_Wrapper.m_Multiplayer2; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MultiPlayer2Actions set) { return set.Get(); }
-        public void AddCallbacks(IMultiPlayer2Actions instance)
+        public static implicit operator InputActionMap(Multiplayer2Actions set) { return set.Get(); }
+        public void AddCallbacks(IMultiplayer2Actions instance)
         {
-            if (instance == null || m_Wrapper.m_MultiPlayer2ActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MultiPlayer2ActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_Multiplayer2ActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_Multiplayer2ActionsCallbackInterfaces.Add(instance);
             @MoveAction.started += instance.OnMoveAction;
             @MoveAction.performed += instance.OnMoveAction;
             @MoveAction.canceled += instance.OnMoveAction;
         }
 
-        private void UnregisterCallbacks(IMultiPlayer2Actions instance)
+        private void UnregisterCallbacks(IMultiplayer2Actions instance)
         {
             @MoveAction.started -= instance.OnMoveAction;
             @MoveAction.performed -= instance.OnMoveAction;
             @MoveAction.canceled -= instance.OnMoveAction;
         }
 
-        public void RemoveCallbacks(IMultiPlayer2Actions instance)
+        public void RemoveCallbacks(IMultiplayer2Actions instance)
         {
-            if (m_Wrapper.m_MultiPlayer2ActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_Multiplayer2ActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IMultiPlayer2Actions instance)
+        public void SetCallbacks(IMultiplayer2Actions instance)
         {
-            foreach (var item in m_Wrapper.m_MultiPlayer2ActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_Multiplayer2ActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_MultiPlayer2ActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_Multiplayer2ActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public MultiPlayer2Actions @MultiPlayer2 => new MultiPlayer2Actions(this);
+    public Multiplayer2Actions @Multiplayer2 => new Multiplayer2Actions(this);
 
     // UI
     private readonly InputActionMap m_UI;
@@ -666,15 +677,24 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_GamepadSchemeIndex];
         }
     }
-    public interface ISoloPlayerActions
+    private int m_MobileSchemeIndex = -1;
+    public InputControlScheme MobileScheme
+    {
+        get
+        {
+            if (m_MobileSchemeIndex == -1) m_MobileSchemeIndex = asset.FindControlSchemeIndex("Mobile");
+            return asset.controlSchemes[m_MobileSchemeIndex];
+        }
+    }
+    public interface ISoloActions
     {
         void OnMoveAction(InputAction.CallbackContext context);
     }
-    public interface IMultiPlayer1Actions
+    public interface IMultiplayer1Actions
     {
         void OnMoveAction(InputAction.CallbackContext context);
     }
-    public interface IMultiPlayer2Actions
+    public interface IMultiplayer2Actions
     {
         void OnMoveAction(InputAction.CallbackContext context);
     }

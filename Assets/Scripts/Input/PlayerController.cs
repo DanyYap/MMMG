@@ -1,55 +1,24 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[Serializable]
-public enum CustomPlayerInput
-{
-    SoloPlayer,
-    MultiPlayer1,
-    MultiPlayer2
-}
-
-[RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerInput input;
+    private PlayerInputManager inputManager;
     private Rigidbody rb;
-    private Vector2 moveVector;
-    [SerializeField] private CustomPlayerInput customPlayerInput;
+    private IMovable playerMover;
+
+    [SerializeField] private PlayerMode playerMode; // Keeping PlayerMode here
     [SerializeField] private float moveSpeed = 5f;
 
     private void Awake()
     {
-        input = GetComponent<PlayerInput>();
+        inputManager = PlayerInputManager.Instance;
         rb = GetComponent<Rigidbody>();
-        input.SwitchCurrentActionMap(customPlayerInput.ToString());
+        playerMover = new PlayerMover(moveSpeed);
     }
 
     private void FixedUpdate()
     {
-        Move(moveVector);
-    }
-
-    public void ShowDebug(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            Debug.Log(context.control.name);
-        }
-    }
-
-    private void Move(Vector2 direction)
-    {
-        // Calculate the desired velocity
-        Vector3 moveVelocity = new Vector3(direction.x, rb.linearVelocity.y, direction.y) * moveSpeed;
-
-        // Update the Rigidbody's velocity
-        rb.linearVelocity = moveVelocity;
-    }
-
-    public void Move(InputAction.CallbackContext context)
-    {
-        moveVector = context.ReadValue<Vector2>();
+        Vector2 direction = inputManager.GetMoveDirection();
+        playerMover.Move(rb, direction);
     }
 }
