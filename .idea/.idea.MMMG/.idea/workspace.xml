@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f81954b7-dcc1-4ea2-941e-ff7b3bc9d664" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Input/PlayerControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Input/PlayerControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Joystick Pack/Examples/Ground.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Joystick Pack/Examples/Ground.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Joystick Pack/Examples/Player.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Joystick Pack/Examples/Player.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DanyTest.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/DanyTest.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,6 +94,7 @@
       <updated>1727679262427</updated>
       <workItem from="1727679265925" duration="740000" />
       <workItem from="1727688733763" duration="380000" />
+      <workItem from="1727965340466" duration="4750000" />
     </task>
     <servers />
   </component>
