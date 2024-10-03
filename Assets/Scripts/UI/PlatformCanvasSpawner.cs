@@ -8,13 +8,10 @@ public class PlatformCanvasSpawner : ScriptableObject
 
     public void SpawnCanvas(PlatformInput input)
     {
-        if (input == PlatformInput.Mobile)
+        GameObject canvas = input == PlatformInput.Mobile ? MobileCanvas : DesktopCanvas;
+        if (GameObject.Find(canvas.name) == null)
         {
-            Instantiate(MobileCanvas);
-        }
-        else if (input == PlatformInput.KeyboardOrConsole)
-        {
-            Instantiate(DesktopCanvas);
+            Instantiate(canvas);
         }
     }
 }

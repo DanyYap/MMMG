@@ -35,28 +35,32 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        playerInput = GetComponent<PlayerInput>();
+        InputSystem.onDeviceChange += OnDeviceChange;
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.onDeviceChange -= OnDeviceChange;
+    }
+
     private void InitializeInput()
     {
         AssignPlatformInput();
         playerInput = GetComponent<PlayerInput>();
+
         canvasSpawner.SpawnCanvas(platformInput);
+
         inputHandler = CreateInputHandler();
-        
+
         // (Further changes) later will create an event to trigger this switch player mode
         customPlayerMode = new CustomPlayerMode(playerInput, PlayerMode.Solo);
     }
 
-    private void AssignPlatformInput()
-    {
-        if (Application.isMobilePlatform)
-        {
-            platformInput = PlatformInput.Mobile;
-        }
-        else
-        {
-            platformInput = PlatformInput.KeyboardOrConsole;
-        }
-    }
+    private void AssignPlatformInput() => platformInput = Application.isMobilePlatform ? PlatformInput.Mobile : PlatformInput.KeyboardOrConsole;
+    //private void AssignPlatformInput() => platformInput = PlatformInput.Mobile;
 
     private IInputHandler CreateInputHandler()
     {
@@ -77,10 +81,15 @@ public class PlayerInputManager : MonoBehaviour
         }
     }
 
-    public void RecordMoveDirection(InputAction.CallbackContext context)
+    private void OnDeviceChange(InputDevice device, InputDeviceChange change)
     {
-        moveDirection = context.ReadValue<Vector2>();
+        if (change is InputDeviceChange.Added or InputDeviceChange.Reconnected)
+        {
+            InitializeInput();
+        }
     }
+
+    public void RecordMoveDirection(InputAction.CallbackContext context) => moveDirection = context.ReadValue<Vector2>();
 
     public Vector2 GetMoveDirection() => inputHandler.GetMoveDirection(moveDirection);
 }
