@@ -29,7 +29,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             ""id"": ""530f9e27-5ea0-4399-956d-0d97fd528b25"",
             ""actions"": [
                 {
-                    ""name"": ""GetMoveVector Action"",
+                    ""name"": ""Move Action"",
                     ""type"": ""Value"",
                     ""id"": ""9718f1b2-7051-4306-b870-0cd40432911b"",
                     ""expectedControlType"": ""Vector2"",
@@ -46,7 +46,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -57,7 +57,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -68,7 +68,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -79,7 +79,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -90,7 +90,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -101,7 +101,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -112,7 +112,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -123,7 +123,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -134,7 +134,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -145,7 +145,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -156,7 +156,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad;Mobile"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -167,7 +167,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             ""id"": ""9bd2873f-acf8-4074-9a7b-587093fe11cf"",
             ""actions"": [
                 {
-                    ""name"": ""GetMoveVector Action"",
+                    ""name"": ""Move Action"",
                     ""type"": ""Value"",
                     ""id"": ""5fc799b2-e5ac-42d2-a8c3-3904920fbfe8"",
                     ""expectedControlType"": ""Vector2"",
@@ -184,7 +184,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -195,7 +195,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -206,7 +206,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -217,7 +217,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -228,7 +228,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -239,7 +239,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -250,7 +250,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
             ""id"": ""33fca7a6-8948-4c3d-a5ad-8bb6703c1888"",
             ""actions"": [
                 {
-                    ""name"": ""GetMoveVector Action"",
+                    ""name"": ""Move Action"",
                     ""type"": ""Value"",
                     ""id"": ""8caa6b8c-9adb-481f-88b7-1853c271ae72"",
                     ""expectedControlType"": ""Vector2"",
@@ -267,7 +267,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -278,7 +278,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -289,7 +289,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -300,7 +300,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -311,7 +311,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -322,7 +322,7 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""GetMoveVector Action"",
+                    ""action"": ""Move Action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -400,13 +400,13 @@ public partial class @PlayerControl: IInputActionCollection2, IDisposable
 }");
         // Solo
         m_Solo = asset.FindActionMap("Solo", throwIfNotFound: true);
-        m_Solo_MoveAction = m_Solo.FindAction("GetMoveVector Action", throwIfNotFound: true);
+        m_Solo_MoveAction = m_Solo.FindAction("Move Action", throwIfNotFound: true);
         // Multiplayer1
         m_Multiplayer1 = asset.FindActionMap("Multiplayer1", throwIfNotFound: true);
-        m_Multiplayer1_MoveAction = m_Multiplayer1.FindAction("GetMoveVector Action", throwIfNotFound: true);
+        m_Multiplayer1_MoveAction = m_Multiplayer1.FindAction("Move Action", throwIfNotFound: true);
         // Multiplayer2
         m_Multiplayer2 = asset.FindActionMap("Multiplayer2", throwIfNotFound: true);
-        m_Multiplayer2_MoveAction = m_Multiplayer2.FindAction("GetMoveVector Action", throwIfNotFound: true);
+        m_Multiplayer2_MoveAction = m_Multiplayer2.FindAction("Move Action", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
