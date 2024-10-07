@@ -2,7 +2,8 @@ using UnityEngine;
 
 public interface IInputHandler
 {
-    Vector2 GetMoveDirection(Vector2 moveDirection);
+    Vector2 GetPlayer1MoveDirection(Vector2 moveDirection);
+    Vector2 GetPlayer2MoveDirection(Vector2 moveDirection);
 }
 
 public class MobileInputHandler : IInputHandler
@@ -15,7 +16,12 @@ public class MobileInputHandler : IInputHandler
     }
 
     // mobile moveDirection is unused
-    public Vector2 GetMoveDirection(Vector2 moveDirection)
+    public Vector2 GetPlayer1MoveDirection(Vector2 moveDirection)
+    {
+        return fixedJoystick.Direction;
+    }
+
+    public Vector2 GetPlayer2MoveDirection(Vector2 moveDirection)
     {
         return fixedJoystick.Direction;
     }
@@ -23,9 +29,13 @@ public class MobileInputHandler : IInputHandler
 
 public class DesktopInputHandler : IInputHandler
 {
-    public Vector2 GetMoveDirection(Vector2 moveDirection)
+    public Vector2 GetPlayer1MoveDirection(Vector2 moveDirection)
+    {
+        return moveDirection;
+    }
+
+    public Vector2 GetPlayer2MoveDirection(Vector2 moveDirection)
     {
         return moveDirection;
     }
 }
-
