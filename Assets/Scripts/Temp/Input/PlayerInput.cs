@@ -51,6 +51,8 @@ public class PlayerInputManager : MonoBehaviour
         inputHandler = platformInputManager.CreateInputHandler();
         playerModeManager = new PlayerModeManager(platformInputManager);
         playerModeManager.ChangePlayerMode(PlayerMode.Multiplayer);
+
+        UpdateConsoleCountText();
     }
 
     private void OnDeviceChange(InputDevice device, InputDeviceChange change)
@@ -59,6 +61,31 @@ public class PlayerInputManager : MonoBehaviour
         if (change == InputDeviceChange.Added || change == InputDeviceChange.Reconnected)
         {
             InitializeInput();
+        }
+    }
+
+    // Function to check how many consoles are available on the device and update TextMeshPro component
+    public void UpdateConsoleCountText()
+    {
+        int consoleCount = 0;
+        foreach (var device in InputSystem.devices)
+        {
+            if (device is Gamepad)
+            {
+                consoleCount++;
+            }
+        }
+        Debug.Log("consoleCount: " + consoleCount);
+
+        // Find GameObject named "Console Detected Text" and update its TextMeshPro component
+        var consoleDetectedTextObject = GameObject.Find("Console Detected Text");
+        if (consoleDetectedTextObject != null)
+        {
+            var textMeshPro = consoleDetectedTextObject.GetComponent<TMPro.TextMeshProUGUI>();
+            if (textMeshPro != null)
+            {
+                textMeshPro.text = $"Available Consoles: {consoleCount}";
+            }
         }
     }
 
@@ -75,5 +102,7 @@ public class PlayerInputManager : MonoBehaviour
     public Vector2 GetPlayer2MoveDirection() => inputHandler.GetPlayer2MoveDirection(player2MoveDirection);
 
     // Change player mode to Solo
-    public void ChangePlayerMode() => playerModeManager.ChangePlayerMode(PlayerMode.Solo);
+    public void SwitchToSolo() => playerModeManager.ChangePlayerMode(PlayerMode.Solo);
+
+    public void SwitchToMultiplayer() => playerModeManager.ChangePlayerMode(PlayerMode.Multiplayer);
 }

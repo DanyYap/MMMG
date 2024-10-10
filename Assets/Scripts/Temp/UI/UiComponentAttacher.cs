@@ -43,7 +43,7 @@ public class UiComponentAttacher : MonoBehaviour
         switch (button.name)
         {
             case "Spawn 2P Button":
-                button.onClick.AddListener(playerInputManager.ChangePlayerMode);
+                button.onClick.AddListener(playerInputManager.SwitchToSolo);
                 break;
             default:
                 Debug.LogWarning($"No action assigned for button {button.name}");
