@@ -22,7 +22,7 @@ public class PlayerControlSystem : MonoBehaviour
         }
     }
 
-    // This method is called when the switch player button is clicked
+    // Switch player when button is clicked
     public void OnSwitchPlayerButtonClick()
     {
         if (players.Count > 1)
@@ -33,7 +33,7 @@ public class PlayerControlSystem : MonoBehaviour
         }
     }
 
-    // This method activates the player at the given index
+    // Activate player at given index
     private void SetActivePlayer(int index)
     {
         for (int i = 0; i < players.Count; i++)

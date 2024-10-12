@@ -4,60 +4,107 @@ using UnityEngine.SceneManagement;
 
 public class SceneManageSystem : MonoBehaviour
 {
-    private string _currentSceneName;
+    private string currentSceneName;
+    private CanvasManageSystem canvasManageSystem;
+    private MobileInputSystem mobileInputSystem;
+    private PlayerControlSystem playerControlSystem;
 
     void Start()
     {
-        _currentSceneName = SceneManager.GetActiveScene().name;
+        currentSceneName = SceneManager.GetActiveScene().name;
+        InitializeComponents();
     }
 
     void Update()
     {
-        if (_currentSceneName != SceneManager.GetActiveScene().name)
+        CheckSceneChange();
+    }
+
+    // Set up the necessary components for the game.
+    private void InitializeComponents()
+    {
+        canvasManageSystem = GetComponent<CanvasManageSystem>();
+        mobileInputSystem = GetComponent<MobileInputSystem>();
+        playerControlSystem = GetComponent<PlayerControlSystem>();
+        ValidateComponents(); // Check if all components are found.
+    }
+
+    // Check if all required components are present.
+    private void ValidateComponents()
+    {
+        if (canvasManageSystem == null || mobileInputSystem == null || playerControlSystem == null)
         {
-            _currentSceneName = SceneManager.GetActiveScene().name;
-            StartCoroutine(WaitForSceneLoad());
+            Debug.LogError("One or more required components are missing.");
         }
     }
 
+    // Check if the current scene has changed.
+    private void CheckSceneChange()
+    {
+        string activeSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName != activeSceneName)
+        {
+            currentSceneName = activeSceneName;
+            StartCoroutine(WaitForSceneLoad()); // Wait for the new scene to load.
+        }
+    }
+
+    // Wait for the new scene to load before proceeding.
     private IEnumerator WaitForSceneLoad()
     {
         yield return new WaitUntil(() => SceneManager.GetActiveScene().isLoaded);
-        OnSceneChanged();
+        OnSceneChanged(); // Scene has loaded, now do the necessary setup.
     }
 
+    // Scene has changed and is now loaded.
     private void OnSceneChanged()
     {
-        // Trigger an event or perform actions when the scene is changed
-        Debug.Log("Scene changed to: " + _currentSceneName);
-        CanvasManageSystem canvasManageSystem = GetComponent<CanvasManageSystem>();
-        if (_currentSceneName == "MenuScene")
+        Debug.Log("Scene changed to: " + currentSceneName);
+        canvasManageSystem.AssignButtonListeners();
+        SwitchPanelsBasedOnScene();
+    }
+
+    // Switch to the correct panel based on the current scene.
+    private void SwitchPanelsBasedOnScene()
+    {
+        if (currentSceneName == SceneNames.MenuScene)
         {
             canvasManageSystem.SwitchToMenuPanel();
-            canvasManageSystem.AssignButtonListeners();
         }
         else
         {
             canvasManageSystem.SwitchToInGamePanel();
-            canvasManageSystem.AssignButtonListeners();
-
-            MobileInputSystem mobileInputSystem = GetComponent<MobileInputSystem>();
             mobileInputSystem.FindJoystick();
-
-            PlayerControlSystem playerControlSystem = GetComponent<PlayerControlSystem>();
             playerControlSystem.InitializePlayers();
         }
     }
 
+    // Load a scene when a button is clicked.
     public void OnLoadSceneButtonClick(string sceneName)
     {
-        if (_currentSceneName != sceneName)
+        if (currentSceneName != sceneName)
         {
-            SceneManager.LoadScene(sceneName);
+            StartCoroutine(LoadSceneAsync(sceneName));
         }
         else
         {
             Debug.Log("Scene " + sceneName + " is already loaded.");
         }
     }
+
+    // Load a scene asynchronously.
+    private IEnumerator LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+    }
+}
+
+public static class SceneNames
+{
+    public const string MenuScene = "MenuScene";
+    // Add other scene names as needed
 }
