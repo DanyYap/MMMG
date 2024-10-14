@@ -1,148 +1,164 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using TMPro;
 
 public class CanvasManageSystem : MonoBehaviour
 {
-    public CanvasScriptableObject canvasScriptableObject;
-    private GameObject canvasInstance;
-    private GameObject menuPanel;
-    private GameObject inGamePanel;
-    private GameObject bothPanel;
-    private GameObject soloPanel;
-    private GameObject multiplayerPanel;
-    private bool isSolo;
+    public CanvasScriptableObject canvasPrefab;
 
-    private static class PanelNames
+    private GameObject canvasInstance;
+    private List<GameObject> mainPanels;
+    private Dictionary<string, List<GameObject>> subPanels;
+    private bool isGameModeSolo;
+    private Dictionary<string, Button> buttonMap;
+    private List<TMP_Text> textMeshProTexts;
+
+    public static class PanelIdentifiers
     {
-        public const string MenuPanel = "Menu Panel";
-        public const string InGamePanel = "In Game Panel";
-        public const string Both = "Both";
-        public const string Solo = "Solo";
-        public const string Multiplayer = "Multiplayer";
+        // Main panels
+        public static readonly string MainMenu = "Main Menu";
+        public static readonly string Lobby = "Lobby";
+        public static readonly string InGame = "In Game";
+
+        // Sub panels for InGame
+        public static readonly string InGameBoth = "Both";
+        public static readonly string InGameSolo = "Solo";
+        public static readonly string InGameMultiplayer = "Multiplayer";
     }
 
-    private static class ButtonNames
+    private static class ButtonIdentifiers
     {
-        public const string SoloButton = "Solo Button";
+        // Main menu buttons
+        public const string SoloGameButton = "Solo Game Button";
         public const string MultiplayerButton = "Multiplayer Button";
-        public const string SwitchButton = "Switch Button";
-        public const string LeaveButton = "Leave Button";
+
+        // Lobby buttons
+        public const string CreateLobbyButton = "Create Lobby Button";
+        public const string JoinLobbyButton = "Join Lobby Button";
+        public const string ExitLobbyButton = "Exit Lobby Button";
+        public const string BackToMenuButton = "Back To Menu Button";
+
+        // In-game buttons
+        public const string ExitGameButton = "Exit Game Button";
+        public const string PlayerSwitchButton = "Player Switch Button";
+    }
+
+    private static class TextIdentifiers
+    {
+        // menu texts
+        public const string MenuText = "Menu Text";
+
+        // lobby texts
+        public const string LobbyText = "Lobby Text";
     }
 
     void Start()
     {
-        InitializeCanvas(); // Set up the canvas
-        SwitchToMenuPanel(); // Show the menu panel
-        AssignButtonListeners(); // Set up button actions
+        SwitchToPanel(PanelIdentifiers.MainMenu);
     }
 
-    // Sets up the canvas and finds the panels
-    private void InitializeCanvas()
+    // Switches to a specific panel and disables all other panels
+    public void SwitchToPanel(string panelName)
+    {
+        InitializeAndManageCanvas();
+
+        GameObject targetPanel = mainPanels.Find(p => p != null && p.name == panelName);
+        if (targetPanel == null)
+        {
+            Debug.LogError($"Panel with name '{panelName}' not found.");
+        }
+
+        foreach (GameObject panel in mainPanels)
+        {
+            SetPanelActive(panel, panel == targetPanel);
+        }
+
+        if (panelName == PanelIdentifiers.InGame)
+        {
+            SetPanelActive(subPanels[PanelIdentifiers.InGame].Find(c => c.name == PanelIdentifiers.InGameBoth), true);
+
+            string activeSubPanelName = isGameModeSolo ? PanelIdentifiers.InGameSolo : PanelIdentifiers.InGameMultiplayer;
+            string inactiveSubPanelName = isGameModeSolo ? PanelIdentifiers.InGameMultiplayer : PanelIdentifiers.InGameSolo;
+
+            SetPanelActive(subPanels[PanelIdentifiers.InGame].Find(c => c.name == activeSubPanelName), true);
+            SetPanelActive(subPanels[PanelIdentifiers.InGame].Find(c => c.name == inactiveSubPanelName), false);
+        }
+    }
+
+    // Initializes and manages the canvas instance, main panels, and sub panels
+    private void InitializeAndManageCanvas()
+    {
+        InitializeCanvasInstance();
+        InitializeMainPanelsAndSubPanels();
+        InitializeTextMeshProTexts();
+        AssignButtonActions();
+    }
+
+    private void InitializeCanvasInstance()
     {
         if (canvasInstance == null)
         {
             canvasInstance = GameObject.FindWithTag("UI");
             if (canvasInstance == null)
             {
-                canvasInstance = Instantiate(canvasScriptableObject.CanvasPrefab);
+                canvasInstance = Instantiate(canvasPrefab.CanvasPrefab);
             }
             canvasInstance.SetActive(true);
-
-            menuPanel = FindPanelByName(PanelNames.MenuPanel);
-            inGamePanel = FindPanelByName(PanelNames.InGamePanel);
-
-            bothPanel = FindChildPanelByName(inGamePanel, PanelNames.Both);
-            soloPanel = FindChildPanelByName(inGamePanel, PanelNames.Solo);
-            multiplayerPanel = FindChildPanelByName(inGamePanel, PanelNames.Multiplayer);
         }
     }
 
-    // Finds a panel by its name
-    private GameObject FindPanelByName(string panelName)
+    private void InitializeMainPanelsAndSubPanels()
     {
-        Transform panelTransform = canvasInstance.transform.Find(panelName);
-        if (panelTransform != null)
+        mainPanels = new List<GameObject>
         {
-            return panelTransform.gameObject;
-        }
-        Debug.LogWarning($"Panel '{panelName}' not found.");
-        return null;
-    }
+            FindPanelByName(PanelIdentifiers.MainMenu),
+            FindPanelByName(PanelIdentifiers.Lobby),
+            FindPanelByName(PanelIdentifiers.InGame)
+        };
+        mainPanels.RemoveAll(p => p == null);
 
-    // Finds a child panel by its name
-    private GameObject FindChildPanelByName(GameObject parentPanel, string childPanelName)
-    {
-        if (parentPanel == null)
+        subPanels = new Dictionary<string, List<GameObject>>();
+
+        List<GameObject> inGameSubPanels = new()
         {
-            Debug.LogWarning("Parent panel is null.");
-            return null;
-        }
+            FindPanelByName(PanelIdentifiers.InGame, PanelIdentifiers.InGameBoth),
+            FindPanelByName(PanelIdentifiers.InGame, PanelIdentifiers.InGameSolo),
+            FindPanelByName(PanelIdentifiers.InGame, PanelIdentifiers.InGameMultiplayer),
+        };
+        inGameSubPanels.RemoveAll(p => p == null); // Remove null game objects from the list
+        subPanels.Add(PanelIdentifiers.InGame, inGameSubPanels);
+    }
 
-        Transform childTransform = parentPanel.transform.Find(childPanelName);
-        if (childTransform != null)
+    // Function to get specific TextMesh Pro Text components from canvasInstance based on TextIdentifiers
+    private void InitializeTextMeshProTexts()
+    {
+        textMeshProTexts = new List<TMP_Text>();
+        TMP_Text[] allTextMeshProTexts = canvasInstance.GetComponentsInChildren<TMP_Text>(true);
+
+        foreach (TMP_Text text in allTextMeshProTexts)
         {
-            return childTransform.gameObject;
+            if (text == null)
+            {
+                Debug.LogWarning("TextMesh Pro Text is null. Skipping.");
+                continue;
+            }
+
+            // Check if the text component matches any of the identifiers
+            if (text.name == TextIdentifiers.MenuText || text.name == TextIdentifiers.LobbyText)
+            {
+                textMeshProTexts.Add(text);
+            }
         }
-        Debug.LogWarning($"Child panel '{childPanelName}' not found in '{parentPanel.name}'.");
-        return null;
-    }
-
-    // Sets a panel and its children to be active or inactive
-    private void SetPanelActive(GameObject panel, bool isActive)
-    {
-        panel.SetActive(isActive);
-        foreach (Transform child in panel.transform)
-        {
-            child.gameObject.SetActive(isActive);
-        }
-    }
-
-    // Switches between two panels
-    private void SwitchPanel(GameObject enablePanel, GameObject disablePanel)
-    {
-        SetPanelActive(enablePanel, true);
-        SetPanelActive(disablePanel, false);
-    }
-
-    // Switches to the in-game panel
-    public void SwitchToInGamePanel()
-    {
-        InitializeCanvas();
-        SwitchPanel(inGamePanel, menuPanel);
-        SetPanelActive(bothPanel, true);
-
-        if (isSolo)
-        {
-            SetPanelActive(soloPanel, true);
-            SetPanelActive(multiplayerPanel, false);
-        }
-        else
-        {
-            SetPanelActive(multiplayerPanel, true);
-            SetPanelActive(soloPanel, false);
-        }
-    }
-
-    // Switches to the menu panel
-    public void SwitchToMenuPanel()
-    {
-        InitializeCanvas();
-        SwitchPanel(menuPanel, inGamePanel);
-    }
-
-    // Sets the game mode to solo or multiplayer
-    public void OnSetSoloButtonClick(bool isSolo)
-    {
-        this.isSolo = isSolo;
     }
 
     // Sets up the actions for each button
-    public void AssignButtonListeners()
+    private void AssignButtonActions()
     {
-        InitializeCanvas();
-        Button[] buttons = canvasInstance.GetComponentsInChildren<Button>(true);
+        buttonMap = new Dictionary<string, Button>();
+        Button[] allButtons = canvasInstance.GetComponentsInChildren<Button>(true);
 
-        foreach (Button button in buttons)
+        foreach (Button button in allButtons)
         {
             if (button == null)
             {
@@ -150,26 +166,103 @@ public class CanvasManageSystem : MonoBehaviour
                 continue;
             }
 
-            button.onClick.RemoveAllListeners();
-
-            switch (button.name)
-            {
-                case ButtonNames.SoloButton:
-                    button.onClick.AddListener(() => OnSetSoloButtonClick(true));
-                    button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene"));
-                    break;
-                case ButtonNames.MultiplayerButton:
-                    button.onClick.AddListener(() => OnSetSoloButtonClick(false));
-                    button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene"));
-                    break;
-                case ButtonNames.SwitchButton:
-                    button.onClick.AddListener(() => GetComponent<PlayerControlSystem>().OnSwitchPlayerButtonClick());
-                    break;
-                case ButtonNames.LeaveButton:
-                    button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene"));
-                    break;
-                    // Add more cases for other buttons as needed
-            }
+            buttonMap.Add(button.name, button);
         }
+
+        // Main menu buttons
+        buttonMap[ButtonIdentifiers.SoloGameButton].onClick.AddListener(() =>
+        {
+            OnGameModeChange(true);
+            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene");
+        });
+
+        buttonMap[ButtonIdentifiers.MultiplayerButton].onClick.AddListener(() =>
+        {
+
+            GetComponent<MultiplayerManageSystem>().OnConnectToPhotonServerButtonClick();
+            OnGameModeChange(false);
+            SwitchToPanel(PanelIdentifiers.Lobby);
+            SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, false);
+
+        });
+
+        // Lobby buttons
+
+        buttonMap[ButtonIdentifiers.CreateLobbyButton].onClick.AddListener(() =>
+        {
+            SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, true);
+            SetPanelActive(buttonMap[ButtonIdentifiers.CreateLobbyButton].gameObject, false);
+            SetPanelActive(buttonMap[ButtonIdentifiers.JoinLobbyButton].gameObject, false);
+            SetPanelActive(buttonMap[ButtonIdentifiers.BackToMenuButton].gameObject, false);
+
+            InitializeTextMeshProTexts();
+            TMP_Text lobbyText = textMeshProTexts.Find(text => text.name == TextIdentifiers.LobbyText);
+            GetComponent<MultiplayerManageSystem>().OnCreateLobbyButtonClick(lobbyText);
+        });
+
+        buttonMap[ButtonIdentifiers.ExitLobbyButton].onClick.AddListener(() =>
+        {
+            SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, false);
+            SetPanelActive(buttonMap[ButtonIdentifiers.CreateLobbyButton].gameObject, true);
+            SetPanelActive(buttonMap[ButtonIdentifiers.JoinLobbyButton].gameObject, true);
+            SetPanelActive(buttonMap[ButtonIdentifiers.BackToMenuButton].gameObject, true);
+
+            InitializeTextMeshProTexts();
+            TMP_Text lobbyText = textMeshProTexts.Find(text => text.name == TextIdentifiers.LobbyText);
+            GetComponent<MultiplayerManageSystem>().OnLeaveLobbyButtonClick(lobbyText);
+        });
+
+        buttonMap[ButtonIdentifiers.BackToMenuButton].onClick.AddListener(() =>
+        {
+            SwitchToPanel(PanelIdentifiers.MainMenu);
+            GetComponent<MultiplayerManageSystem>().OnDisconnectButtonClick();
+        });
+
+        // In-game buttons
+        buttonMap[ButtonIdentifiers.PlayerSwitchButton].onClick.AddListener(() => GetComponent<PlayerControlSystem>().OnSwitchPlayerButtonClick());
+        buttonMap[ButtonIdentifiers.ExitGameButton].onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene"));
+    }
+
+    // Finds a panel or a sub panel by its name
+    private GameObject FindPanelByName(string panelName, string subPanelName = null)
+    {
+        if (canvasInstance == null)
+        {
+            Debug.LogError("Canvas instance is null. Ensure it is properly set up.");
+            return null;
+        }
+
+        Transform panelTransform = canvasInstance.transform.Find(panelName);
+        if (panelTransform == null)
+        {
+            Debug.LogError($"Panel with name '{panelName}' not found.");
+            return null;
+        }
+
+        if (subPanelName != null)
+        {
+            Transform subPanelTransform = panelTransform.Find(subPanelName);
+            if (subPanelTransform == null)
+            {
+                Debug.LogError($"Sub panel with name '{subPanelName}' not found under '{panelName}'.");
+                return null;
+            }
+            return subPanelTransform.gameObject;
+        }
+        return panelTransform.gameObject;
+    }
+
+    // Sets a panel and its sub panels to be active or inactive
+    private void SetPanelActive(GameObject panel, bool isActive)
+    {
+        panel.SetActive(isActive);
+        subPanels.TryGetValue(panel.name, out List<GameObject> panelSubPanels);
+        panelSubPanels?.ForEach(subPanel => subPanel.SetActive(isActive));
+    }
+
+    // Sets the game mode to solo or multiplayer
+    private void OnGameModeChange(bool isSolo)
+    {
+        this.isGameModeSolo = isSolo;
     }
 }
