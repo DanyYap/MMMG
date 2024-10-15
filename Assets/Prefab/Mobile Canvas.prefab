@@ -34,9 +34,9 @@ RectTransform:
   - {fileID: 283334798014471311}
   m_Father: {fileID: 3814059880555149489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 123.19, y: -25}
   m_SizeDelta: {x: 127, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4201993472077086512
@@ -1947,7 +1947,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1925062228715754031
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2538,7 +2538,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7919073464313149708
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2977,9 +2977,9 @@ RectTransform:
   - {fileID: 6050070407215098498}
   m_Father: {fileID: 3814059880555149489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 123.19, y: -168.65}
   m_SizeDelta: {x: 127, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &954573516421242304
@@ -3401,7 +3401,7 @@ GameObject:
   - component: {fileID: 6431226962763619671}
   - component: {fileID: 4816819512563086721}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Join Lobby Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

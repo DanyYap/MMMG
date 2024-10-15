@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.Events;
 
 public class CanvasManageSystem : MonoBehaviour
 {
@@ -51,6 +52,7 @@ public class CanvasManageSystem : MonoBehaviour
 
         // lobby texts
         public const string LobbyText = "Lobby Text";
+        public const string JoinLobbyText = "Join Lobby Text";
     }
 
     void Start()
@@ -133,26 +135,15 @@ public class CanvasManageSystem : MonoBehaviour
     // Function to get specific TextMesh Pro Text components from canvasInstance based on TextIdentifiers
     private void InitializeTextMeshProTexts()
     {
+        TMP_Text[] textMeshProTextsArray = canvasInstance.GetComponentsInChildren<TMP_Text>(true);
         textMeshProTexts = new List<TMP_Text>();
-        TMP_Text[] allTextMeshProTexts = canvasInstance.GetComponentsInChildren<TMP_Text>(true);
-
-        foreach (TMP_Text text in allTextMeshProTexts)
+        foreach (TMP_Text text in textMeshProTextsArray)
         {
-            if (text == null)
-            {
-                Debug.LogWarning("TextMesh Pro Text is null. Skipping.");
-                continue;
-            }
-
-            // Check if the text component matches any of the identifiers
-            if (text.name == TextIdentifiers.MenuText || text.name == TextIdentifiers.LobbyText)
-            {
-                textMeshProTexts.Add(text);
-            }
+            textMeshProTexts.Add(text);
         }
     }
 
-    // Sets up the actions for each button
+    // Sets up the actions for each button to ensure each button is only executed once per click
     private void AssignButtonActions()
     {
         buttonMap = new Dictionary<string, Button>();
@@ -170,37 +161,52 @@ public class CanvasManageSystem : MonoBehaviour
         }
 
         // Main menu buttons
-        buttonMap[ButtonIdentifiers.SoloGameButton].onClick.AddListener(() =>
+        AddButtonAction(ButtonIdentifiers.SoloGameButton, () => ProcessButtonAction(ButtonIdentifiers.SoloGameButton, () =>
         {
             OnGameModeChange(true);
             GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene");
-        });
+        }));
 
-        buttonMap[ButtonIdentifiers.MultiplayerButton].onClick.AddListener(() =>
+        AddButtonAction(ButtonIdentifiers.MultiplayerButton, () => ProcessButtonAction(ButtonIdentifiers.MultiplayerButton, () =>
         {
-
             GetComponent<MultiplayerManageSystem>().OnConnectToPhotonServerButtonClick();
             OnGameModeChange(false);
             SwitchToPanel(PanelIdentifiers.Lobby);
             SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, false);
-
-        });
+        }));
 
         // Lobby buttons
-
-        buttonMap[ButtonIdentifiers.CreateLobbyButton].onClick.AddListener(() =>
+        AddButtonAction(ButtonIdentifiers.CreateLobbyButton, () => ProcessButtonAction(ButtonIdentifiers.CreateLobbyButton, () =>
         {
             SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, true);
             SetPanelActive(buttonMap[ButtonIdentifiers.CreateLobbyButton].gameObject, false);
             SetPanelActive(buttonMap[ButtonIdentifiers.JoinLobbyButton].gameObject, false);
             SetPanelActive(buttonMap[ButtonIdentifiers.BackToMenuButton].gameObject, false);
 
-            InitializeTextMeshProTexts();
+            InitializeAndManageCanvas();
             TMP_Text lobbyText = textMeshProTexts.Find(text => text.name == TextIdentifiers.LobbyText);
             GetComponent<MultiplayerManageSystem>().OnCreateLobbyButtonClick(lobbyText);
-        });
+        }));
 
-        buttonMap[ButtonIdentifiers.ExitLobbyButton].onClick.AddListener(() =>
+        AddButtonAction(ButtonIdentifiers.JoinLobbyButton, () => ProcessButtonAction(ButtonIdentifiers.JoinLobbyButton, () =>
+        {
+            InitializeAndManageCanvas();
+            TMP_Text joinLobbyText = textMeshProTexts.Find(text => text.name == TextIdentifiers.JoinLobbyText);
+            string textToPass = joinLobbyText != null ? joinLobbyText.text : "";
+            MultiplayerManageSystem multiplayerManageSystem = GetComponent<MultiplayerManageSystem>();
+
+            bool joinedSuccessfully = multiplayerManageSystem.OnJoinLobbyButtonClick(textToPass);
+
+            if (joinedSuccessfully)
+            {
+                SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, true);
+                SetPanelActive(buttonMap[ButtonIdentifiers.CreateLobbyButton].gameObject, false);
+                SetPanelActive(buttonMap[ButtonIdentifiers.JoinLobbyButton].gameObject, false);
+                SetPanelActive(buttonMap[ButtonIdentifiers.BackToMenuButton].gameObject, false);
+            }
+        }));
+
+        AddButtonAction(ButtonIdentifiers.ExitLobbyButton, () => ProcessButtonAction(ButtonIdentifiers.ExitLobbyButton, () =>
         {
             SetPanelActive(buttonMap[ButtonIdentifiers.ExitLobbyButton].gameObject, false);
             SetPanelActive(buttonMap[ButtonIdentifiers.CreateLobbyButton].gameObject, true);
@@ -210,17 +216,49 @@ public class CanvasManageSystem : MonoBehaviour
             InitializeTextMeshProTexts();
             TMP_Text lobbyText = textMeshProTexts.Find(text => text.name == TextIdentifiers.LobbyText);
             GetComponent<MultiplayerManageSystem>().OnLeaveLobbyButtonClick(lobbyText);
-        });
+        }));
 
-        buttonMap[ButtonIdentifiers.BackToMenuButton].onClick.AddListener(() =>
+        AddButtonAction(ButtonIdentifiers.BackToMenuButton, () => ProcessButtonAction(ButtonIdentifiers.BackToMenuButton, () =>
         {
             SwitchToPanel(PanelIdentifiers.MainMenu);
             GetComponent<MultiplayerManageSystem>().OnDisconnectButtonClick();
-        });
+        }));
 
         // In-game buttons
-        buttonMap[ButtonIdentifiers.PlayerSwitchButton].onClick.AddListener(() => GetComponent<PlayerControlSystem>().OnSwitchPlayerButtonClick());
-        buttonMap[ButtonIdentifiers.ExitGameButton].onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene"));
+        AddButtonAction(ButtonIdentifiers.PlayerSwitchButton, () => ProcessButtonAction(ButtonIdentifiers.PlayerSwitchButton, () =>
+        {
+            GetComponent<PlayerControlSystem>().OnSwitchPlayerButtonClick();
+        }));
+
+        AddButtonAction(ButtonIdentifiers.ExitGameButton, () => ProcessButtonAction(ButtonIdentifiers.ExitGameButton, () =>
+        {
+            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene");
+        }));
+    }
+
+    private void AddButtonAction(string buttonIdentifier, UnityAction action)
+    {
+        Button button = buttonMap[buttonIdentifier];
+        if (button != null)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(action);
+        }
+        else
+        {
+            Debug.LogError($"Button with identifier '{buttonIdentifier}' not found.");
+        }
+    }
+
+    private void ProcessButtonAction(string buttonIdentifier, UnityAction action)
+    {
+        if (!buttonMap[buttonIdentifier].interactable)
+        {
+            return; // Exit if the button is already being processed
+        }
+        buttonMap[buttonIdentifier].interactable = false; // Disable the button to prevent multiple clicks
+        action();
+        buttonMap[buttonIdentifier].interactable = true; // Re-enable the button after processing
     }
 
     // Finds a panel or a sub panel by its name
