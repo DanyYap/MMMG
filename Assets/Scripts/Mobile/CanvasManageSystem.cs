@@ -27,6 +27,8 @@ public class CanvasManageSystem : MonoBehaviour
         public const string MultiplayerButton = "Multiplayer Button";
         public const string SwitchButton = "Switch Button";
         public const string LeaveButton = "Leave Button";
+        public const string InteractButton = "Interact Button";
+        public const string AttackButton = " Attack Button";
     }
 
     void Start()
@@ -156,7 +158,7 @@ public class CanvasManageSystem : MonoBehaviour
             {
                 case ButtonNames.SoloButton:
                     button.onClick.AddListener(() => OnSetSoloButtonClick(true));
-                    button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene"));
+                    button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("FireHoseScene"));
                     break;
                 case ButtonNames.MultiplayerButton:
                     button.onClick.AddListener(() => OnSetSoloButtonClick(false));
@@ -167,6 +169,9 @@ public class CanvasManageSystem : MonoBehaviour
                     break;
                 case ButtonNames.LeaveButton:
                     button.onClick.AddListener(() => GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene"));
+                    break;
+                case ButtonNames.InteractButton:
+                    button.onClick.AddListener(() => GetComponent<GrabTools>().GrabObject());
                     break;
                     // Add more cases for other buttons as needed
             }

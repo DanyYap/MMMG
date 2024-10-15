@@ -6,9 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f81954b7-dcc1-4ea2-941e-ff7b3bc9d664" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Mobile Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Mobile Canvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/WaterHoseTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/WaterHoseTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Game Mechanic/FireExtinguishing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Game Mechanic/FireExtinguishing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasManageSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasManageSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Temp/Player Mechanics/GrabTools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Temp/Player Mechanics/GrabTools.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +99,8 @@
       <workItem from="1727688733763" duration="380000" />
       <workItem from="1727965340466" duration="4750000" />
       <workItem from="1728012232365" duration="3527000" />
+      <workItem from="1728887744293" duration="2100000" />
+      <workItem from="1728896778488" duration="971000" />
     </task>
     <servers />
   </component>

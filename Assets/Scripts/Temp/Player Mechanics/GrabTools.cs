@@ -9,23 +9,7 @@ public class GrabTools : MonoBehaviour
 
     void Update()
     {
-        if (objectInRange != null && Input.GetKeyDown(KeyCode.E) && !isHoldingObject)
-        {
-            GrabObject();
-        }
-        else if (isHoldingObject && Input.GetKeyDown(KeyCode.E))
-        {
-            ReleaseObject();
-        }
         
-        if (isHoldingObject && Input.GetMouseButton(0))
-        {
-            UseWaterHose();
-        }
-        else
-        {
-            grabParticleSystem.Stop();
-        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -44,7 +28,7 @@ public class GrabTools : MonoBehaviour
         }
     }
 
-    void GrabObject()
+    public void GrabObject()
     {
         if (objectInRange != null)
         {
