@@ -299,7 +299,7 @@ public class CanvasManageSystem : MonoBehaviour
     }
 
     // Sets the game mode to solo or multiplayer
-    private void OnGameModeChange(bool isSolo)
+    public void OnGameModeChange(bool isSolo)
     {
         this.isGameModeSolo = isSolo;
     }
