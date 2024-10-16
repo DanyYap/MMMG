@@ -1,16 +1,12 @@
 using UnityEngine;
 
-public class GrabTools : MonoBehaviour
+public class GrabToolsSystem : MonoBehaviour
 {
+    
     public Transform handPosition;
     public ParticleSystem grabParticleSystem;
     private GameObject objectInRange;
     [SerializeField] bool isHoldingObject = false;
-
-    void Update()
-    {
-        
-    }
 
     void OnTriggerEnter(Collider other)
     {
@@ -39,7 +35,7 @@ public class GrabTools : MonoBehaviour
         }
     }
 
-    void ReleaseObject()
+    public void ReleaseObject()
     {
         if (isHoldingObject)
         {
@@ -49,7 +45,7 @@ public class GrabTools : MonoBehaviour
         }
     }
     
-    void UseWaterHose()
+    public void UseTools()
     {
         if (grabParticleSystem != null)
         {

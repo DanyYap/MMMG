@@ -6,12 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="f81954b7-dcc1-4ea2-941e-ff7b3bc9d664" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Mobile Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Mobile Canvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Model/Prefab/Mobile Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Prefab/Mobile Canvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/WaterHoseTest.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/WaterHoseTest.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasManageSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/CanvasManageSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Temp/Player Mechanics/GrabTools.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Temp/Player Mechanics/GrabTools.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Tutorial level.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Tutorial level.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/CanvasManageSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/CanvasManageSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/PlayerControlSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/PlayerControlSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Suspended/Player Mechanics/GrabTools.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Suspended/Player Mechanics/GrabTools.cs.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +103,10 @@
       <workItem from="1728012232365" duration="3527000" />
       <workItem from="1728887744293" duration="2100000" />
       <workItem from="1728896778488" duration="971000" />
+      <workItem from="1729001889835" duration="1514000" />
+      <workItem from="1729003457341" duration="975000" />
+      <workItem from="1729039992503" duration="8071000" />
+      <workItem from="1729051958923" duration="506000" />
     </task>
     <servers />
   </component>

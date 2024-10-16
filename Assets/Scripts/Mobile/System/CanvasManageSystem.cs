@@ -43,6 +43,9 @@ public class CanvasManageSystem : MonoBehaviour
         // In-game buttons
         public const string ExitGameButton = "Exit Game Button";
         public const string PlayerSwitchButton = "Player Switch Button";
+        public const string AttackButton = "Attack Button";
+        public const string GrabButton = "Grab Button";
+        public const string ReleaseButton = "Release Button";
     }
 
     private static class TextIdentifiers
@@ -164,7 +167,7 @@ public class CanvasManageSystem : MonoBehaviour
         AddButtonAction(ButtonIdentifiers.SoloGameButton, () => ProcessButtonAction(ButtonIdentifiers.SoloGameButton, () =>
         {
             OnGameModeChange(true);
-            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene");
+            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("FireHoseScene");
         }));
 
         AddButtonAction(ButtonIdentifiers.MultiplayerButton, () => ProcessButtonAction(ButtonIdentifiers.MultiplayerButton, () =>
@@ -234,6 +237,26 @@ public class CanvasManageSystem : MonoBehaviour
         {
             GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene");
         }));
+        
+        AddButtonAction(ButtonIdentifiers.AttackButton, () => ProcessButtonAction(ButtonIdentifiers.AttackButton, () =>
+        {
+            GetComponent<PlayerControlSystem>().OnUseToolsClick();
+        }));
+        
+        AddButtonAction(ButtonIdentifiers.GrabButton, () => ProcessButtonAction(ButtonIdentifiers.GrabButton, () =>
+        {
+            GetComponent<PlayerControlSystem>().OnGrabObjectClick();
+            buttonMap[ButtonIdentifiers.GrabButton].interactable = false;
+            buttonMap[ButtonIdentifiers.ReleaseButton].interactable = true;
+        }));
+        
+        AddButtonAction(ButtonIdentifiers.ReleaseButton, () => ProcessButtonAction(ButtonIdentifiers.ReleaseButton, () =>
+        {
+            GetComponent<PlayerControlSystem>().OnReleaseObjectClick();
+            buttonMap[ButtonIdentifiers.GrabButton].interactable = true;
+            buttonMap[ButtonIdentifiers.ReleaseButton].interactable = false;
+        }));
+        
     }
 
     private void AddButtonAction(string buttonIdentifier, UnityAction action)
