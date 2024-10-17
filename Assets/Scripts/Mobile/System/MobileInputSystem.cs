@@ -1,6 +1,11 @@
 using UnityEngine;
 
-public class MobileInputSystem : MonoBehaviour
+public interface IMobileInput
+{
+    Vector2 GetDirection();
+}
+
+public class MobileInputSystem : MonoBehaviour, IMobileInput
 {
     public static MobileInputSystem Instance { get; private set; }
 
@@ -20,7 +25,7 @@ public class MobileInputSystem : MonoBehaviour
         }
     }
 
-    public void FindJoystick()
+    private void FindJoystick()
     {
         _fixedJoystick = FindFirstObjectByType<FixedJoystick>();
     }

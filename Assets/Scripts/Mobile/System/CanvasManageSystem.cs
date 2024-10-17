@@ -164,7 +164,7 @@ public class CanvasManageSystem : MonoBehaviour
         AddButtonAction(ButtonIdentifiers.SoloGameButton, () => ProcessButtonAction(ButtonIdentifiers.SoloGameButton, () =>
         {
             OnGameModeChange(true);
-            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("GameScene");
+            GetComponent<SceneManageSystem>().LoadScene("GameScene");
         }));
 
         AddButtonAction(ButtonIdentifiers.MultiplayerButton, () => ProcessButtonAction(ButtonIdentifiers.MultiplayerButton, () =>
@@ -227,12 +227,12 @@ public class CanvasManageSystem : MonoBehaviour
         // In-game buttons
         AddButtonAction(ButtonIdentifiers.PlayerSwitchButton, () => ProcessButtonAction(ButtonIdentifiers.PlayerSwitchButton, () =>
         {
-            GetComponent<PlayerControlSystem>().OnSwitchPlayerButtonClick();
+            //GetComponent<PlayerManageSystem>().SwitchPlayer();
         }));
 
         AddButtonAction(ButtonIdentifiers.ExitGameButton, () => ProcessButtonAction(ButtonIdentifiers.ExitGameButton, () =>
         {
-            GetComponent<SceneManageSystem>().OnLoadSceneButtonClick("MenuScene");
+            GetComponent<SceneManageSystem>().LoadScene("MenuScene");
         }));
     }
 

@@ -1,108 +1,114 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static CanvasManageSystem;
 
-public class SceneManageSystem : MonoBehaviour
+public static class SceneNames
 {
+    public const string MenuScene = "MenuScene";
+    public const string GameScene = "GameScene";
+}
+
+public interface ISceneController
+{
+    void OnSceneChanged(string sceneName);
+    void LoadScene(string sceneName);
+}
+
+public class SceneManageSystem : MonoBehaviour, ISceneController
+{
+    public static SceneManageSystem Instance;
+
     private string currentSceneName;
-    private CanvasManageSystem canvasManageSystem;
-    private MobileInputSystem mobileInputSystem;
-    private PlayerControlSystem playerControlSystem;
     private bool isLoadingScene = false; // Flag to prevent multiple loads
+    private InterfaceManageSystem interfaceManageSystem;
+    private PlayerManageSystem playerManageSystem;
 
-    void Start()
+    private void Awake()
     {
-        currentSceneName = SceneManager.GetActiveScene().name;
-        InitializeComponents();
-    }
-
-    void Update()
-    {
-        CheckSceneChange();
-    }
-
-    // Set up the necessary components for the game.
-    private void InitializeComponents()
-    {
-        canvasManageSystem = GetComponent<CanvasManageSystem>();
-        mobileInputSystem = GetComponent<MobileInputSystem>();
-        playerControlSystem = GetComponent<PlayerControlSystem>();
-        ValidateComponents(); // Check if all components are found.
-    }
-
-    // Check if all required components are present.
-    private void ValidateComponents()
-    {
-        if (canvasManageSystem == null || mobileInputSystem == null || playerControlSystem == null)
+        if (Instance == null)
         {
-            Debug.LogError("One or more required components are missing.");
-        }
-    }
-
-    // Check if the current scene has changed.
-    private void CheckSceneChange()
-    {
-        string activeSceneName = SceneManager.GetActiveScene().name;
-        if (currentSceneName != activeSceneName)
-        {
-            currentSceneName = activeSceneName;
-            StartCoroutine(WaitForSceneLoad()); // Wait for the new scene to load.
-        }
-    }
-
-    // Wait for the new scene to load before proceeding.
-    private IEnumerator WaitForSceneLoad()
-    {
-        yield return new WaitUntil(() => SceneManager.GetActiveScene().isLoaded);
-        OnSceneChanged(); // Scene has loaded, now do the necessary setup.
-    }
-
-    // Scene has changed and is now loaded.
-    private void OnSceneChanged()
-    {
-        Debug.Log("Scene changed to: " + currentSceneName);
-
-        if (currentSceneName == SceneNames.MenuScene)
-        {
-            canvasManageSystem.SwitchToPanel(PanelIdentifiers.MainMenu);
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            canvasManageSystem.SwitchToPanel(PanelIdentifiers.InGame);
-            mobileInputSystem.FindJoystick();
-            playerControlSystem.InitializePlayers();
+            Destroy(gameObject);
+        }
+
+        currentSceneName = SceneManager.GetActiveScene().name;
+        interfaceManageSystem = GetComponent<InterfaceManageSystem>();
+        playerManageSystem = GetComponent<PlayerManageSystem>();
+    }
+
+    public void OnSceneChanged(string sceneName)
+    {
+        Debug.Log($"Scene changed to: {sceneName}");
+        
+        switch (sceneName)
+        {
+            case SceneNames.MenuScene:
+                ActivateMenu();
+                break;
+            case SceneNames.GameScene:
+                ActivateGame();
+                break;
+            default:
+                Debug.LogWarning($"Unknown scene: {sceneName}.");
+                break;
         }
     }
 
-    // Load a scene when a button is clicked.
-    public void OnLoadSceneButtonClick(string sceneName)
+    private void ActivateMenu()
     {
-        if (!isLoadingScene && currentSceneName != sceneName) // Check if not already loading
+        interfaceManageSystem.SwitchToPanel(PanelIdentifiers.MainMenu);
+    }
+
+    private void ActivateGame()
+    {
+        interfaceManageSystem.SwitchToPanel(PanelIdentifiers.InGame);
+        playerManageSystem.InitializePlayers();
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        Debug.Log("Load Scene");
+
+        if (!isLoadingScene && currentSceneName != sceneName)
         {
             isLoadingScene = true; // Set loading flag
             StartCoroutine(LoadSceneAsync(sceneName));
         }
         else
         {
-            Debug.Log("Scene " + sceneName + " is already loaded or currently loading.");
+            Debug.Log($"Scene {sceneName} is already loaded or currently loading.");
         }
     }
 
-    // Load a scene asynchronously.
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+        if (asyncLoad == null)
+        {
+            Debug.LogError($"Failed to load scene {sceneName}.");
+            yield break;
+        }
+
         while (!asyncLoad.isDone)
         {
             yield return null;
         }
-        isLoadingScene = false; // Reset loading flag after loading
-    }
-}
 
-public static class SceneNames
-{
-    public const string MenuScene = "MenuScene";
-    // Add other scene names as needed
+        isLoadingScene = false; 
+        CheckSceneChange();
+    }
+
+    private void CheckSceneChange()
+    {
+        string activeSceneName = SceneManager.GetActiveScene().name;
+        if (!currentSceneName.Equals(activeSceneName))
+        {
+            currentSceneName = activeSceneName;
+            OnSceneChanged(currentSceneName);
+        }
+    }
 }

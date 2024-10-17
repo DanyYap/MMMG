@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private MobileInputSystem inputSystem;
+    private InterfaceManageSystem interfaceManageSystem;
     private Rigidbody rb;
     private IMovable playerMover;
     private IRotatable playerRotator;
@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        inputSystem = MobileInputSystem.Instance;
+        interfaceManageSystem = FindFirstObjectByType<InterfaceManageSystem>();
         rb = GetComponent<Rigidbody>();
 
         playerRotator = new PlayerRotator(rotationSpeed, rotationOffset);
@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        moveDirection = inputSystem.GetDirection();
+        if (interfaceManageSystem == null) return;
+        moveDirection = interfaceManageSystem.GameJoystick.GetJoystickDirection();
         playerMover.Move(rb, moveDirection);
     }
 }

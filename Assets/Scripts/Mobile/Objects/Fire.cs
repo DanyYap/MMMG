@@ -19,7 +19,7 @@ public class Fire : MonoBehaviour, IFireable
 
     private void Awake()
     {
-        fireParticleManager = new FireParticleManager(); // Initialize particle manager
+        fireParticleManager = gameObject.AddComponent<FireParticleManager>(); // Use AddComponent to initialize particle manager
     }
 
     public void StartFire()
