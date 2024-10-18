@@ -2,14 +2,14 @@ using System.Collections;
 using UnityEngine;
 
 // This interface defines methods for anything that can catch fire
-public interface IFireable
+public interface IFireable : IInteractable
 {
     void StartFire(); // Method to start fire
     void PutOutFire(); // Method to extinguish fire
 }
 
 // This class handles the fire behavior
-public class Fire : MonoBehaviour, IFireable
+public class Fireable : MonoBehaviour, IFireable
 {
     [SerializeField]
     private GameObject fireParticlePrefab; // The fire effect to show
@@ -92,5 +92,10 @@ public class Fire : MonoBehaviour, IFireable
     private void OnTriggerExit(Collider other)
     {
         PutOutFire(); // Extinguish fire when exiting
+    }
+
+    public void Interact()
+    {
+        return;
     }
 }

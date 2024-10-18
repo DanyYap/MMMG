@@ -20,4 +20,9 @@ public class FlammableObject : MonoBehaviour, IFireable
     {
         
     }
+
+    public void Interact()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -64,7 +64,7 @@ public class InteractObjectAction : IButtonAction
         this.interactableObject = interactableObject;
     }
 
-    public void Reinitialize(IInteractable interactableObject)
+    public void Reinitialize(IInteractable interactableObject = null)
     {
         this.interactableObject = interactableObject;
     }

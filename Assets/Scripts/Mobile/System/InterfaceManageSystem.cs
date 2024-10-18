@@ -7,14 +7,14 @@ using UnityEngine.UI;
 public class InterfaceManageSystem : MonoBehaviour
 {
     public static InterfaceManageSystem Instance;
-
     public CanvasScriptableObject canvasFactory;
-    private GameObject canvasPrefab;
+    public GameJoystick GameJoystick => gameJoystick;
 
+    private GameObject canvasPrefab;
     private Dictionary<string, IPanel> panels;
     private IPanel currentPanel;
-
     private GameJoystick gameJoystick;
+    private InteractObjectAction interactAction;
 
     private void Awake()
     {
@@ -89,7 +89,11 @@ public class InterfaceManageSystem : MonoBehaviour
         gameJoystick = new GameJoystick(joystick);
     }
 
-    public GameJoystick GameJoystick => gameJoystick;
+    // Call this method when a player interacts with an object
+    public void UpdateInteractableObject(IInteractable newInteractableObject = null)
+    {
+        interactAction.Reinitialize(newInteractableObject);
+    }
 
     private void SetupButtonActions()
     {
@@ -106,13 +110,16 @@ public class InterfaceManageSystem : MonoBehaviour
             }
         }
 
+        interactAction = new InteractObjectAction(); // Initialize interact action
+
         // Menu buttons
         SetupButton(ButtonIdentifiers.SoloGameButton, () => new StartGameAction(sceneController).Execute());
 
         // Game buttons
-        SetupButton(ButtonIdentifiers.PlayerSwitchButton, () => 
-        new SwitchPlayerAction(PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute());
+        SetupButton(ButtonIdentifiers.PlayerSwitchButton, () =>
+            new SwitchPlayerAction(PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute());
         SetupButton(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneController).Execute());
+        SetupButton(ButtonIdentifiers.InteractButton, () => interactAction.Execute());
     }
 
     // Finds a panel or a sub panel by its name within the provided parent transform

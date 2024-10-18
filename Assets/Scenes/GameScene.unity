@@ -1004,6 +1004,7 @@ GameObject:
   - component: {fileID: 2080171699}
   - component: {fileID: 2080171698}
   - component: {fileID: 2080171697}
+  - component: {fileID: 2080171702}
   - component: {fileID: 2080171701}
   m_Layer: 0
   m_Name: Cube
@@ -1115,6 +1116,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireParticleManager: {fileID: 880839658}
   fireParticlePrefab: {fileID: 1479090776876454383, guid: 5380de7e27a4c1a4289bede52a933cdc, type: 3}
+--- !u!114 &2080171702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080171696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3efd4bef4ec4386479f140a79122ab0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!199 &1253039592150210735
 ParticleSystemRenderer:
   serializedVersion: 6
