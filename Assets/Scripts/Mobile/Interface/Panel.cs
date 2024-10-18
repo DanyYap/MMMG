@@ -18,34 +18,48 @@ public interface IPanel
 {
     void Show();
     void Hide();
-    bool IsDestroyed(); // New method to check if the panel is destroyed
+    bool IsDestroyed(); // To check if the panel is destroyed
 }
 
-// Implement the IsDestroyed method in the panel classes
-public class MainMenuPanel : IPanel
+// Abstract class for panel behavior
+public abstract class BasePanel : IPanel
 {
-    private GameObject panel;
+    protected GameObject panelObject;
 
-    public MainMenuPanel(GameObject panel)
+    public BasePanel(GameObject panelObject)
     {
-        this.panel = panel;
+        this.panelObject = panelObject;
     }
 
-    public void Show() { panel.SetActive(true); }
-    public void Hide() { panel.SetActive(false); }
-    public bool IsDestroyed() { return panel == null; }
+    public virtual void Show() => panelObject.SetActive(true);
+    public virtual void Hide() => panelObject.SetActive(false);
+    public virtual bool IsDestroyed() => panelObject == null;
 }
 
-public class InGamePanel : IPanel
+// Concrete panel classes
+public class MainMenuPanel : BasePanel
 {
-    private GameObject panel;
+    public MainMenuPanel(GameObject panelObject) : base(panelObject) { }
+}
 
-    public InGamePanel(GameObject panel)
+public class InGamePanel : BasePanel
+{
+    public InGamePanel(GameObject panelObject) : base(panelObject) { }
+}
+
+// Factory for creating panels
+public class PanelFactory
+{
+    public static IPanel CreatePanel(string panelName, GameObject panelObject)
     {
-        this.panel = panel;
+        if (panelName == PanelIdentifiers.MainMenu)
+        {
+            return new MainMenuPanel(panelObject);
+        }
+        else if (panelName == PanelIdentifiers.InGame)
+        {
+            return new InGamePanel(panelObject);
+        }
+        return null;
     }
-
-    public void Show() { panel.SetActive(true); }
-    public void Hide() { panel.SetActive(false); }
-    public bool IsDestroyed() { return panel == null; }
 }

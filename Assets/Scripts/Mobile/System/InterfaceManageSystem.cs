@@ -22,13 +22,12 @@ public class InterfaceManageSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializePanels();
         }
         else
         {
             Destroy(gameObject);
         }
-
-        InitializePanels();
     }
 
     void Start()
@@ -56,8 +55,8 @@ public class InterfaceManageSystem : MonoBehaviour
             panels = new Dictionary<string, IPanel>();
         }
 
-        panels[PanelIdentifiers.MainMenu] = new MainMenuPanel(menuPanel);
-        panels[PanelIdentifiers.InGame] = new InGamePanel(gamePanel);
+        panels[PanelIdentifiers.MainMenu] = PanelFactory.CreatePanel(PanelIdentifiers.MainMenu, menuPanel);
+        panels[PanelIdentifiers.InGame] = PanelFactory.CreatePanel(PanelIdentifiers.InGame, gamePanel);
     }
 
     public void SwitchToPanel(string panelId)
@@ -94,39 +93,30 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private void SetupButtonActions()
     {
-        // menu buttons
         ISceneController sceneController = GetComponent<ISceneController>();
-        Button button = GameObject.Find(ButtonIdentifiers.SoloGameButton)?.GetComponent<Button>();
-        if (button != null)
+        PlayerManageSystem.Instance.InitializePlayers();
+
+        // Setup action for the button
+        void SetupButton(string buttonIdentifier, UnityAction action)
         {
-            UnityAction action = () => new StartGameAction(sceneController).Execute();
-            GameButton startGameButton = new GameButton(button, action);
+            Button button = GameObject.Find(buttonIdentifier)?.GetComponent<Button>();
+            if (button != null)
+            {
+                new GameButton(button, action);
+            }
         }
 
-        // game buttons
-        button = GameObject.Find(ButtonIdentifiers.PlayerSwitchButton)?.GetComponent<Button>();
-        if (button != null)
-        {
-            PlayerManageSystem.Instance.InitializePlayers();
-            UnityAction action = () => new SwitchPlayerAction(
-                PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute();
-            GameButton switchPlayerButton = new GameButton(button, action);
-        }
+        // Menu buttons
+        SetupButton(ButtonIdentifiers.SoloGameButton, () => new StartGameAction(sceneController).Execute());
 
-        button = GameObject.Find(ButtonIdentifiers.BackToMenuButton)?.GetComponent<Button>();
-        Debug.Log(button);
-        if (button != null)
-        {
-            UnityAction action = () => new BackMenuAction(sceneController).Execute();
-            GameButton backToMenuButton = new GameButton(button, action);
-        }
+        // Game buttons
+        SetupButton(ButtonIdentifiers.PlayerSwitchButton, () => 
+        new SwitchPlayerAction(PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute());
+        SetupButton(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneController).Execute());
     }
 
     // Finds a panel or a sub panel by its name within the provided parent transform
-    private GameObject FindPanelByName(
-        Transform parentTransform,
-        string panelName,
-        string subPanelName = null)
+    private GameObject FindPanelByName(Transform parentTransform, string panelName, string subPanelName = null)
     {
         if (parentTransform == null)
         {
@@ -141,17 +131,13 @@ public class InterfaceManageSystem : MonoBehaviour
             return null;
         }
 
-        if (subPanelName != null)
+        Transform targetTransform = subPanelName != null ? panelTransform.Find(subPanelName) : panelTransform;
+        if (targetTransform == null)
         {
-            Transform subPanelTransform = panelTransform.Find(subPanelName);
-            if (subPanelTransform == null)
-            {
-                Debug.LogError($"Sub panel with name '{subPanelName}' not found under '{panelName}'.");
-                return null;
-            }
-            return subPanelTransform.gameObject;
+            Debug.LogError($"Sub panel with name '{subPanelName}' not found under '{panelName}'.");
+            return null;
         }
 
-        return panelTransform.gameObject;
+        return targetTransform.gameObject;
     }
 }

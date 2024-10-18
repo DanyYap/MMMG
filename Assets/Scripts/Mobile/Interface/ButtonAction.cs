@@ -36,7 +36,6 @@ public class BackMenuAction : IButtonAction
 
     public void Execute()
     {
-        Debug.Log("load game scene");
         sceneController.LoadScene(SceneNames.MenuScene);
     }
 }
@@ -58,9 +57,14 @@ public class SwitchPlayerAction : IButtonAction
 
 public class InteractObjectAction : IButtonAction
 {
-    private readonly GameObject interactableObject;
+    private IInteractable interactableObject;
 
-    public InteractObjectAction(GameObject interactableObject)
+    public InteractObjectAction(IInteractable interactableObject = null)
+    {
+        this.interactableObject = interactableObject;
+    }
+
+    public void Reinitialize(IInteractable interactableObject)
     {
         this.interactableObject = interactableObject;
     }
@@ -69,6 +73,6 @@ public class InteractObjectAction : IButtonAction
     {
         if (interactableObject == null) return;
 
-
+        interactableObject.Interact();
     }
 }
