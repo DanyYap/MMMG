@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface IMovable
 {
-    void Move(Rigidbody rb, Vector2 inputDirection);
+    void Move(Rigidbody rb, Vector2 inputDirection, bool isMoving);
 }
 
 public class PlayerMover : IMovable
@@ -17,9 +17,10 @@ public class PlayerMover : IMovable
         this.rotator = rotator;
     }
 
-    public void Move(Rigidbody rb, Vector2 inputDirection)
+    public void Move(Rigidbody rb, Vector2 inputDirection, bool isMoving)
     {
         if (rb == null) return;
+        isMoving = inputDirection != Vector2.zero;
 
         // Use efficient calculations for target velocity
         Vector3 targetVelocity = new Vector3(inputDirection.x, rb.linearVelocity.y, inputDirection.y) * speed;

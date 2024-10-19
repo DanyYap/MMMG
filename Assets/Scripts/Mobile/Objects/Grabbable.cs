@@ -10,57 +10,82 @@ public interface IGrabbable : IInteractable
 public class Grabbable : MonoBehaviour, IGrabbable
 {
     public event Action OnGrabEvent;
+    public event Action OnReleaseEvent;
+
     private Transform playerHand;
+    private PlayerController owner;
 
     private void Awake()
     {
         OnGrabEvent += OnGrab;
+        OnReleaseEvent += OnRelease;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        PlayerController player = other.GetComponent<PlayerController>();
+        if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
-            //Transform playerHandChild = other.transform.Find("Player Hand");
-            Transform playerHandChild = other.transform;
-            if (playerHandChild != null)
-            {
-                playerHand = playerHandChild;
-            }
-
+            playerHand = other.transform;
             InterfaceManageSystem.Instance.UpdateInteractableObject(this);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        InterfaceManageSystem.Instance.UpdateInteractableObject(null);
+        if (owner == null)
+        {
+            InterfaceManageSystem.Instance.UpdateInteractableObject(null);
+        }
     }
 
     public void Interact()
     {
-        OnGrabEvent.Invoke();
+        if (owner == null || PlayerSwitcher.SelectedPlayer == owner)
+        {
+            if (PlayerSwitcher.SelectedPlayer.PlayerState.IsGrabbing)
+            {
+                OnReleaseEvent.Invoke();
+            }
+            else
+            {
+                OnGrabEvent.Invoke();
+            }
+        }
     }
 
     public void OnGrab()
     {
-        OnGrabEvent -= OnGrab;
-        OnGrabEvent += OnRelease;
-
-        // Attach the object to the player's hand
-        transform.SetParent(playerHand);
-        transform.localPosition = Vector3.zero; // Adjust the position if needed
-        transform.localRotation = Quaternion.identity; // Adjust the rotation if needed
+        owner = PlayerSwitcher.SelectedPlayer; // Assign the owner
+        SetPlayerGrabbingState(true);
+        AttachToPlayerHand();
         Debug.Log("grab");
     }
 
     public void OnRelease()
     {
-        OnGrabEvent -= OnRelease;
-        OnGrabEvent += OnGrab;
-
-        // Detach the object from the player's hand
-        transform.SetParent(null);
+        SetPlayerGrabbingState(false);
+        DetachFromPlayerHand();
+        owner = null; // Clear the owner on release
         Debug.Log("release");
+    }
+
+    private void AttachToPlayerHand()
+    {
+        transform.SetParent(playerHand);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+
+    private void DetachFromPlayerHand()
+    {
+        transform.SetParent(null);
+    }
+
+    private void SetPlayerGrabbingState(bool isGrabbing)
+    {
+        PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
+            flag => PlayerSwitcher.SelectedPlayer.PlayerState.IsGrabbing = flag,
+            isGrabbing);
     }
 }

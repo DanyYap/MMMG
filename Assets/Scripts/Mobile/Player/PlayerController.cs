@@ -1,8 +1,28 @@
+using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
+// TODO: need to modify so can have multiple player states at the same time
+public class PlayerState
+{
+    public bool IsMoving    { get; set; }
+    public bool IsGrabbing  { get; set; }
+
+    public PlayerState()
+    {
+        IsMoving = false;
+        IsGrabbing = false;
+    }
+
+    public void SetState(Action<bool> stateSetter, bool flag)
+    {
+        stateSetter(flag);
+    }
+}
 
 public class PlayerController : MonoBehaviour
 {
+    public PlayerState PlayerState; 
+
     private InterfaceManageSystem interfaceManageSystem;
     private Rigidbody rb;
     private IMovable playerMover;
@@ -18,6 +38,7 @@ public class PlayerController : MonoBehaviour
         interfaceManageSystem = FindFirstObjectByType<InterfaceManageSystem>();
         rb = GetComponent<Rigidbody>();
 
+        this.PlayerState = new PlayerState();
         playerRotator = new PlayerRotator(rotationSpeed, rotationOffset);
         playerMover = new PlayerMover(moveSpeed, playerRotator);
     }
@@ -26,6 +47,6 @@ public class PlayerController : MonoBehaviour
     {
         if (interfaceManageSystem == null) return;
         moveDirection = interfaceManageSystem.GameJoystick.GetJoystickDirection();
-        playerMover.Move(rb, moveDirection);
+        playerMover.Move(rb, moveDirection, PlayerState.IsMoving);
     }
 }

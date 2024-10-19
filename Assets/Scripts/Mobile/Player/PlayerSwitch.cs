@@ -8,6 +8,8 @@ public interface IPlayerSwitcher
 
 public class PlayerSwitcher : IPlayerSwitcher
 {
+    public static PlayerController SelectedPlayer;
+    
     private List<GameObject> players;
     private int currentPlayerIndex;
 
@@ -30,7 +32,14 @@ public class PlayerSwitcher : IPlayerSwitcher
     {
         for (int i = 0; i < players.Count; i++)
         {
-            var enable = players[i].GetComponent<PlayerController>().enabled = (i == index);
+            var playerController = players[i].GetComponent<PlayerController>();
+            playerController.enabled = (i == index);
+
+            if (i == index)
+            {
+                PlayerSwitcher.SelectedPlayer = playerController;
+            }
         }
     }
+
 }

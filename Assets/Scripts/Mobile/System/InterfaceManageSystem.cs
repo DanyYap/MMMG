@@ -92,6 +92,7 @@ public class InterfaceManageSystem : MonoBehaviour
     // Call this method when a player interacts with an object
     public void UpdateInteractableObject(IInteractable newInteractableObject = null)
     {
+        Debug.Log(newInteractableObject);
         interactAction.Reinitialize(newInteractableObject);
     }
 
