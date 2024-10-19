@@ -75,11 +75,15 @@ public class Grabbable : MonoBehaviour, IGrabbable
         transform.SetParent(playerHand);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
+
+        PlayerSwitcher.SelectedPlayer.ObjectOnInteract = this;
     }
 
     private void DetachFromPlayerHand()
     {
         transform.SetParent(null);
+
+        PlayerSwitcher.SelectedPlayer.ObjectOnInteract = null;
     }
 
     private void SetPlayerGrabbingState(bool isGrabbing)

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-// TODO: need to modify so can have multiple player states at the same time
 public class PlayerState
 {
     public bool IsMoving    { get; set; }
@@ -21,7 +20,8 @@ public class PlayerState
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerState PlayerState; 
+    public PlayerState PlayerState;
+    public IInteractable ObjectOnInteract;
 
     private InterfaceManageSystem interfaceManageSystem;
     private Rigidbody rb;
