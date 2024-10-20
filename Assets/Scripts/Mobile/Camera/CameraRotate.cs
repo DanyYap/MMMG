@@ -34,7 +34,6 @@ public class CameraRotate : ICameraRotateStrategy
     public float TargetHorizontalRotation { get; private set; }
     public float TargetVerticalRotation { get; private set; }
 
-    // Constructor to initialize with orbitalFollow and rotation settings
     public CameraRotate(CameraController camera)
     {
         this.camera = camera;
@@ -44,44 +43,36 @@ public class CameraRotate : ICameraRotateStrategy
 
     public void RotateCamera(RotationAxis axis)
     {
-        // Determine the rotation value based on the direction
         float rotationValue = rotateSettings.clockwise ? rotateSettings.rotationAmount : -rotateSettings.rotationAmount;
 
-        // Check the chosen rotation axis
         if (axis == RotationAxis.Horizontal)
         {
-            TargetHorizontalRotation = orbitalFollow.HorizontalAxis.Value + rotationValue;
+            TargetHorizontalRotation += rotationValue;
 
             // Normalize the target rotation to keep it within 0-360 degrees
-            if (TargetHorizontalRotation >= 360)
-            {
-                TargetHorizontalRotation -= 360;
-            }
-            else if (TargetHorizontalRotation < 0)
-            {
-                TargetHorizontalRotation += 360;
-            }
+            TargetHorizontalRotation = NormalizeAngle(TargetHorizontalRotation);
         }
         else if (axis == RotationAxis.Vertical)
         {
-            TargetVerticalRotation = orbitalFollow.VerticalAxis.Value + rotationValue;
+            TargetVerticalRotation += rotationValue;
 
             // Normalize the vertical axis value
-            if (TargetVerticalRotation > 1f) // Assuming 1 is the max for vertical axis
-            {
-                TargetVerticalRotation = 1f;
-            }
-            else if (TargetVerticalRotation < -1f) // Assuming -1 is the min for vertical axis
-            {
-                TargetVerticalRotation = -1f;
-            }
+            TargetVerticalRotation = Mathf.Clamp(TargetVerticalRotation, -1f, 1f); // Assuming -1 to 1 is the range
         }
     }
 
-    // Method to update the axis value based on the event
+    // Normalize angle to keep it within 0-360 degrees
+    private float NormalizeAngle(float angle)
+    {
+        while (angle >= 360) angle -= 360;
+        while (angle < 0) angle += 360;
+        return angle;
+    }
+
     public void UpdateAxisValues()
     {
-        orbitalFollow.HorizontalAxis.Value = Mathf.Lerp(orbitalFollow.HorizontalAxis.Value, TargetHorizontalRotation, Time.deltaTime * rotateSettings.rotationSpeed);
+        // Smoothly rotate towards the target horizontal rotation
+        orbitalFollow.HorizontalAxis.Value = Mathf.LerpAngle(orbitalFollow.HorizontalAxis.Value, TargetHorizontalRotation, Time.deltaTime * rotateSettings.rotationSpeed);
         orbitalFollow.VerticalAxis.Value = Mathf.Lerp(orbitalFollow.VerticalAxis.Value, TargetVerticalRotation, Time.deltaTime * rotateSettings.rotationSpeed);
     }
 }
