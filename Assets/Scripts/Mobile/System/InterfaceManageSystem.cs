@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 // Manager for handling UI transitions and button actions
 public class InterfaceManageSystem : MonoBehaviour
@@ -99,6 +100,7 @@ public class InterfaceManageSystem : MonoBehaviour
     private void SetupButtonActions()
     {
         ISceneController sceneController = GetComponent<ISceneController>();
+        CameraController camera = FindFirstObjectByType<CameraController>();
         PlayerManageSystem.Instance.InitializePlayers();
 
         // Setup action for the button
@@ -120,7 +122,7 @@ public class InterfaceManageSystem : MonoBehaviour
         SetupButton(ButtonIdentifiers.PlayerSwitchButton, () =>
             new SwitchPlayerAction(PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute());
         SetupButton(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneController).Execute());
-        SetupButton(ButtonIdentifiers.InteractButton, () => interactAction.Execute());
+        SetupButton(ButtonIdentifiers.RotateCameraButton, () => new RotateCameraAction(camera).Execute());
     }
 
     // Finds a panel or a sub panel by its name within the provided parent transform

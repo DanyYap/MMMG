@@ -32,15 +32,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private Vector3 rotationOffset = Vector3.zero;
+    [SerializeField] private Camera mainCamera; // Reference to the main camera
 
     private void Awake()
     {
         interfaceManageSystem = FindFirstObjectByType<InterfaceManageSystem>();
+        mainCamera = FindFirstObjectByType<Camera>();
         rb = GetComponent<Rigidbody>();
 
         this.PlayerState = new PlayerState();
         playerRotator = new PlayerRotator(rotationSpeed, rotationOffset);
-        playerMover = new PlayerMover(moveSpeed, playerRotator);
+        playerMover = new PlayerMover(moveSpeed, playerRotator, mainCamera);
     }
 
     private void FixedUpdate()

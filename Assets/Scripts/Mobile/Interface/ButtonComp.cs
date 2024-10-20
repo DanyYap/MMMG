@@ -15,6 +15,7 @@ public static class ButtonIdentifiers
     public const string ExitGameButton      = "Exit Game Button";
     public const string PlayerSwitchButton  = "Player Switch Button";
     public const string InteractButton      = "Player Interact Button";
+    public const string RotateCameraButton  = "Rotate Camera Button";
 
     public static Button FindButton(string buttonIdentifier)
     {

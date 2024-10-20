@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 // Button action interface
@@ -74,5 +75,24 @@ public class InteractObjectAction : IButtonAction
         if (interactableObject == null) return;
 
         interactableObject.Interact();
+    }
+}
+
+public class RotateCameraAction : IButtonAction
+{
+    private CameraController camera;
+    private CameraRotate rotate;
+
+    public RotateCameraAction(CameraController camera)
+    {
+        this.camera = camera;
+        rotate = camera.CameraRotate;
+    }
+
+    public void Execute()
+    {
+        if (camera == null) return;
+
+        rotate.RotateCamera(RotationAxis.Horizontal);
     }
 }
