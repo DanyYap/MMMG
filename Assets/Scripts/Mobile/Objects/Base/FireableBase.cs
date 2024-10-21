@@ -16,8 +16,8 @@ public class FireFactory
         GameObject fireInstance = Object.Instantiate(
             fireParticle,
             target.transform.position,
-            Quaternion.Euler(-90, 0, 0),
-            target.transform);
+            Quaternion.Euler(-90, 0, 0), // Fire facing upwards
+            target.transform); // Make it a child of the target
 
         fireInstance.transform.localPosition = Vector3.zero; // Make sure fire is on the object
         return fireInstance;
@@ -31,6 +31,7 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     protected FireFactory fireFactory;
     protected GameObject fire;
     protected ParticleSystem fireParticleSystem;
+    private FireBehavior fireBehavior;
 
     protected virtual void Awake()
     {
@@ -42,39 +43,35 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     {
         fire = fireFactory.CreateFireParticle(gameObject, effectsLibrary.Fire); // Instantiate fire particles
         fireParticleSystem = fire.GetComponent<ParticleSystem>(); // Get the ParticleSystem component
-    }
-
-    protected IEnumerator FadeInFireEffect()
-    {
-        fire.SetActive(true); // Activate the fire particles GameObject
-        ParticleSystem.MainModule mainModule = fireParticleSystem.main;
-        Color startColor = mainModule.startColor.color;
-
-        for (float t = 0; t <= 1; t += Time.deltaTime)
-        {
-            startColor.a = t; // Set alpha
-            mainModule.startColor = startColor; // Apply changes
-            yield return null; // Wait until the next frame
-        }
-        fireParticleSystem.Play(); // Start the particle system
-    }
-
-    protected IEnumerator FadeOutFireEffect()
-    {
-        ParticleSystem.MainModule mainModule = fireParticleSystem.main;
-        Color startColor = mainModule.startColor.color;
-
-        for (float t = 1; t >= 0; t -= Time.deltaTime)
-        {
-            startColor.a = t; // Set alpha
-            mainModule.startColor = startColor; // Apply changes
-            yield return null; // Wait until the next frame
-        }
-        fireParticleSystem.Stop(); // Stop the particle system
-        fire.SetActive(false); // Disable the fire particles GameObject
+        fireBehavior = new FireBehavior(fireParticleSystem);
     }
 
     public abstract void Ignite();
     public abstract void Extinguish();
     public abstract void Interact();
+
+    protected IEnumerator FadeInFireEffect()
+    {
+        return fireBehavior.FadeInFireEffect(); // Delegate to FireBehavior
+    }
+
+    protected IEnumerator FadeOutFireEffect()
+    {
+        return fireBehavior.FadeOutFireEffect(); // Delegate to FireBehavior
+    }
+
+    private void FixedUpdate()
+    {
+        if (fire != null)
+        {
+            // Keep the fire facing upwards
+            fire.transform.rotation = Quaternion.Euler(-90, 0, 0);
+
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                fireBehavior.Update(rb.linearVelocity.y);
+            }
+        }
+    }
 }
