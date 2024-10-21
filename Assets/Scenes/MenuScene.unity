@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 1223354528}
   - component: {fileID: 1223354527}
   - component: {fileID: 1223354530}
+  - component: {fileID: 1223354531}
   m_Layer: 0
   m_Name: New Game Manager
   m_TagString: Untagged
@@ -348,7 +349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c4e641b3fd76b9429d8abad74bebd76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasFactory: {fileID: 11400000, guid: 3a0cae213ec3af540845a65c17ec857c, type: 2}
 --- !u!114 &1223354528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,6 +388,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6654a98910d7645a8030245e297719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1223354531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1223354526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31f4b99b72e9b23478eb541fb5b5222d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanvasLibrary: {fileID: 11400000, guid: 3a0cae213ec3af540845a65c17ec857c, type: 2}
+  EffectsLibrary: {fileID: 11400000, guid: 726683da2eb6d434d8d93797fbcc39e1, type: 2}
 --- !u!1 &1496573639
 GameObject:
   m_ObjectHideFlags: 0

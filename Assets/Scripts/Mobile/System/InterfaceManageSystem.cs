@@ -8,7 +8,7 @@ using UnityEngine.Rendering;
 public class InterfaceManageSystem : MonoBehaviour
 {
     public static InterfaceManageSystem Instance;
-    public CanvasScriptableObject canvasFactory;
+    private CanvasScriptableObject canvasLibrary;
     public GameJoystick GameJoystick => gameJoystick;
 
     private GameObject canvasPrefab;
@@ -38,13 +38,14 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private void InitializePanels()
     {
-        string canvasName = canvasFactory.CanvasPrefab.name;
+        canvasLibrary = ScriptableObjectManageSystem.Instance.CanvasLibrary;
+        string canvasName = canvasLibrary.CanvasPrefab.name;
         canvasPrefab = GameObject.Find(canvasName);
 
         // Check if the canvas prefab still exists in the scene
         if (canvasPrefab == null)
         {
-            canvasPrefab = Instantiate(canvasFactory.CanvasPrefab);
+            canvasPrefab = Instantiate(canvasLibrary.CanvasPrefab);
         }
 
         // Ensure that we create panels even if they were previously destroyed

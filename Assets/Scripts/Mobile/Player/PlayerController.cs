@@ -5,11 +5,13 @@ public class PlayerState
 {
     public bool IsMoving    { get; set; }
     public bool IsGrabbing  { get; set; }
+    public bool IsBurning    { get; set; }
 
     public PlayerState()
     {
         IsMoving = false;
         IsGrabbing = false;
+        IsBurning = false;
     }
 
     public void SetState(Action<bool> stateSetter, bool flag)

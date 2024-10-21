@@ -4,45 +4,93 @@ using UnityEngine;
 // This interface defines methods for anything that can catch fire
 public interface IFireable : IInteractable
 {
-    void StartFire(); // Method to start fire
-    void PutOutFire(); // Method to extinguish fire
+    void Ignite(); // Method to start fire
+    void Extinguish(); // Method to extinguish fire
+}
+
+public class FireFactory
+{
+    // Factory Method to create fire particles
+    public GameObject CreateFireParticle(GameObject target, GameObject fireParticle)
+    {
+        GameObject fireInstance = Object.Instantiate(
+            fireParticle,
+            target.transform.position,
+            Quaternion.Euler(-90, 0, 0),
+            target.transform);
+
+        fireInstance.transform.localPosition = Vector3.zero; // Make sure fire is on the object
+        return fireInstance;
+    }
 }
 
 // This class handles the fire behavior
 public class Fireable : MonoBehaviour, IFireable
 {
-    [SerializeField]
-    private GameObject fireParticlePrefab; // The fire effect to show
-    private FireParticleManager fireParticleManager; // Manages fire particles
-    private GameObject fireParticles; // Tracks the fire particles
-    private ParticleSystem fireParticleSystem; // To access particle system directly
+    [SerializeField] private bool isPlayer = false;
+
+    private ParticleEffectsScriptableObject effects;
+    private FireFactory fireFactory; // Manages fire particles
+    private GameObject fire; // Tracks the fire particles
+    private ParticleSystem fireParticleSystem; // Access particle system directly
 
     private void Awake()
     {
-        fireParticleManager = gameObject.AddComponent<FireParticleManager>(); // Use AddComponent to initialize particle manager
+        effects = ScriptableObjectManageSystem.Instance.EffectsLibrary;
+        fireFactory = new FireFactory(); // Initialize fire particle manager
     }
 
-    public void StartFire()
+    private void Start()
     {
-        if (fireParticles == null) // Create fire particles if none exist
+        if (!isPlayer)
         {
-            CreateFireParticles();
+            Ignite();
+        }
+    }
+
+    public void Ignite()
+    {
+        if (fire == null) // Create fire particles if none exist
+        {
+            CreateFireParticle();
         }
         else
         {
-            StartCoroutine(FadeInFireParticles()); // Gradually activate existing fire particles
+            StartCoroutine(FadeInFireEffect()); // Gradually activate existing fire particles
+        }
+
+        if (isPlayer)
+        {
+            PlayerController playerController = GetComponentInParent<PlayerController>();
+            PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
+            flag => PlayerSwitcher.SelectedPlayer.PlayerState.IsBurning = flag, true);
         }
     }
 
-    private void CreateFireParticles()
+    public void Extinguish()
     {
-        fireParticles = fireParticleManager.CreateFireParticles(gameObject, fireParticlePrefab); // Instantiate fire particles
-        fireParticleSystem = fireParticles.GetComponent<ParticleSystem>(); // Get the ParticleSystem component
+        if (fire != null) // Check if an active fire exists
+        {
+            StartCoroutine(FadeOutFireEffect()); // Gradually deactivate fire particles
+        }
+
+        if (isPlayer)
+        {
+            PlayerController playerController = GetComponentInParent<PlayerController>();
+            PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
+            flag => PlayerSwitcher.SelectedPlayer.PlayerState.IsBurning = flag, false);
+        }
     }
 
-    private IEnumerator FadeInFireParticles()
+    private void CreateFireParticle()
     {
-        fireParticles.SetActive(true); // Activate the fire particles GameObject
+        fire = fireFactory.CreateFireParticle(gameObject, effects.Fire); // Instantiate fire particles
+        fireParticleSystem = fire.GetComponent<ParticleSystem>(); // Get the ParticleSystem component
+    }
+
+    private IEnumerator FadeInFireEffect()
+    {
+        fire.SetActive(true); // Activate the fire particles GameObject
         ParticleSystem.MainModule mainModule = fireParticleSystem.main;
         Color startColor = mainModule.startColor.color;
 
@@ -56,15 +104,7 @@ public class Fireable : MonoBehaviour, IFireable
         fireParticleSystem.Play(); // Start the particle system
     }
 
-    public void PutOutFire()
-    {
-        if (fireParticles != null) // Check if an active fire exists
-        {
-            StartCoroutine(FadeOutFireParticles()); // Gradually deactivate fire particles
-        }
-    }
-
-    private IEnumerator FadeOutFireParticles()
+    private IEnumerator FadeOutFireEffect()
     {
         ParticleSystem.MainModule mainModule = fireParticleSystem.main;
         Color startColor = mainModule.startColor.color;
@@ -77,25 +117,70 @@ public class Fireable : MonoBehaviour, IFireable
             yield return null; // Wait until the next frame
         }
         fireParticleSystem.Stop(); // Stop the particle system
-        fireParticles.SetActive(false); // Disable the fire particles GameObject
+        fire.SetActive(false); // Disable the fire particles GameObject
     }
 
     // Triggered when something enters the fire area
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<IFireable>(out var fireable)) 
+        // if self is player
+        if (isPlayer)
         {
-            StartFire();
+            // if self is burning
+            PlayerController playerController = GetComponentInParent<PlayerController>();
+            if (playerController.PlayerState.IsBurning)
+            {
+
+                // then others will be burnt as well
+                if (other.TryGetComponent<IFireable>(out var fireable))
+                {
+                    Ignite();
+                }
+                else
+                {
+                    // Try to find IFireable in the children of the other GameObject
+                    var fireablesInChildren = other.GetComponentsInChildren<IFireable>();
+
+                    // Check if any fireable components were found in children
+                    if (fireablesInChildren.Length > 0)
+                    {
+                        // Optionally, you can choose to ignite the first found fireable in the children
+                        fireablesInChildren[0].Ignite(); // Call Ignite on the first found fireable
+                    }
+                }
+            }
+        }
+
+        // if self is object
+        else
+        {
+            if (other.TryGetComponent<IFireable>(out var fireable))
+            {
+                Ignite();
+            }
+            else
+            {
+                // Try to find IFireable in the children of the other GameObject
+                var fireablesInChildren = other.GetComponentsInChildren<IFireable>();
+
+                // Check if any fireable components were found in children
+                if (fireablesInChildren.Length > 0)
+                {
+                    // Optionally, you can choose to ignite the first found fireable in the children
+                    fireablesInChildren[0].Ignite(); // Call Ignite on the first found fireable
+                }
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PutOutFire(); // Extinguish fire when exiting
+        //Extinguish(); // Extinguish fire when exiting
     }
 
+    // Interact method from IInteractable
     public void Interact()
     {
-        return;
+        // Implementation of interaction logic (if needed)
     }
 }
