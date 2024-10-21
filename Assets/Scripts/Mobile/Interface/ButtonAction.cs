@@ -68,11 +68,16 @@ public class InteractObjectAction : IButtonAction
     public void Reinitialize(IInteractable interactableObject = null)
     {
         this.interactableObject = interactableObject;
+        Debug.Log("reinitialized as " + this.interactableObject);
     }
 
     public void Execute()
     {
-        if (interactableObject == null) return;
+        if (interactableObject == null)
+        {
+            Debug.Log("No interactable object found");
+            return;
+        }
 
         interactableObject.Interact();
     }

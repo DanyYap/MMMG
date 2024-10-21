@@ -123,6 +123,7 @@ public class InterfaceManageSystem : MonoBehaviour
         SetupButton(ButtonIdentifiers.PlayerSwitchButton, () =>
             new SwitchPlayerAction(PlayerManageSystem.Instance.GetPlayerSwitcher()).Execute());
         SetupButton(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneController).Execute());
+        SetupButton(ButtonIdentifiers.InteractButton, () => interactAction.Execute());
         SetupButton(ButtonIdentifiers.RotateCameraButton, () => new RotateCameraAction(camera).Execute());
     }
 

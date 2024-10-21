@@ -41,6 +41,8 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
     public void Interact()
     {
+        Debug.Log("interact");
+
         if (owner == null || PlayerSwitcher.SelectedPlayer == owner)
         {
             if (PlayerSwitcher.SelectedPlayer.PlayerState.IsGrabbing)
