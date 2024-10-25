@@ -6,10 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="b2085e77-c9d0-4025-810e-d58622304280" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Model/Prefab/Rope.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Prefab/Rope.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Packages/QuickOutline/Samples/Materials/Plane.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Packages/QuickOutline/Samples/Materials/Plane.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Settings/DefaultVolumeProfile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TimeManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TimeManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/Objects/RopeSpawn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/Objects/RopeSpawn.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +93,8 @@
       <option name="presentableId" value="Default" />
       <updated>1727338700491</updated>
       <workItem from="1727338704848" duration="2719000" />
-      <workItem from="1729758516033" duration="3351000" />
+      <workItem from="1729758516033" duration="5636000" />
+      <workItem from="1729840639745" duration="1026000" />
     </task>
     <servers />
   </component>

@@ -1,74 +1,38 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class RopeSpawn : MonoBehaviour
 {
-    [SerializeField] 
-    private GameObject partPrefab, parentObject;
+    public Transform player; // The player's transform
+    public float maxLength = 5f; // Maximum length of the hose
+    private Rigidbody rb;
 
-    [SerializeField] 
-    [Range(1, 1000)] private int length = 1;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true; // Initially set to kinematic for controlled movement
+    }
 
-    [SerializeField] 
-    private float partDistance = 0.21f;
-
-    [SerializeField] 
-    private bool reset, spawn, snapFirst, snapLast;
-    
-    
-    // Update is called once per frame
     void Update()
     {
-        if (reset)
-        {
-            foreach (GameObject tmp in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                Destroy(tmp);
-            }
-        }
+        // Calculate distance from player to hose's end
+        float distance = Vector3.Distance(player.position, transform.position);
 
-        if (spawn)
+        // Check if the distance exceeds max length
+        if (distance > maxLength)
         {
-            Spawn();
-
-            spawn = false;
+            DetachHose();
         }
     }
 
-    public void Spawn()
+    private void DetachHose()
     {
-        int count = (int)(length / partDistance);
-        
-        for(int x = 0; x < count; x++)
-        {
-            GameObject tmp;
+        // Set hose Rigidbody to non-kinematic to allow physics interaction
+        rb.isKinematic = false;
 
-            tmp = Instantiate(partPrefab,
-                new Vector3(transform.position.x, transform.position.y + partDistance * (x + 1), transform.position.z),
-                Quaternion.identity, parentObject.transform);
-
-            tmp.transform.eulerAngles = new Vector3(180, 0, 0);
-
-            tmp.name = parentObject.transform.childCount.ToString();
-
-            if (x == 0)
-            {
-                Destroy(tmp.GetComponent<CharacterJoint>());
-                if (snapFirst)
-                {
-                    tmp.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                }
-            }
-            else
-            {
-                tmp.GetComponent<CharacterJoint>().connectedBody = parentObject.transform
-                    .Find((parentObject.transform.childCount - 1).ToString()).GetComponent<Rigidbody>();
-            }
-        }
-
-        if (snapLast)
-        {
-            parentObject.transform.Find((parentObject.transform.childCount).ToString()).GetComponent<Rigidbody>()
-                .constraints = RigidbodyConstraints.FreezeAll;
-        }
+        // Optionally, you can also apply a force or change its position
+        // For example, you can make it fall or shoot in a specific direction
+        // rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Example force
     }
 }
+
