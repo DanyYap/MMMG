@@ -1,12 +1,10 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class PlayerManageSystem : MonoBehaviour
 {
-    public static PlayerManageSystem Instance;
+    public static PlayerManageSystem Instance { get; private set; }
 
-    private List<GameObject> players;
-    private IPlayerSwitcher playerSwitcher;
+    private IPlayerManager playerManager;
 
     private void Awake()
     {
@@ -14,25 +12,27 @@ public class PlayerManageSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            CreateSystem();
+            InitializeSystem();
         }
         else
         {
             Destroy(gameObject);
         }
-
-        InitializePlayers();
     }
 
-    public void InitializePlayers()
+    private void CreateSystem()
     {
-        players = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
-        playerSwitcher = new PlayerSwitcher(players);
-
-        if (players.Count > 0)
-        {
-            playerSwitcher.Switch(); // Activate the first player
-        }
+        playerManager = new PlayerManager();
     }
 
-    public IPlayerSwitcher GetPlayerSwitcher() => playerSwitcher;
+    public void InitializeSystem()
+    {
+        playerManager.InitializePlayers();
+    }
+
+    public IPlayerManager GetPlayerManager()
+    {
+        return playerManager;
+    }
 }

@@ -9,17 +9,17 @@ public interface IButtonAction
 // Scenario-specific button actions
 public class StartGameAction : IButtonAction
 {
-    private ISceneController sceneController;
+    private SceneManageSystem sceneManageSystem;
 
-    public StartGameAction(ISceneController sceneController)
+    public StartGameAction(SceneManageSystem sceneManageSystem)
     {
-        this.sceneController = sceneController;
+        this.sceneManageSystem = sceneManageSystem;
     }
 
     public void Execute()
     {
         Debug.Log("load game scene");
-        sceneController.LoadScene(SceneNames.GameScene);
+        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.GameScene);
     }
 }
 
@@ -27,31 +27,31 @@ public class StartGameAction : IButtonAction
 
 public class BackMenuAction : IButtonAction
 {
-    private ISceneController sceneController;
+    private SceneManageSystem sceneManageSystem;
 
-    public BackMenuAction(ISceneController sceneController)
+    public BackMenuAction(SceneManageSystem sceneManageSystem)
     {
-        this.sceneController = sceneController;
+        this.sceneManageSystem = sceneManageSystem;
     }
 
     public void Execute()
     {
-        sceneController.LoadScene(SceneNames.MenuScene);
+        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.MenuScene);
     }
 }
 
 public class SwitchPlayerAction : IButtonAction
 {
-    private IPlayerSwitcher playerSwitcher;
+    private PlayerManageSystem playerManageSystem;
 
-    public SwitchPlayerAction(IPlayerSwitcher playerSwitcher)
+    public SwitchPlayerAction(PlayerManageSystem playerManageSystem)
     {
-        this.playerSwitcher = playerSwitcher;
+        this.playerManageSystem = playerManageSystem;
     }
 
     public void Execute()
     {
-        playerSwitcher.Switch();
+        playerManageSystem.GetPlayerManager().SwitchPlayer();
     }
 }
 
