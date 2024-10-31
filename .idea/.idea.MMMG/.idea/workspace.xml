@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="b2085e77-c9d0-4025-810e-d58622304280" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Packages/QuickOutline/Samples/Materials/Plane.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Packages/QuickOutline/Samples/Materials/Plane.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Model/Fbx/Level Design.fbx.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Fbx/Level Design.fbx.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/Objects/RopeSpawn.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/Objects/RopeSpawn.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/QualitySettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +17,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Mobile/Objects/DistanceJoint3D.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -95,6 +97,8 @@
       <workItem from="1727338704848" duration="2719000" />
       <workItem from="1729758516033" duration="5636000" />
       <workItem from="1729840639745" duration="1026000" />
+      <workItem from="1729853396585" duration="910000" />
+      <workItem from="1730357640934" duration="1223000" />
     </task>
     <servers />
   </component>

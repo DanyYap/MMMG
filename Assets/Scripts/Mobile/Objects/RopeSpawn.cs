@@ -1,38 +1,76 @@
-using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class RopeSpawn : MonoBehaviour
 {
-    public Transform player; // The player's transform
-    public float maxLength = 5f; // Maximum length of the hose
-    private Rigidbody rb;
+    public float RigidbodyMass = 1f;
+    public float ColliderRadius = 0.1f;
+    public float JointSpring = 0.1f;
+    public float JointDamper = 5f;
+    public Vector3 RotationOffset;
+    public Vector3 PositionOffset;
 
-    void Start()
+    protected List<Transform> CopySource;
+    protected List<Transform> CopyDestination;
+    protected static GameObject RigidBodyContainer;
+
+    void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true; // Initially set to kinematic for controlled movement
+        if(RigidBodyContainer == null)
+            RigidBodyContainer = new GameObject("RopeRigidbodyContainer");
+
+        CopySource = new List<Transform>();
+        CopyDestination = new List<Transform>();
+
+        //add children
+        AddChildren(transform);
     }
 
-    void Update()
+    private void AddChildren(Transform parent)
     {
-        // Calculate distance from player to hose's end
-        float distance = Vector3.Distance(player.position, transform.position);
-
-        // Check if the distance exceeds max length
-        if (distance > maxLength)
+        for (int i = 0; i < parent.childCount; i++)
         {
-            DetachHose();
+            var child = parent.GetChild(i);
+            var representative = new GameObject(child.gameObject.name);
+            representative.transform.parent = RigidBodyContainer.transform;
+            //rigidbody
+            var childRigidbody = representative.gameObject.AddComponent<Rigidbody>();
+            childRigidbody.useGravity = true;
+            childRigidbody.isKinematic = false;
+            childRigidbody.freezeRotation = true;
+            childRigidbody.mass = RigidbodyMass;
+
+            //collider
+            var collider = representative.gameObject.AddComponent<SphereCollider>();
+            collider.center = Vector3.zero;
+            collider.radius = ColliderRadius;
+
+            //DistanceJoint
+            var joint = representative.gameObject.AddComponent<DistanceJoint3D>();
+            joint.ConnectedRigidbody = parent;
+            joint.DetermineDistanceOnStart = true;
+            joint.Spring = JointSpring;
+            joint.Damper = JointDamper;
+            joint.DetermineDistanceOnStart = false;
+            joint.Distance = Vector3.Distance(parent.position, child.position);
+
+            //add copy source
+            CopySource.Add(representative.transform);
+            CopyDestination.Add(child);
+
+            AddChildren(child);
         }
     }
 
-    private void DetachHose()
+    public void Update()
     {
-        // Set hose Rigidbody to non-kinematic to allow physics interaction
-        rb.isKinematic = false;
-
-        // Optionally, you can also apply a force or change its position
-        // For example, you can make it fall or shoot in a specific direction
-        // rb.AddForce(Vector3.down * 5f, ForceMode.Impulse); // Example force
+        for (int i = 0; i < CopySource.Count; i++)
+        {
+            CopyDestination[i].position = CopySource[i].position + PositionOffset;
+            CopyDestination[i].rotation = CopySource[i].rotation * Quaternion.Euler(RotationOffset);
+        }
     }
 }
 
