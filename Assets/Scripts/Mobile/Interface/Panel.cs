@@ -31,6 +31,7 @@ public abstract class BasePanel : IPanel
         this.panelObject = panelObject;
     }
 
+    public GameObject PanelObject => panelObject;
     public virtual void Show() => panelObject.SetActive(true);
     public virtual void Hide() => panelObject.SetActive(false);
     public virtual bool IsDestroyed() => panelObject == null;

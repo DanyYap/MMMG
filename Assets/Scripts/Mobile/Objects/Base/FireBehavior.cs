@@ -6,69 +6,112 @@ public enum FireState
     Idle,
     Rising,
     Falling,
-    Extinguished // New extinguished state
+    Extinguished // State indicating the fire is extinguished
 }
 
 public class FireBehavior
 {
-    private ParticleSystem fireParticleSystem;
-    private FireState currentState;
+    private ParticleSystem fireParticleSystem; // Reference to the Particle System for fire
+    private FireState currentState; // Current state of the fire
 
+    // Constructor that initializes the fire behavior with a Particle System
     public FireBehavior(ParticleSystem particleSystem)
     {
         fireParticleSystem = particleSystem;
-        currentState = FireState.Idle;
-        fireParticleSystem.Stop();
+        currentState = FireState.Idle; // Start in Idle state
+        fireParticleSystem.Stop(); // Ensure fire is not emitting at the start
     }
 
+    // Update method to check and update the fire state based on vertical velocity
     public void Update(float verticalVelocity)
     {
         FireState newState = GetFireState(verticalVelocity);
 
-        if (newState != currentState)
+        if (newState != currentState) // If the state has changed
         {
-            currentState = newState;
-            UpdateFireEffect();
+            currentState = newState; // Update the current state
+            UpdateFireEffect(); // Update the fire's visual effects
         }
     }
 
+    // Determine the new fire state based on vertical velocity
     private FireState GetFireState(float verticalVelocity)
     {
-        if (verticalVelocity < 0) return FireState.Falling;
-        else if (verticalVelocity > 0) return FireState.Rising;
-        return currentState == FireState.Extinguished ? FireState.Extinguished : FireState.Idle;
+        if (verticalVelocity < 0) return FireState.Falling; // Falling state
+        else if (verticalVelocity > 0) return FireState.Rising; // Rising state
+        return currentState == FireState.Extinguished ? FireState.Extinguished : FireState.Idle; // Idle or Extinguished
     }
 
+    // Update the fire's visual effects based on the current state
     private void UpdateFireEffect()
     {
-        ParticleSystem.MainModule mainModule = fireParticleSystem.main;
+        ParticleSystem.MainModule mainModule = fireParticleSystem.main; // Access the main module of the Particle System
 
         switch (currentState)
         {
             case FireState.Falling:
-                mainModule.startColor = new Color(1f, 0.5f, 0.5f, 1f); // Cooler shade
-                mainModule.startSize = new ParticleSystem.MinMaxCurve(Mathf.Max(0.5f, mainModule.startSize.constant - 0.1f)); // Reduce size
+                HandleFallingState(mainModule); // Handle effects for falling state
                 break;
 
             case FireState.Rising:
-                mainModule.startColor = new Color(1f, 1f, 0f, 1f); // Hotter color
-                mainModule.startSize = new ParticleSystem.MinMaxCurve(mainModule.startSize.constant + 0.1f); // Increase size
+                HandleRisingState(mainModule); // Handle effects for rising state
                 break;
 
             case FireState.Idle:
-                // Normal fire state but less intense
-                mainModule.startColor = new Color(1f, 0.8f, 0f, 1f); // Normal fire color
-                mainModule.startSize = new ParticleSystem.MinMaxCurve(0.75f); // Slightly reduced size
+                HandleIdleState(mainModule); // Handle effects for idle state
                 break;
 
             case FireState.Extinguished:
-                // Fire is minimal or extinguished
-                mainModule.startColor = new Color(1f, 0.3f, 0f, 1f); // Dimmed fire color
-                mainModule.startSize = new ParticleSystem.MinMaxCurve(0.1f); // Very small size
-                fireParticleSystem.Stop(); // Ensure it's not actively emitting particles
+                HandleExtinguishedState(mainModule); // Handle effects for extinguished state
                 break;
         }
 
+        ApplyInstabilityEffect(mainModule); // Apply instability effects based on size
+    }
+
+    // Handle visual effects when the fire is falling
+    private void HandleFallingState(ParticleSystem.MainModule mainModule)
+    {
+        mainModule.startColor = new Color(1f, 0.5f, 0.5f, 1f); // Set cooler shade for falling fire
+        mainModule.startSize = new ParticleSystem.MinMaxCurve(Mathf.Max(0.5f, mainModule.startSize.constant - 0.1f)); // Reduce size
+    }
+
+    // Handle visual effects when the fire is rising
+    private void HandleRisingState(ParticleSystem.MainModule mainModule)
+    {
+        mainModule.startColor = new Color(1f, 1f, 0f, 1f); // Set hotter color for rising fire
+        mainModule.startSize = new ParticleSystem.MinMaxCurve(mainModule.startSize.constant + 0.1f); // Increase size
+    }
+
+    // Handle visual effects when the fire is idle
+    private void HandleIdleState(ParticleSystem.MainModule mainModule)
+    {
+        mainModule.startColor = new Color(1f, 0.8f, 0f, 1f); // Set normal fire color for idle state
+        mainModule.startSize = new ParticleSystem.MinMaxCurve(Mathf.Max(0.75f, mainModule.startSize.constant)); // Maintain slightly reduced size
+    }
+
+    // Handle visual effects when the fire is extinguished
+    private void HandleExtinguishedState(ParticleSystem.MainModule mainModule)
+    {
+        mainModule.startColor = new Color(1f, 0.3f, 0f, 1f); // Set dimmed fire color for extinguished state
+        mainModule.startSize = new ParticleSystem.MinMaxCurve(0.1f); // Set very small size
+        fireParticleSystem.Stop(); // Ensure the fire is not emitting particles
+    }
+
+    // Apply instability effects based on the size of the fire
+    private void ApplyInstabilityEffect(ParticleSystem.MainModule mainModule)
+    {
+        float currentSize = mainModule.startSize.constant; // Get the current size of the fire
+
+        if (currentSize > 1.5f) // Threshold for instability
+        {
+            // Apply random flickering color for instability
+            mainModule.startColor = new Color(Random.Range(0.8f, 1f), Random.Range(0f, 0.5f), 0f, 1f);
+            // Randomly adjust size for instability
+            mainModule.startSize = new ParticleSystem.MinMaxCurve(currentSize * Random.Range(0.8f, 1.2f));
+        }
+
+        // Play or stop the particle system based on the current state
         if (currentState != FireState.Extinguished)
         {
             fireParticleSystem.Play();
@@ -79,12 +122,14 @@ public class FireBehavior
         }
     }
 
+    // Coroutine to fade in the fire effect
     public IEnumerator FadeInFireEffect()
     {
         fireParticleSystem.gameObject.SetActive(true); // Activate the fire particles GameObject
-        ParticleSystem.MainModule mainModule = fireParticleSystem.main;
-        Color startColor = mainModule.startColor.color;
+        ParticleSystem.MainModule mainModule = fireParticleSystem.main; // Access the main module
+        Color startColor = mainModule.startColor.color; // Get the current color
 
+        // Gradually increase the alpha value to create a fade-in effect
         for (float t = 0; t <= 1; t += Time.deltaTime)
         {
             startColor.a = t; // Set alpha
@@ -94,11 +139,13 @@ public class FireBehavior
         fireParticleSystem.Play(); // Start the particle system
     }
 
+    // Coroutine to fade out the fire effect
     public IEnumerator FadeOutFireEffect()
     {
-        ParticleSystem.MainModule mainModule = fireParticleSystem.main;
-        Color startColor = mainModule.startColor.color;
+        ParticleSystem.MainModule mainModule = fireParticleSystem.main; // Access the main module
+        Color startColor = mainModule.startColor.color; // Get the current color
 
+        // Gradually decrease the alpha value to create a fade-out effect
         for (float t = 1; t >= 0; t -= Time.deltaTime)
         {
             startColor.a = t; // Set alpha

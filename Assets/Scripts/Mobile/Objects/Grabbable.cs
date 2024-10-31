@@ -14,16 +14,19 @@ public class Grabbable : MonoBehaviour, IGrabbable
     public event Action OnReleaseEvent;
 
     // self
+    public bool isSelf = true;
     private Collider selfCollider;
 
     // self parent
     private GameObject selfParent;
     private Outline parentOutline;
+    private Rigidbody parentRigidbody;
+    private Collider parentCollider;
 
     // target
     private Transform playerHand;
     private PlayerController owner;
-    
+
     private void Awake()
     {
         OnGrabEvent += OnGrab;
@@ -33,8 +36,12 @@ public class Grabbable : MonoBehaviour, IGrabbable
         selfCollider.isTrigger = true;
 
         selfParent = transform.parent?.gameObject;
-        if (selfParent == null) selfParent = gameObject;
+        if (selfParent == null || isSelf) selfParent = gameObject;
+        Debug.Log(selfParent);
+
+        parentRigidbody = selfParent.GetComponent<Rigidbody>();
         parentOutline = selfParent.GetComponent<Outline>();
+        parentCollider = selfParent.GetComponent<Collider>();
         OutlineObject(false);
     }
 
@@ -44,7 +51,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
             playerHand = other.transform;
-            InterfaceManageSystem.Instance.UpdateInteractableObject(this);
+            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(this);
             OutlineObject(true);
         }
     }
@@ -54,7 +61,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         PlayerController player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
-            InterfaceManageSystem.Instance.UpdateInteractableObject(null);
+            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(null);
             OutlineObject(false);
         }
     }
@@ -94,21 +101,39 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
     private void AttachToPlayerHand()
     {
-        selfParent.GetComponent<Collider>().isTrigger = false;
+        // Lock rigidbody constraints while grabbing
+        if (parentRigidbody != null)
+        {
+            parentRigidbody.isKinematic = true; // Disable physics interactions
+            parentRigidbody.detectCollisions = false;
+        }
 
         selfParent.transform.SetParent(playerHand);
         selfParent.transform.localPosition = Vector3.zero;
         selfParent.transform.localRotation = Quaternion.identity;
-
+        
         PlayerSwitcher.SelectedPlayer.ObjectOnInteract = this;
     }
 
     private void DetachFromPlayerHand()
     {
-        selfParent.GetComponent<Collider>().isTrigger = true;
+        // Move the object away from the player's facing direction
+        Vector3 detachDirection = playerHand.forward; // Get the player's forward direction
+        Vector3 detachOffset = detachDirection * -1f; // Adjust this value as needed (1 unit away)
+        Vector3 newPosition = selfParent.transform.position + detachOffset;
 
+        // Set the position first, then unlock rigidbody constraints
+        selfParent.transform.position = newPosition;
+        
+        // Unlock rigidbody constraints when released
+        if (parentRigidbody != null)
+        {
+            parentRigidbody.isKinematic = false; // Enable physics interactions
+            parentRigidbody.detectCollisions = true; // Re-enable collisions
+        }
+        
         selfParent.transform.SetParent(null);
-
+        
         PlayerSwitcher.SelectedPlayer.ObjectOnInteract = null;
     }
 
@@ -126,7 +151,6 @@ public class Grabbable : MonoBehaviour, IGrabbable
         if (enable)
         {
             parentOutline.enabled = true;
-
             parentOutline.OutlineMode = Outline.Mode.OutlineVisible;
 
             // Create a new color instance and modify it
@@ -135,7 +159,6 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
             // Assign the modified color back to OutlineColor
             parentOutline.OutlineColor = outlineColor;
-
             parentOutline.OutlineWidth = 7.5f;
         }
         else
