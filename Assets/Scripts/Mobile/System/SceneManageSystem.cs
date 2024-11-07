@@ -4,6 +4,7 @@ public static class SceneNames
 {
     public const string MenuScene = "MenuScene";
     public const string GameScene = "GameScene";
+    public const string FireHoseScene = "FireHoseScene";
 }
 
 public class SceneManageSystem : MonoBehaviour
