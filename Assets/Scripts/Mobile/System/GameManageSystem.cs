@@ -2,21 +2,43 @@ using UnityEngine;
 
 public class GameManageSystem : MonoBehaviour
 {
-    private IStatusManager statusManager;
+    public static GameManageSystem Instance { get; private set; }
+
+    private IHealthStatusManager statusManager;
 
     private void Awake()
     {
-        // Dependency injection of the status manager
-        statusManager = new StatusManager();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            CreateSystem();
+            InitializeSystem();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
-        // Find and register all ObjectStatus components
-        var objectStatuses = FindObjectsByType<ObjectStatus>(FindObjectsSortMode.InstanceID);
+    private void CreateSystem()
+    {
+        // Dependency injection of the status manager
+        statusManager = new HealthStatusManager();
+    }
+
+    public void InitializeSystem()
+    {
+        statusManager.ClearAllHealthStatuses();
+
+        // Find and register all Health components
+        var objectStatuses = FindObjectsByType<Health>(FindObjectsSortMode.InstanceID);
         foreach (var status in objectStatuses)
         {
-            statusManager.RegisterStatus(status);
+            statusManager.RegisterHealthStatus(status);
         }
 
         // Log the total status value for debugging
-        Debug.Log($"Total Status Value: {statusManager.CalculateTotalStatus()}");
+        Debug.Log($"Total Status Value: {statusManager.CalculateTotalHealth()}");
     }
 }

@@ -27,11 +27,6 @@ public class InterfaceManageSystem : MonoBehaviour
         SwitchToPanel(PanelIdentifiers.MainMenu);
     }
 
-    public MobileInputManager GetInputManager()
-    {
-        return inputManager;
-    }
-
     private void CreateSystem()
     {
         panelManager = new PanelManager();
@@ -46,6 +41,11 @@ public class InterfaceManageSystem : MonoBehaviour
 
         inputManager = new MobileInputManager(sceneManageSystem, playerManageSystem, cameraController);
         panelManager.InitializePanels();
+    }
+
+    public MobileInputManager GetInputManager()
+    {
+        return inputManager;
     }
 
     public void SwitchToPanel(string panel)

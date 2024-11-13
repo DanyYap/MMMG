@@ -38,6 +38,7 @@ public class SceneManagerCustom : ISceneManager
 
         PlayerManageSystem.Instance.InitializeSystem();
         InterfaceManageSystem.Instance.InitializeSystem();
+        GameManageSystem.Instance.InitializeSystem();
 
         InterfaceManageSystem.Instance.SwitchToPanel(sceneName == SceneNames.MenuScene
             ? PanelIdentifiers.MainMenu
