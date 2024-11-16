@@ -4,15 +4,15 @@ using System.Collections.Generic;
 public interface IHealthStatusManager
 {
     float CalculateTotalHealth();
-    void RegisterHealthStatus(IHealthStatus status);
-    void UnregisterHealthStatus(IHealthStatus status);
+    void RegisterHealthStatus(Health status);
+    void UnregisterHealthStatus(Health status);
     void ClearAllHealthStatuses();
 }
 
 // Manages health status components efficiently
 public class HealthStatusManager : IHealthStatusManager
 {
-    private readonly HashSet<IHealthStatus> healthStatusComponents = new(); // Use HashSet for efficient lookups
+    private readonly HashSet<Health> healthStatusComponents = new(); // Use HashSet for efficient lookups
 
     public float CalculateTotalHealth()
     {
@@ -24,12 +24,12 @@ public class HealthStatusManager : IHealthStatusManager
         return totalHealth; 
     }
 
-    public void RegisterHealthStatus(IHealthStatus status)
+    public void RegisterHealthStatus(Health status)
     {
         healthStatusComponents.Add(status); // Add returns false if already exists, no need for check
     }
 
-    public void UnregisterHealthStatus(IHealthStatus status)
+    public void UnregisterHealthStatus(Health status)
     {
         healthStatusComponents.Remove(status); // Remove does nothing if the item is not present
     }

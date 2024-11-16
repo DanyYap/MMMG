@@ -3,9 +3,14 @@ using UnityEngine;
 
 public class ObjectFireable : FireableBase
 {
+    [SerializeField] private bool isFiredAtStart = false;
+
     private void Start()
     {
-        Ignite();
+        if (isFiredAtStart)
+        {
+            Ignite();
+        }
     }
 
     public override void Ignite()

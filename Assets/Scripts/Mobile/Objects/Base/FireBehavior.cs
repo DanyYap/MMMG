@@ -13,6 +13,9 @@ public class FireBehavior
 {
     private ParticleSystem fireParticleSystem; // Reference to the Particle System for fire
     private FireState currentState; // Current state of the fire
+    private float flammableValue = 0f; // Dynamic flammable value
+
+    public float FlammableValue => flammableValue;
 
     // Constructor that initializes the fire behavior with a Particle System
     public FireBehavior(ParticleSystem particleSystem)
@@ -32,6 +35,8 @@ public class FireBehavior
             currentState = newState; // Update the current state
             UpdateFireEffect(); // Update the fire's visual effects
         }
+
+        AdjustFlammableValue(); // Adjust the flammable value based on current state
     }
 
     // Determine the new fire state based on vertical velocity
@@ -67,6 +72,26 @@ public class FireBehavior
         }
 
         ApplyInstabilityEffect(mainModule); // Apply instability effects based on size
+    }
+
+    // Adjust the flammable value dynamically based on the fire's state and time
+    private void AdjustFlammableValue()
+    {
+        switch (currentState)
+        {
+            case FireState.Rising:
+                flammableValue = Mathf.Min(flammableValue + Time.deltaTime * 5f, 100f); // Increase intensity
+                break;
+            case FireState.Falling:
+                flammableValue = Mathf.Max(flammableValue - Time.deltaTime * 3f, 1f); // Decrease intensity
+                break;
+            case FireState.Idle:
+                flammableValue = Mathf.Max(flammableValue - Time.deltaTime * 1f, 1f); // Gradual decay when idle
+                break;
+            case FireState.Extinguished:
+                flammableValue = 0f; // Set to zero when extinguished
+                break;
+        }
     }
 
     // Handle visual effects when the fire is falling

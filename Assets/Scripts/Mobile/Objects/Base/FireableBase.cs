@@ -31,7 +31,7 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     protected FireFactory fireFactory;
     protected GameObject fire;
     protected ParticleSystem fireParticleSystem;
-    private FireBehavior fireBehavior;
+    protected FireBehavior fireBehavior;
 
     protected virtual void Awake()
     {
@@ -49,6 +49,13 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     public abstract void Ignite();
     public abstract void Extinguish();
     public abstract void Interact();
+
+    public float GetFlammableValue()
+    {
+        if (fireBehavior == null) return 0f;
+
+        return fireBehavior.FlammableValue;
+    }
 
     protected IEnumerator FadeInFireEffect()
     {
