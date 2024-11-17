@@ -4,8 +4,8 @@ public class ScriptableObjectManageSystem : MonoBehaviour
 {
     public static ScriptableObjectManageSystem Instance { get; private set; }
 
-    public CanvasScriptableObject CanvasLibrary;
-    public ParticleEffectsScriptableObject EffectsLibrary;
+    public CanvasLibrary CanvasLibrary;
+    public ParticleEffectsLibrary EffectsLibrary;
 
     private void Awake()
     {

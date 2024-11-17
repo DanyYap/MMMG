@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfff85b42608b464dbb27604c0419aee, type: 3}
-  m_Name: ParticleEffectsScriptableObject
+  m_Script: {fileID: 11500000, guid: e97ae8a07de44a64faaa8345a82a68f1, type: 3}
+  m_Name: ParticleEffectsLibrary
   m_EditorClassIdentifier: 
   Fire: {fileID: 1479090776876454383, guid: 5380de7e27a4c1a4289bede52a933cdc, type: 3}

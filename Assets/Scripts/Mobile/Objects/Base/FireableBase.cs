@@ -27,7 +27,7 @@ public class FireFactory
 // Base class for fireable objects
 public abstract class FireableBase : MonoBehaviour, IFireable
 {
-    protected ParticleEffectsScriptableObject effectsLibrary;
+    protected ParticleEffectsLibrary effectsLibrary;
     protected FireFactory fireFactory;
     protected GameObject fire;
     protected ParticleSystem fireParticleSystem;
