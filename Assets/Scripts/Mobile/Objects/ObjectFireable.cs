@@ -30,6 +30,7 @@ public class ObjectFireable : FireableBase
         if (fire != null)
         {
             StartCoroutine(FadeOutFireEffect());
+            Debug.Log("extinguish");
         }
     }
 

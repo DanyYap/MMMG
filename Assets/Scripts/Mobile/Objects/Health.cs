@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public interface IDamageable
@@ -21,6 +22,9 @@ public class Health : MonoBehaviour, IDamageable, IHealable
     private float lastDamageTime;
     private HealthModifier healthModifier;
 
+    private event Action destroyEvent;
+    private bool eventTriggered = false;
+
     public float CurrentHealth => currentHealth;
 
     private void Awake()
@@ -29,10 +33,21 @@ public class Health : MonoBehaviour, IDamageable, IHealable
 
         currentHealth = maxHealth;
         healthModifier = new HealthModifier(fireableBase);
+
+        destroyEvent += () => gameObject.GetComponent<ObjectFireable>().Extinguish();
     }
 
     private void Update()
     {
+        if (currentHealth == 0 && !eventTriggered)
+        {
+            // TODO: invoke an event to hide object, or make it black with animation
+            //gameObject.SetActive(false);
+            destroyEvent.Invoke();
+            eventTriggered = true;
+            return;
+        }
+
         // Check if enough time has passed since the last damage application
         if (Time.time >= lastDamageTime + damageCooldown)
         {
@@ -48,6 +63,8 @@ public class Health : MonoBehaviour, IDamageable, IHealable
 
     public void TakeDamage(float amount)
     {
+        if (currentHealth == 0) return;
+
         currentHealth = Mathf.Clamp(currentHealth - amount, MIN_HEALTH, maxHealth);
         Debug.Log($"Took damage: {amount}. Current health: {currentHealth}");
     }

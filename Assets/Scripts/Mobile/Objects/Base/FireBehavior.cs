@@ -177,7 +177,7 @@ public class FireBehavior
             mainModule.startColor = startColor; // Apply changes
             yield return null; // Wait until the next frame
         }
-        fireParticleSystem.Stop(); // Stop the particle system
-        fireParticleSystem.gameObject.SetActive(false); // Disable the fire particles GameObject
+        //fireParticleSystem.Stop(); // Stop the particle system
+        //fireParticleSystem.gameObject.SetActive(false); // Disable the fire particles GameObject
     }
 }

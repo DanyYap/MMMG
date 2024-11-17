@@ -53,6 +53,8 @@ public class GameManageSystem : MonoBehaviour
         if (!isExecuting) return;
 
         var healths = healthManager.GetCurrentTotalHealths();
+        if (healths == 0) isExecuting = false;
+
         InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, healths);
     }
 
