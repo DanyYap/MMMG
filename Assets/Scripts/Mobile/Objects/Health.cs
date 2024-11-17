@@ -1,60 +1,82 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-// Interface for status management
-public interface IHealthStatus
+public interface IDamageable
 {
-    void UpdateHealth(List<float> affectedValues);
+    void TakeDamage(float amount);
 }
 
-public class Health : MonoBehaviour, IHealthStatus
+public interface IHealable
+{
+    void Heal(float amount);
+}
+
+public class Health : MonoBehaviour, IDamageable, IHealable
 {
     [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float minHealth = 0f;
+    [SerializeField] private float damageCooldown = 1f; // Cooldown in seconds
+
+    private readonly float MIN_HEALTH = 0f;
 
     private float currentHealth;
-    private FireableBase fireableBase;
+    private float lastDamageTime;
+    private HealthModifier healthModifier;
 
     public float CurrentHealth => currentHealth;
 
     private void Awake()
     {
+        var fireableBase = GetComponent<FireableBase>();
+
         currentHealth = maxHealth;
-        fireableBase = GetComponent<FireableBase>(); // Ensure FireableBase is attached
+        healthModifier = new HealthModifier(fireableBase);
     }
 
     private void Update()
     {
-        // Collect multiple health-affecting values
-        List<float> healthModifiers = new()
+        // Check if enough time has passed since the last damage application
+        if (Time.time >= lastDamageTime + damageCooldown)
         {
-            - fireableBase.GetFlammableValue() * 0.001f,
-            GetOtherHealthModifiers() // Example method for other modifiers
-        };
-
-        UpdateHealth(healthModifiers); // Call the updated method
-
-        Debug.Log(currentHealth);
-    }
-
-    // Update health based on multiple values
-    public void UpdateHealth(List<float> affectedValues)
-    {
-        float totalEffect = 0f;
-        foreach (var value in affectedValues)
-        {
-            totalEffect += value; // Sum all health-modifying values
-        }
-
-        if (totalEffect != 0 && currentHealth > minHealth) // Only update if there is an effect and health is above minimum
-        {
-            currentHealth = Mathf.Clamp(currentHealth + totalEffect, minHealth, maxHealth); // Clamp health
+            float damage = healthModifier.GetCurrentDamage();
+            
+            if (damage > 0)
+            {
+                TakeDamage(damage);
+                lastDamageTime = Time.time; // Reset cooldown timer
+            }
         }
     }
 
-    private float GetOtherHealthModifiers()
+    public void TakeDamage(float amount)
     {
-        // Placeholder for other health-modifying logic
-        return 0f; // Replace with actual logic
+        currentHealth = Mathf.Clamp(currentHealth - amount, MIN_HEALTH, maxHealth);
+        Debug.Log($"Took damage: {amount}. Current health: {currentHealth}");
+    }
+
+    public void Heal(float amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, MIN_HEALTH, maxHealth);
+        Debug.Log($"Healed: {amount}. Current health: {currentHealth}");
+    }
+
+    public float GetMaxHealth() => maxHealth;
+}
+
+public interface IHealthModifier
+{
+    float GetCurrentDamage();
+}
+
+public class HealthModifier : IHealthModifier
+{
+    private FireableBase fireableBase;
+
+    public HealthModifier(FireableBase fireableBase)
+    {
+        this.fireableBase = fireableBase;
+    }
+
+    public float GetCurrentDamage()
+    {
+        return fireableBase.GetFlammableValue();
     }
 }

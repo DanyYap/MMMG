@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -16,26 +15,12 @@ public static class ButtonIdentifiers
     public const string PlayerSwitchButton  = "Player Switch Button";
     public const string InteractButton      = "Player Interact Button";
     public const string RotateCameraButton  = "Rotate Camera Button";
-
-    public static Button FindButton(string buttonIdentifier)
-    {
-        // Find button by its name in the scene
-        GameObject buttonObject = GameObject.Find(buttonIdentifier);
-        Button button = buttonObject != null ? buttonObject.GetComponent<Button>() : null;
-
-        if (button == null)
-        {
-            Debug.LogError($"Button with identifier '{buttonIdentifier}' not found in the scene.");
-        }
-
-        return button;
-    }
 }
 
 public interface IButtonComponent
 {
-    void ReinitializeButton(Button button);
-    void ChangeAction(UnityAction action);
+    void InitializeButton(Button button);
+    void InitializeAction(UnityAction action);
     void ExecuteAction();
 }
 
@@ -46,17 +31,16 @@ public class GameButton : IButtonComponent
 
     public GameButton(Button button, UnityAction action)
     {
-        this.button = button;
-        this.action = action;
-        ChangeAction(action);
+        InitializeButton(button);
+        InitializeAction(action);
     }
 
-    public void ReinitializeButton(Button button)
+    public void InitializeButton(Button button)
     {
         this.button = button;
     }
 
-    public void ChangeAction(UnityAction action)
+    public void InitializeAction(UnityAction action)
     {
         if (action == null) return;
 
