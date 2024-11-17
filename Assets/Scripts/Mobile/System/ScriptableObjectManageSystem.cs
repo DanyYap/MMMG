@@ -6,6 +6,7 @@ public class ScriptableObjectManageSystem : MonoBehaviour
 
     public CanvasLibrary CanvasLibrary;
     public ParticleEffectsLibrary EffectsLibrary;
+    public AnimationLibrary AnimationLibrary;
 
     private void Awake()
     {

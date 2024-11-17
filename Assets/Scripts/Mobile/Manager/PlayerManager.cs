@@ -16,6 +16,7 @@ public class PlayerManager : IPlayerManager
     {
         players = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         playerSwitcher = new PlayerSwitcher(players);
+        Debug.Log("yoooooooo " + players.Count);
 
         if (players.Count > 0)
         {

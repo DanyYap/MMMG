@@ -26,7 +26,8 @@ public class PlayerRotator : IRotatable
             forward.Normalize(); // Normalize to get a unit vector
 
             // Calculate the desired direction, inverting the input direction
-            Vector3 direction = forward * -inputDirection.y + camera.transform.right * -inputDirection.x + rotationOffset;
+            //Vector3 direction = forward * -inputDirection.y + camera.transform.right * -inputDirection.x + rotationOffset;
+            Vector3 direction = forward * inputDirection.y + camera.transform.right * inputDirection.x + rotationOffset;
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, Time.deltaTime * rotationSpeed); // Smooth rotation
         }

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public interface IMovable
 {
-    void Move(Rigidbody rb, Vector2 inputDirection, bool isMoving);
+    void Move(Rigidbody rb, Vector2 inputDirection);
 }
 
 public class PlayerMover : IMovable
@@ -20,10 +20,9 @@ public class PlayerMover : IMovable
         this.camera = camera; // Store the camera reference
     }
 
-    public void Move(Rigidbody rb, Vector2 inputDirection, bool isMoving)
+    public void Move(Rigidbody rb, Vector2 inputDirection)
     {
         if (rb == null) return;
-        isMoving = inputDirection != Vector2.zero;
 
         // Calculate camera's forward direction
         Vector3 forward = camera.transform.forward;

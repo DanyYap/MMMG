@@ -27,14 +27,17 @@ public class PlayerController : MonoBehaviour
 
     private InterfaceManageSystem interfaceManageSystem;
     private Rigidbody rb;
+    private Vector2 moveDirection;
     private IMovable playerMover;
     private IRotatable playerRotator;
-    private Vector2 moveDirection;
+    private IAnimatable playerAnimator;
 
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private Vector3 rotationOffset = Vector3.zero;
     [SerializeField] private Camera mainCamera; // Reference to the main camera
+
+    public Transform playerGrabPoint;
 
     private void Awake()
     {
@@ -42,15 +45,38 @@ public class PlayerController : MonoBehaviour
         mainCamera = FindFirstObjectByType<Camera>();
         rb = GetComponent<Rigidbody>();
 
+        // movement & rotation
         this.PlayerState = new PlayerState();
         playerRotator = new PlayerRotator(rotationSpeed, rotationOffset);
         playerMover = new PlayerMover(moveSpeed, playerRotator, mainCamera);
+
+        // animation
+        var animator = GetComponent<Animator>();
+        var library = ScriptableObjectManageSystem.Instance.AnimationLibrary;
+        playerAnimator = AnimatableFactory.CreateAnimator(animator, library, EntityType.Character);
+        if (playerAnimator is CharacterAnimator characterAnimator)
+        {
+            characterAnimator.InitializePlayerState(PlayerState);
+        }
+
+        // grabbing
+        if (playerGrabPoint == null)
+        {
+            playerGrabPoint = gameObject.transform;
+        }
+    }
+
+    private void Update()
+    {
+        playerAnimator.PlayIdleOrRun();
     }
 
     private void FixedUpdate()
     {
         if (interfaceManageSystem == null) return;
         moveDirection = interfaceManageSystem.GetInputManager().GetJoystickDirection();
-        playerMover.Move(rb, moveDirection, PlayerState.IsMoving);
+
+        PlayerState.IsMoving = moveDirection != Vector2.zero;
+        playerMover.Move(rb, moveDirection);
     }
 }

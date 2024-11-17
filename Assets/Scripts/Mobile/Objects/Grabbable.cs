@@ -50,7 +50,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         PlayerController player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
-            playerHand = other.transform;
+            playerHand = player.playerGrabPoint;
             InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(this);
             OutlineObject(true);
         }

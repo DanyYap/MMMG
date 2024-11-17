@@ -21,7 +21,7 @@ public class PlayerSwitcher : IPlayerSwitcher
 
     public void Switch()
     {
-        if (players.Count > 1)
+        if (players.Count >= 1)
         {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
             SetActivePlayer(currentPlayerIndex);
