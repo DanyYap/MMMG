@@ -5,9 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - UI
-  - grabObject
-  - Fire
-  - water
+  - Hostage
   layers:
   - Default
   - TransparentFX
@@ -15,7 +13,7 @@ TagManager:
   - 
   - Water
   - UI
-  - Fire
+  - 
   - 
   - 
   - 
