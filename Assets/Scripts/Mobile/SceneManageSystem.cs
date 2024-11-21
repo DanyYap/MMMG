@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static CanvasManageSystem;
 
 public class SceneManageSystem : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class SceneManageSystem : MonoBehaviour
     private CanvasManageSystem canvasManageSystem;
     private MobileInputSystem mobileInputSystem;
     private PlayerControlSystem playerControlSystem;
+    private bool isLoadingScene = false; // Flag to prevent multiple loads
 
     void Start()
     {
@@ -60,20 +62,14 @@ public class SceneManageSystem : MonoBehaviour
     private void OnSceneChanged()
     {
         Debug.Log("Scene changed to: " + currentSceneName);
-        canvasManageSystem.AssignButtonListeners();
-        SwitchPanelsBasedOnScene();
-    }
 
-    // Switch to the correct panel based on the current scene.
-    private void SwitchPanelsBasedOnScene()
-    {
         if (currentSceneName == SceneNames.MenuScene)
         {
-            canvasManageSystem.SwitchToMenuPanel();
+            canvasManageSystem.SwitchToPanel(PanelIdentifiers.MainMenu);
         }
         else
         {
-            canvasManageSystem.SwitchToInGamePanel();
+            canvasManageSystem.SwitchToPanel(PanelIdentifiers.InGame);
             mobileInputSystem.FindJoystick();
             playerControlSystem.InitializePlayers();
         }
@@ -82,13 +78,14 @@ public class SceneManageSystem : MonoBehaviour
     // Load a scene when a button is clicked.
     public void OnLoadSceneButtonClick(string sceneName)
     {
-        if (currentSceneName != sceneName)
+        if (!isLoadingScene && currentSceneName != sceneName) // Check if not already loading
         {
+            isLoadingScene = true; // Set loading flag
             StartCoroutine(LoadSceneAsync(sceneName));
         }
         else
         {
-            Debug.Log("Scene " + sceneName + " is already loaded.");
+            Debug.Log("Scene " + sceneName + " is already loaded or currently loading.");
         }
     }
 
@@ -100,6 +97,7 @@ public class SceneManageSystem : MonoBehaviour
         {
             yield return null;
         }
+        isLoadingScene = false; // Reset loading flag after loading
     }
 }
 
