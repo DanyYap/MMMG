@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="b2085e77-c9d0-4025-810e-d58622304280" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MMMG/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Model/Prefab/Player.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Prefab/Player.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Model/Image/Human_DefaultMaterial_Normal_Raw.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Image/Human_DefaultMaterial_Normal_Raw.png.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Model/Prefab/Mobile Canvas.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Model/Prefab/Mobile Canvas.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Packages/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Packages/TextMesh Pro/Resources/Fonts &amp; Materials/LiberationSans SDF - Fallback.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/FireHoseScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/SceneManageSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Mobile/System/SceneManageSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MenuScene.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,6 +102,7 @@
       <workItem from="1729853396585" duration="910000" />
       <workItem from="1730357640934" duration="1223000" />
       <workItem from="1730943309993" duration="5628000" />
+      <workItem from="1732166774657" duration="1601000" />
     </task>
     <servers />
   </component>
