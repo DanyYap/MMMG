@@ -11,8 +11,10 @@ public interface IInputManager
 public class MobileInputManager : IInputManager
 {
     private GameJoystick gameJoystick;
+    private InteractObjectAction[] interactActions;
     private InteractObjectAction interactAction = new();
-
+    private InteractObjectAction interactAction_2 = new();
+    
     private readonly SceneManageSystem sceneManageSystem;
     private readonly PlayerManageSystem playerManageSystem;
     private readonly CameraController cameraController;
@@ -28,6 +30,8 @@ public class MobileInputManager : IInputManager
         this.sceneManageSystem = sceneManageSystem;
         this.playerManageSystem = playerManageSystem;
         this.cameraController = cameraController;
+
+        interactActions = new InteractObjectAction[] { interactAction, interactAction_2 };
     }
 
     public void SetupJoystick()
@@ -50,13 +54,19 @@ public class MobileInputManager : IInputManager
         SetupButton(ButtonIdentifiers.InteractButton,
             () => interactAction.Execute());
 
+        SetupButton(ButtonIdentifiers.UseToolButton,
+            () => interactAction_2.Execute());
+
         SetupButton(ButtonIdentifiers.RotateCameraButton,
             () => new RotateCameraAction(cameraController).Execute());
     }
 
-    public void SetNewInteractAction(IInteractable interactableObject)
+    public void SetNewInteractAction(IInteractable interactableObject, int index)
     {
-        this.interactAction.Reinitialize(interactableObject);
+        if (index >= 0 && index <= interactActions.Length)
+        {
+            interactActions[index].Reinitialize(interactableObject);
+        }
     }
 
     public Vector2 GetJoystickDirection()
@@ -66,10 +76,10 @@ public class MobileInputManager : IInputManager
 
     private void SetupButton(string buttonId, UnityAction action)
     {
-        Button button = GameObject.Find(buttonId)?.GetComponent<Button>();
+        UnityEngine.UI.Button button = GameObject.Find(buttonId)?.GetComponent<UnityEngine.UI.Button>();
         if (button != null)
         {
-            new GameButton(button, action);
+            new Button(button, action);
         }
     }
 }

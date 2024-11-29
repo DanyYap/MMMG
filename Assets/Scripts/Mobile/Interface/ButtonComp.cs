@@ -15,27 +15,29 @@ public static class ButtonIdentifiers
     public const string PlayerSwitchButton  = "Player Switch Button";
     public const string InteractButton      = "Player Interact Button";
     public const string RotateCameraButton  = "Rotate Camera Button";
+    public const string UseToolButton       = "Use Tools Button";
 }
 
 public interface IButtonComponent
 {
-    void InitializeButton(Button button);
+    void InitializeButton(UnityEngine.UI.Button button);
     void InitializeAction(UnityAction action);
     void ExecuteAction();
+    void EnableButtonVisibility(bool enabled);
 }
 
-public class GameButton : IButtonComponent
+public class Button : IButtonComponent
 {
-    private Button button;
+    private UnityEngine.UI.Button button;
     private UnityAction action;
 
-    public GameButton(Button button, UnityAction action)
+    public Button(UnityEngine.UI.Button button, UnityAction action)
     {
         InitializeButton(button);
         InitializeAction(action);
     }
 
-    public void InitializeButton(Button button)
+    public void InitializeButton(UnityEngine.UI.Button button)
     {
         this.button = button;
     }
@@ -57,5 +59,10 @@ public class GameButton : IButtonComponent
         button.interactable = false;
         action();
         button.interactable = true;
+    }
+
+    public void EnableButtonVisibility(bool enabled)
+    {
+        button.gameObject.SetActive(enabled);
     }
 }

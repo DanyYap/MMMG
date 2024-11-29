@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ParticleEffectsLibrary
   m_EditorClassIdentifier: 
   Fire: {fileID: 1479090776876454383, guid: 5380de7e27a4c1a4289bede52a933cdc, type: 3}
+  Water: {fileID: 6835437864763863386, guid: 6bdfa6796fcab4e44ae9d29f147a81ff, type: 3}

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public interface IGrabbable : IInteractable
 {
@@ -12,6 +13,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
 {
     public event Action OnGrabEvent;
     public event Action OnReleaseEvent;
+    private event Action outsideEvent;
 
     // self
     public bool isSelf = true;
@@ -27,6 +29,9 @@ public class Grabbable : MonoBehaviour, IGrabbable
     private Transform playerHand;
     private PlayerController owner;
 
+    //
+    
+
     private void Awake()
     {
         OnGrabEvent += OnGrab;
@@ -37,7 +42,6 @@ public class Grabbable : MonoBehaviour, IGrabbable
 
         selfParent = transform.parent?.gameObject;
         if (selfParent == null || isSelf) selfParent = gameObject;
-        Debug.Log(selfParent);
 
         parentRigidbody = selfParent.GetComponent<Rigidbody>();
         parentOutline = selfParent.GetComponent<Outline>();
@@ -51,7 +55,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
             playerHand = player.playerGrabPoint;
-            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(this);
+            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(this, 0);
             OutlineObject(true);
         }
     }
@@ -61,7 +65,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         PlayerController player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(null);
+            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(null, 0);
             OutlineObject(false);
         }
     }
@@ -88,7 +92,9 @@ public class Grabbable : MonoBehaviour, IGrabbable
         owner = PlayerSwitcher.SelectedPlayer; // Assign the owner
         SetPlayerGrabbingState(true);
         AttachToPlayerHand();
-        Debug.Log("grab");
+
+        if (outsideEvent == null) return;
+        outsideEvent.Invoke();
     }
 
     public void OnRelease()
@@ -96,7 +102,16 @@ public class Grabbable : MonoBehaviour, IGrabbable
         SetPlayerGrabbingState(false);
         DetachFromPlayerHand();
         owner = null; // Clear the owner on release
-        Debug.Log("release");
+
+        if (outsideEvent == null) return;
+        outsideEvent.Invoke();
+        outsideEvent = null;
+    }
+
+    public void AssignNewEvent(Action newEvent)
+    {
+        outsideEvent = null;
+        outsideEvent = newEvent;
     }
 
     private void AttachToPlayerHand()
@@ -153,7 +168,6 @@ public class Grabbable : MonoBehaviour, IGrabbable
             parentOutline.enabled = true;
             parentOutline.OutlineMode = Outline.Mode.OutlineVisible;
 
-            // Create a new color instance and modify it
             Color outlineColor = Color.red;
             outlineColor.a = 0.5f; // Set the alpha value
 

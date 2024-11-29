@@ -41,9 +41,8 @@ public class PlayerSwitcher : IPlayerSwitcher
 
                 // update interact button of object owned by current player
                 InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(
-                    PlayerSwitcher.SelectedPlayer.ObjectOnInteract);
+                    PlayerSwitcher.SelectedPlayer.ObjectOnInteract, 0);
             }
         }
     }
-
 }

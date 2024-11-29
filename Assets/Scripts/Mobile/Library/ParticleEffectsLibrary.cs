@@ -5,4 +5,5 @@ public class ParticleEffectsLibrary : ScriptableObject
 {
     [Header("Fire")]
     public GameObject Fire;
+    public GameObject Water;
 }

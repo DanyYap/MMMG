@@ -561,30 +561,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1514899236702256368, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1514899236702256368, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -25
-      objectReference: {fileID: 0}
-    - target: {fileID: 1746916329548179132, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1746916329548179132, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -153.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 5403651169710062085, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 252.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6021423767157408433, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
-      propertyPath: m_Spacing
-      value: 78.7
-      objectReference: {fileID: 0}
     - target: {fileID: 7210105889266491967, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
       propertyPath: m_Name
       value: Mobile Canvas
@@ -671,6 +647,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8172677573701343789, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756430979177890109, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
