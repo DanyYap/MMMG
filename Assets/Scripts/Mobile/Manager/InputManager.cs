@@ -1,23 +1,22 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public interface IInputManager
 {
-    void SetupJoystick();
-    void SetupButtonActions();
+    void SetJoystick();
+    void SetButtonAction(string buttonIdentifier, UnityAction action);
 }
 
 public class MobileInputManager : IInputManager
 {
     private GameJoystick gameJoystick;
-    private InteractObjectAction[] interactActions;
-    private InteractObjectAction interactAction = new();
-    private InteractObjectAction interactAction_2 = new();
-    
     private readonly SceneManageSystem sceneManageSystem;
     private readonly PlayerManageSystem playerManageSystem;
     private readonly CameraController cameraController;
+
+    // Use a Dictionary to map ButtonIdentifiers to Button components
+    private readonly Dictionary<string, UnityEngine.UI.Button> buttonComponents = new Dictionary<string, UnityEngine.UI.Button>();
 
     public MobileInputManager(
         SceneManageSystem sceneManageSystem,
@@ -31,55 +30,62 @@ public class MobileInputManager : IInputManager
         this.playerManageSystem = playerManageSystem;
         this.cameraController = cameraController;
 
-        interactActions = new InteractObjectAction[] { interactAction, interactAction_2 };
+        InitializeButtonActions();
     }
 
-    public void SetupJoystick()
+    public void SetJoystick()
     {
-        FixedJoystick joystick = UnityEngine.Object.FindAnyObjectByType<FixedJoystick>();
+        FixedJoystick joystick = Object.FindAnyObjectByType<FixedJoystick>();
         gameJoystick = new GameJoystick(joystick);
     }
 
-    public void SetupButtonActions()
+    // Set or remove an action for a button and toggle its visibility based on action presence
+    public void SetButtonAction(string buttonIdentifier, UnityAction action = null)
     {
-        SetupButton(ButtonIdentifiers.SoloGameButton,
-            () => new StartGameAction(sceneManageSystem).Execute());
+        // Find the button in the scene
+        UnityEngine.UI.Button gameButton = GameObject.Find(buttonIdentifier)?.GetComponent<UnityEngine.UI.Button>();
 
-        SetupButton(ButtonIdentifiers.PlayerSwitchButton,
-            () => new SwitchPlayerAction(playerManageSystem).Execute());
-
-        SetupButton(ButtonIdentifiers.BackToMenuButton,
-            () => new BackMenuAction(sceneManageSystem).Execute());
-
-        SetupButton(ButtonIdentifiers.InteractButton,
-            () => interactAction.Execute());
-
-        SetupButton(ButtonIdentifiers.UseToolButton,
-            () => interactAction_2.Execute());
-
-        SetupButton(ButtonIdentifiers.RotateCameraButton,
-            () => new RotateCameraAction(cameraController).Execute());
-    }
-
-    public void SetNewInteractAction(IInteractable interactableObject, int index)
-    {
-        if (index >= 0 && index <= interactActions.Length)
+        // If button exists, assign or clear the action
+        if (gameButton != null)
         {
-            interactActions[index].Reinitialize(interactableObject);
+            if (action != null)
+            {
+                // Add button component to dictionary if not already present
+                if (!buttonComponents.ContainsKey(buttonIdentifier))
+                {
+                    buttonComponents.Add(buttonIdentifier, gameButton);
+                }
+
+                // Assign the action to the button
+                gameButton.onClick.RemoveAllListeners();  // Clear previous listeners
+                gameButton.onClick.AddListener(action);  // Assign new action
+            }
+            else
+            {
+                // If no action is provided, clear all listeners and disable the button
+                gameButton.onClick.RemoveAllListeners();  // Clear previous listeners
+
+                // Remove button component from dictionary if no action is set
+                if (buttonComponents.ContainsKey(buttonIdentifier))
+                {
+                    buttonComponents.Remove(buttonIdentifier);
+                }
+            }
         }
     }
 
-    public Vector2 GetJoystickDirection()
-    {
-        return gameJoystick.GetJoystickDirection();
-    }
 
-    private void SetupButton(string buttonId, UnityAction action)
+    public Vector2 GetJoystickDirection() => gameJoystick.GetJoystickDirection();
+
+    // Method to initialize button actions with their respective identifiers
+    public void InitializeButtonActions()
     {
-        UnityEngine.UI.Button button = GameObject.Find(buttonId)?.GetComponent<UnityEngine.UI.Button>();
-        if (button != null)
-        {
-            new Button(button, action);
-        }
+        // Adding actions for each button identifier
+        SetButtonAction(ButtonIdentifiers.SoloGameButton, () => new StartGameAction(sceneManageSystem).Execute());
+        SetButtonAction(ButtonIdentifiers.PlayerSwitchButton, () => new SwitchPlayerAction(playerManageSystem).Execute());
+        SetButtonAction(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneManageSystem).Execute());
+        SetButtonAction(ButtonIdentifiers.InteractButton, () => new InteractObjectAction());
+        SetButtonAction(ButtonIdentifiers.UseToolButton, () => new InteractObjectAction());
+        SetButtonAction(ButtonIdentifiers.RotateCameraButton, () => new RotateCameraAction(cameraController).Execute());
     }
 }

@@ -23,7 +23,6 @@ public interface IButtonComponent
     void InitializeButton(UnityEngine.UI.Button button);
     void InitializeAction(UnityAction action);
     void ExecuteAction();
-    void EnableButtonVisibility(bool enabled);
 }
 
 public class Button : IButtonComponent

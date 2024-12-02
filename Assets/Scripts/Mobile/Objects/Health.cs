@@ -66,13 +66,13 @@ public class Health : MonoBehaviour, IDamageable, IHealable
         if (currentHealth == 0) return;
 
         currentHealth = Mathf.Clamp(currentHealth - amount, MIN_HEALTH, maxHealth);
-        Debug.Log($"Took damage: {amount}. Current health: {currentHealth}");
+        //Debug.Log($"Took damage: {amount}. Current health: {currentHealth}");
     }
 
     public void Heal(float amount)
     {
         currentHealth = Mathf.Clamp(currentHealth + amount, MIN_HEALTH, maxHealth);
-        Debug.Log($"Healed: {amount}. Current health: {currentHealth}");
+        //Debug.Log($"Healed: {amount}. Current health: {currentHealth}");
     }
 
     public float GetMaxHealth() => maxHealth;

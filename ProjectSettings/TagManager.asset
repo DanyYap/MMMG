@@ -6,14 +6,17 @@ TagManager:
   tags:
   - UI
   - Hostage
+  - Fire
+  - Water
+  - grabObject
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Fire
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

@@ -61,8 +61,8 @@ public class InterfaceManageSystem : MonoBehaviour
     public void SwitchToPanel(string panel)
     {
         panelManager.SwitchToPanel(panel);
-        inputManager.SetupJoystick();
-        inputManager.SetupButtonActions();
+        inputManager.SetJoystick();
+        inputManager.InitializeButtonActions();
         textManager.SetupTexts();
     }
 }

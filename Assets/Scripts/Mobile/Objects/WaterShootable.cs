@@ -50,8 +50,7 @@ public class WaterShootable : MonoBehaviour, IWaterShootable, IInteractable
 
         if (gameButton != null)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(this, 1);
-            gameButton.SetActive(true);
+            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.UseToolButton, () => Interact());
         }
 
         initializeButtonEvent -= InitializeButton;
@@ -64,8 +63,7 @@ public class WaterShootable : MonoBehaviour, IWaterShootable, IInteractable
 
         if (gameButton != null)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetNewInteractAction(null, 1);
-            gameButton.SetActive(false);
+            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.UseToolButton);
         }
 
         initializeButtonEvent -= ResetButton;

@@ -41,7 +41,7 @@ public class PlayerFireable : FireableBase
 
     private void OnTriggerEnter(Collider other)
     {
-        HandleFireInteraction(other);
+        HandleFireInteraction(other); // Add additional behavior specific to ObjectFireable.
     }
 
     private void HandleFireInteraction(Collider other)

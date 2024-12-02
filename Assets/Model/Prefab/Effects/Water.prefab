@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 5709913562112627759}
   - component: {fileID: 7195895845494653925}
   - component: {fileID: 9076174444806252268}
+  - component: {fileID: 6753759779738547072}
   m_Layer: 4
   m_Name: Water
-  m_TagString: water
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6835437864763863386}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.013999939, z: -0.72}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.61}
   m_ConstrainProportionsScale: 0
@@ -3793,11 +3794,11 @@ ParticleSystem:
     radiusScale: 1
     collidesWith:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 72
     maxCollisionShapes: 256
-    quality: 0
+    quality: 1
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -4834,6 +4835,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &6753759779738547072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6835437864763863386}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b727e557f50150488efdf42dc8c7038, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7085871752120979796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4845,9 +4858,9 @@ GameObject:
   - component: {fileID: 3486165331086051523}
   - component: {fileID: 4123265311629151862}
   - component: {fileID: 5531640976203260899}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: SubEmitter0
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
