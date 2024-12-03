@@ -17,7 +17,7 @@ public class FireFactory
         GameObject fireInstance = Object.Instantiate(
             fireParticle,
             target.transform.position,
-            Quaternion.Euler(-90, 0, 0), // Fire facing upwards
+            Quaternion.Euler(-90, 0, 0), // TargetFollower facing upwards
             target.transform); // Make it a child of the target
 
         fireInstance.transform.localPosition = Vector3.zero; // Make sure fire is on the object

@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7132813729241701660}
   - component: {fileID: 636043347637857780}
   - component: {fileID: 76230833335283017}
-  - component: {fileID: 7518705862050497558}
+  - component: {fileID: 8878358902077010231}
+  - component: {fileID: 4166057549236145141}
   m_Layer: 3
   m_Name: Fire
   m_TagString: Fire
@@ -4864,8 +4865,24 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 1}
---- !u!114 &7518705862050497558
+  m_Center: {x: 0, y: 0, z: 0.5}
+--- !u!114 &8878358902077010231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2861472087431022720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d2a9f498c4bd344b6efb10d99e4218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 2255315639677616171}
+  toFollow: 1
+  followSpeed: 20
+  offsetHeight: 0
+--- !u!114 &4166057549236145141
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4877,10 +4894,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02adfca6fa5b869418f9641911e46800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainObject: {fileID: 2255315639677616171}
-  toFollow: 1
-  followSpeed: 10
-  offsetHeight: -0.49
+  fireParticles: {fileID: 7132813729241701660}
+  isBurning: 1
 --- !u!1 &3273034176824820937
 GameObject:
   m_ObjectHideFlags: 0
@@ -4927,6 +4942,7 @@ GameObject:
   - component: {fileID: 5773376470381963839}
   - component: {fileID: 7074079459647008040}
   - component: {fileID: 8118244225794045668}
+  - component: {fileID: 4386101144464125549}
   m_Layer: 3
   m_Name: Object
   m_TagString: Untagged
@@ -5050,3 +5066,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4386101144464125549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4129735717757959492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 468928959a2259745b099db05e72fbc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  damageCooldown: 1

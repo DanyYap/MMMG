@@ -8,6 +8,9 @@ public class ScriptableObjectManageSystem : MonoBehaviour
     public ParticleEffectsLibrary EffectsLibrary;
     public AnimationLibrary AnimationLibrary;
 
+    public CanvasFactory CanvasFactory;
+    public ParticleSystemFactory ParticleSystemFactory;
+
     private void Awake()
     {
         if (Instance == null)

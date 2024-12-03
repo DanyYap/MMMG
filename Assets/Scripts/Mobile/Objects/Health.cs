@@ -1,18 +1,10 @@
 using System;
 using UnityEngine;
 
-public interface IDamageable
+public class Health : MonoBehaviour, IHealth
 {
-    void TakeDamage(float amount);
-}
+    public float Damage = 1.0f;
 
-public interface IHealable
-{
-    void Heal(float amount);
-}
-
-public class Health : MonoBehaviour, IDamageable, IHealable
-{
     [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float damageCooldown = 1f; // Cooldown in seconds
 
@@ -20,7 +12,7 @@ public class Health : MonoBehaviour, IDamageable, IHealable
 
     private float currentHealth;
     private float lastDamageTime;
-    private HealthModifier healthModifier;
+    private HealthEffector healthEffector;
 
     private event Action destroyEvent;
     private bool eventTriggered = false;
@@ -29,10 +21,10 @@ public class Health : MonoBehaviour, IDamageable, IHealable
 
     private void Awake()
     {
-        var fireableBase = GetComponent<FireableBase>();
+        var fire = GetComponent<Fire>();
 
         currentHealth = maxHealth;
-        healthModifier = new HealthModifier(fireableBase);
+        healthEffector = new HealthEffector(fire);
 
         destroyEvent += () => gameObject.GetComponent<ObjectFireable>().Extinguish();
     }
@@ -51,49 +43,53 @@ public class Health : MonoBehaviour, IDamageable, IHealable
         // Check if enough time has passed since the last damage application
         if (Time.time >= lastDamageTime + damageCooldown)
         {
-            float damage = healthModifier.GetCurrentDamage();
+            float damage = healthEffector.GetCurrentDamage();
             
             if (damage > 0)
             {
-                TakeDamage(damage);
+                ReceiveDamage(damage);
                 lastDamageTime = Time.time; // Reset cooldown timer
             }
         }
     }
 
-    public void TakeDamage(float amount)
+    public void ReceiveDamage(float damageAmount)
     {
+        // If the health is already at 0, no further damage should be applied
         if (currentHealth == 0) return;
 
-        currentHealth = Mathf.Clamp(currentHealth - amount, MIN_HEALTH, maxHealth);
-        //Debug.Log($"Took damage: {amount}. Current health: {currentHealth}");
-    }
+        // Calculate the new health after taking damage
+        float newHealth = currentHealth - damageAmount;
 
-    public void Heal(float amount)
-    {
-        currentHealth = Mathf.Clamp(currentHealth + amount, MIN_HEALTH, maxHealth);
-        //Debug.Log($"Healed: {amount}. Current health: {currentHealth}");
+        // Ensure that health stays within the bounds of MIN_HEALTH and maxHealth
+        currentHealth = Mathf.Clamp(newHealth, MIN_HEALTH, maxHealth);
     }
 
     public float GetMaxHealth() => maxHealth;
+
+    public void DealDamage(Health enemyHealth, float damageAmount)
+    {
+        enemyHealth.currentHealth -= damageAmount;
+    }
 }
 
-public interface IHealthModifier
+public interface IHealthEffector
 {
     float GetCurrentDamage();
 }
 
-public class HealthModifier : IHealthModifier
+public class HealthEffector : IHealthEffector
 {
-    private FireableBase fireableBase;
+    private Fire fire;
 
-    public HealthModifier(FireableBase fireableBase)
+    public HealthEffector(Fire fire)
     {
-        this.fireableBase = fireableBase;
+        this.fire = fire;
     }
 
     public float GetCurrentDamage()
     {
-        return fireableBase.GetFlammableValue();
+        if (fire == null) return 0f;
+        return fire.HitDamage();
     }
 }

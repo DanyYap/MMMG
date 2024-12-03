@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4325d32f10ed9d4fb64bfb0b3be67ba, type: 3}
+  m_Name: CanvasFactory
+  m_EditorClassIdentifier: 
+  canvasPrefabs:
+  - key: Mobile Canvas
+    prefab: {fileID: 7210105889266491967, guid: 37a0b61cfb1b0ea468b0f489d16d2dbd, type: 3}
