@@ -1,15 +1,13 @@
 using UnityEngine;
 
-public class ScriptableObjectManageSystem : MonoBehaviour
+public class FactoryManageSystem : MonoBehaviour
 {
-    public static ScriptableObjectManageSystem Instance { get; private set; }
-
-    public CanvasLibrary CanvasLibrary;
-    public ParticleEffectsLibrary EffectsLibrary;
-    public AnimationLibrary AnimationLibrary;
+    public static FactoryManageSystem Instance { get; private set; }
 
     public CanvasFactory CanvasFactory;
     public ParticleSystemFactory ParticleSystemFactory;
+
+    public AnimationLibrary AnimationLibrary;
 
     private void Awake()
     {

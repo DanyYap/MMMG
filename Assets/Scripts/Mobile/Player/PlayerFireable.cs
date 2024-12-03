@@ -5,22 +5,14 @@ public class PlayerFireable : FireableBase
 {
     private PlayerController self;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake(); 
         self = GetComponentInParent<PlayerController>();
     }
 
     public override void Ignite()
     {
-        if (fire == null)
-        {
-            CreateFireParticle();
-        }
-        else
-        {
-            StartCoroutine(FadeInFireEffect());
-        }
+        StartCoroutine(FadeInFireEffect());
 
         // Set player burning state
         PlayerSwitcher.SelectedPlayer.PlayerState.SetState(

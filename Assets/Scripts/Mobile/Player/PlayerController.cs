@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
         // animation
         var animator = GetComponent<Animator>();
-        var library = ScriptableObjectManageSystem.Instance.AnimationLibrary;
+        var library = FactoryManageSystem.Instance.AnimationLibrary;
         playerAnimator = AnimatableFactory.CreateAnimator(animator, library, EntityType.Character);
         if (playerAnimator is CharacterAnimator characterAnimator)
         {

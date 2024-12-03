@@ -14,9 +14,8 @@ public class PanelManager : IPanelManager
 
     public void InitializePanels()
     {
-        var canvasLibrary = ScriptableObjectManageSystem.Instance.CanvasLibrary;
-        var canvasPrefab = GameObject.Find(canvasLibrary.CanvasPrefab.name)
-                                   ?? Object.Instantiate(canvasLibrary.CanvasPrefab);
+        var canvasLibrary = FactoryManageSystem.Instance.CanvasFactory;
+        var canvasPrefab = canvasLibrary.CreateInstance("Mobile Canvas");
 
         panels[PanelIdentifiers.MainMenu] = PanelFactory.CreatePanel(
             PanelIdentifiers.MainMenu, FindPanelByName(canvasPrefab.transform, PanelIdentifiers.MainMenu));

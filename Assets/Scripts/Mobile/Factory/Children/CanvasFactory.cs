@@ -9,46 +9,66 @@ public class CanvasFactory : ScriptableFactoryBase<Canvas>
     public class CanvasEntry
     {
         public string key;  // Key to identify the canvas (e.g., "MainMenu", "HUD").
-        public GameObject prefab;  // The prefab (GameObject) for this canvas type.
+        public GameObject prefab;  // The GameObject prefab for this canvas type.
     }
 
-    [SerializeField] private List<CanvasEntry> canvasPrefabs;  // List of available canvas prefabs.
-    private Dictionary<string, GameObject> canvasInstances;  // Dictionary to store created canvas instances.
+    [SerializeField] private List<CanvasEntry> canvasPrefabs;  // List of available canvas GameObject prefabs.
+    private Dictionary<string, Canvas> canvasInstances;  // Dictionary to store created canvas instances.
 
     private void OnEnable()
     {
         // Initialize the dictionary to hold canvas instances.
-        canvasInstances = new Dictionary<string, GameObject>();
+        canvasInstances = new Dictionary<string, Canvas>();
+
+        // Validate that each prefab has a Canvas component.
+        foreach (var entry in canvasPrefabs)
+        {
+            if (entry.prefab != null && entry.prefab.GetComponent<Canvas>() == null)
+            {
+                Debug.LogError($"Prefab for key '{entry.key}' does not have a Canvas component attached!");
+            }
+        }
     }
 
-    public override GameObject CreateInstance(string key, Vector3 position, Quaternion rotation)
+    public override GameObject CreateInstance(string key, Vector3? position = null, Quaternion? rotation = null)
     {
-        // Check if the canvas for this key has already been created.
-        if (canvasInstances.ContainsKey(key))
+        // Default position and rotation if not provided.
+        Vector3 spawnPosition = position ?? Vector3.zero;  // Default to (0,0,0) if null
+        Quaternion spawnRotation = rotation ?? Quaternion.identity;  // Default to no rotation if null
+
+        // Check if a canvas with this key already exists in the scene.
+        Canvas existingCanvas = FindExistingCanvasInScene(key);
+        if (existingCanvas != null)
         {
-            Debug.LogWarning($"Canvas with key '{key}' already instantiated. Returning the existing instance.");
-            return canvasInstances[key]; // Return GameObject with Canvas attached.
+            Debug.LogWarning($"Canvas with key '{key}' already exists in the scene. Returning the existing instance.");
+            return existingCanvas.gameObject; // Return the existing GameObject with the Canvas component
         }
 
         // Find the corresponding canvas prefab for this key.
         var entry = canvasPrefabs.Find(c => c.key == key);
         if (entry != null)
         {
-            // Instantiate and store the canvas GameObject.
-            var newCanvasObject = Instantiate(entry.prefab, position, rotation);
-            canvasInstances.Add(key, newCanvasObject);
-
-            // Ensure the GameObject has the Canvas component.
-            if (newCanvasObject.GetComponent<Canvas>() == null)
-            {
-                Debug.LogError($"The prefab for key '{key}' does not contain a Canvas component!");
-                return null;
-            }
-
-            return newCanvasObject; // Return GameObject with Canvas attached.
+            // Instantiate the new GameObject (which contains the Canvas component)
+            var newCanvasGO = Instantiate(entry.prefab, spawnPosition, spawnRotation);
+            return newCanvasGO; // Return GameObject containing the Canvas component
         }
 
         Debug.LogError($"Canvas prefab with key '{key}' not found!");
         return null;
+    }
+
+    // Helper method to search for an existing canvas in the scene.
+    private Canvas FindExistingCanvasInScene(string key)
+    {
+        // Find all canvases in the scene and check for the one with the matching key.
+        Canvas[] canvases = FindObjectsByType<Canvas>(FindObjectsSortMode.InstanceID);
+        foreach (var canvas in canvases)
+        {
+            if (canvas.gameObject.name == key)
+            {
+                return canvas; // Return the existing canvas if found.
+            }
+        }
+        return null; // Return null if no matching canvas is found.
     }
 }

@@ -1,49 +1,18 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-
-// This interface defines methods for anything that can catch fire
-public interface IFireable : IInteractable
-{
-    void Ignite(); // Method to start fire
-    void Extinguish(); // Method to extinguish fire
-}
-
-public class FireFactory
-{
-    // Factory Method to create fire particles
-    public GameObject CreateFireParticle(GameObject target, GameObject fireParticle)
-    {
-        GameObject fireInstance = Object.Instantiate(
-            fireParticle,
-            target.transform.position,
-            Quaternion.Euler(-90, 0, 0), // TargetFollower facing upwards
-            target.transform); // Make it a child of the target
-
-        fireInstance.transform.localPosition = Vector3.zero; // Make sure fire is on the object
-        return fireInstance;
-    }
-}
 
 // Base class for fireable objects
 public abstract class FireableBase : MonoBehaviour, IFireable
 {
-    protected ParticleEffectsLibrary effectsLibrary;
-    protected FireFactory fireFactory;
     protected GameObject fire;
     protected ParticleSystem fireParticleSystem;
     protected FireBehavior fireBehavior;
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
-        effectsLibrary = ScriptableObjectManageSystem.Instance.EffectsLibrary;
-        fireFactory = new FireFactory();
-    }
-
-    protected void CreateFireParticle()
-    {
-        fire = fireFactory.CreateFireParticle(gameObject, effectsLibrary.Fire); // Instantiate fire particles
-        fireParticleSystem = fire.GetComponent<ParticleSystem>(); // Get the ParticleSystem component
+        var effectFactory = FactoryManageSystem.Instance.ParticleSystemFactory;
+        fire = effectFactory.CreateInstance("Fire");
+        fireParticleSystem = fire.GetComponent<ParticleSystem>();
         fireBehavior = new FireBehavior(fireParticleSystem);
     }
 
@@ -60,12 +29,12 @@ public abstract class FireableBase : MonoBehaviour, IFireable
 
     protected IEnumerator FadeInFireEffect()
     {
-        return fireBehavior.FadeInFireEffect(); // Delegate to FireBehavior
+        return fireBehavior.FadeInFireEffect(); 
     }
 
     protected IEnumerator FadeOutFireEffect()
     {
-        return fireBehavior.FadeOutFireEffect(); // Delegate to FireBehavior
+        return fireBehavior.FadeOutFireEffect(); 
     }
 
     private void FixedUpdate()

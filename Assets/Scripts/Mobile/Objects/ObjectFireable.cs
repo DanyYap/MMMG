@@ -5,8 +5,10 @@ public class ObjectFireable : FireableBase
 {
     [SerializeField] private bool isFiredAtStart = false;
 
-    private void Start()
+    private new void Start()
     {
+        base.Start();
+
         if (isFiredAtStart)
         {
             Ignite();
@@ -15,14 +17,7 @@ public class ObjectFireable : FireableBase
 
     public override void Ignite()
     {
-        if (fire == null)
-        {
-            CreateFireParticle();
-        }
-        else
-        {
-            StartCoroutine(FadeInFireEffect());
-        }
+        StartCoroutine(FadeInFireEffect());
     }
 
     public override void Extinguish()
