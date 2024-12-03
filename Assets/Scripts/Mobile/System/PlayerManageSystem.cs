@@ -28,7 +28,7 @@ public class PlayerManageSystem : MonoBehaviour
 
     public void InitializeSystem()
     {
-        playerManager.InitializePlayers();
+        //playerManager.InitializePlayers();
     }
 
     public IPlayerManager GetPlayerManager()

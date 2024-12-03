@@ -23,7 +23,7 @@ public class SceneManagerCustom : ISceneManager
         if (!isLoadingScene && currentSceneName != sceneName)
         {
             isLoadingScene = true;
-            PlayerManageSystem.Instance.GetPlayerManager().InitializePlayers();
+            
             SceneManageSystem.Instance.StartCoroutine(LoadSceneAsync(sceneName));
         }
         else
@@ -36,9 +36,7 @@ public class SceneManagerCustom : ISceneManager
     {
         Debug.Log($"Scene changed to: {sceneName}");
 
-        PlayerManageSystem.Instance.InitializeSystem();
         InterfaceManageSystem.Instance.InitializeSystem();
-        GameManageSystem.Instance.InitializeSystem();
 
         InterfaceManageSystem.Instance.SwitchToPanel(sceneName == SceneNames.MenuScene
             ? PanelIdentifiers.MainMenu

@@ -65,8 +65,6 @@ public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
         activeParticles.Clear(); // Clear the list of active particles for the old scene.
     }
 
-
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Reinitialize particle pools and reattach any particles if necessary.

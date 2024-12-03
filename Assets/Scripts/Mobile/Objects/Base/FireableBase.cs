@@ -8,12 +8,19 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     protected ParticleSystem fireParticleSystem;
     protected FireBehavior fireBehavior;
 
+    //TESTING ONLY
+    public GameObject FireGO;
+
     protected virtual void Start()
     {
         var effectFactory = FactoryManageSystem.Instance.ParticleSystemFactory;
-        fire = effectFactory.CreateInstance("Fire");
+
+        fire = effectFactory.CreateInstance("Fire", transform.position, transform.rotation);
         fireParticleSystem = fire.GetComponent<ParticleSystem>();
         fireBehavior = new FireBehavior(fireParticleSystem);
+
+        fire.transform.SetParent(transform);
+        FireGO = fire;
     }
 
     public abstract void Ignite();

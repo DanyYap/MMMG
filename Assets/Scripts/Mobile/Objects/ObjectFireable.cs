@@ -31,21 +31,18 @@ public class ObjectFireable : FireableBase
 
     private void OnTriggerEnter(Collider other)
     {
-        HandleFireInteraction(other); // Add additional behavior specific to ObjectFireable.
-    }
-
-    private void HandleFireInteraction(Collider other)
-    {
+        // Try to get the IFireable component on the object directly first.
         if (other.TryGetComponent<IFireable>(out var fireable))
         {
-            Ignite();
+            fireable.Ignite();
         }
         else
         {
-            var fireablesInChildren = other.GetComponentsInChildren<IFireable>();
-            if (fireablesInChildren.Length > 0)
+            // If no IFireable component is found, check its children.
+            var fireableInChildren = other.GetComponentInChildren<IFireable>();
+            if (fireableInChildren != null)
             {
-                fireablesInChildren[0].Ignite();
+                fireableInChildren.Ignite();
             }
         }
     }

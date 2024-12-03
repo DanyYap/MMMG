@@ -33,7 +33,7 @@ public class InterfaceManageSystem : MonoBehaviour
         panelManager = new PanelManager();
 
         ITextComponentFactory textFactory = new TextComponentFactory(); // Create textFactory instance
-        textManager = new TextManager(textFactory); 
+        textManager = new TextManager(textFactory);
     }
 
     public void InitializeSystem()

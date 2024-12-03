@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement; // For scene management
 
 public class GameManageSystem : MonoBehaviour
 {
@@ -14,12 +15,25 @@ public class GameManageSystem : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             CreateSystem();
-            InitializeSystem();
+            SceneManager.sceneLoaded += OnSceneLoaded; // Register to scene loaded event
+            SceneManager.sceneUnloaded += OnSceneUnloaded; // Register to scene unloaded event
         }
         else
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Initialize the system when a new scene is loaded
+        InitializeSystem();
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        // Perform cleanup when the scene is unloaded
+        CleanupSystem();
     }
 
     private void Update()
@@ -61,5 +75,19 @@ public class GameManageSystem : MonoBehaviour
     public void EnableExecution(bool enabled)
     {
         isExecuting = enabled;
+    }
+
+    private void CleanupSystem()
+    {
+        // Perform any necessary cleanup when the scene is unloaded
+        healthManager.ClearAllHealths();
+        Debug.Log("System cleaned up on scene unload.");
+    }
+
+    private void OnDestroy()
+    {
+        // Unregister from the scene events when this object is destroyed
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 }
