@@ -20,7 +20,12 @@ public class Water : MonoBehaviour
     {
         //Debug.Log(other.tag);
         
-        if (other.CompareTag("Fire")) 
+        if (other.CompareTag("Player")) 
+        {
+            Debug.Log(other);
+            other.GetComponent<PlayerHealth>().ReceiveDamage(1f);
+        }
+        else if (other.CompareTag("Fire"))
         {
             Debug.Log(other);
             other.GetComponent<ObjectHealth>().ReceiveDamage(1f);

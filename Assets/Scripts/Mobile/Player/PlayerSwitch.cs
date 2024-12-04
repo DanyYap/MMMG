@@ -45,7 +45,14 @@ public class PlayerSwitcher : IPlayerSwitcher
                     () => PlayerSwitcher.SelectedPlayer.ObjectOnInteract.Interact());
 
                 InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(
-                    ButtonIdentifiers.UseToolButton);   //TEMPORARY
+                    ButtonIdentifiers.UseToolButton,
+                    () => {
+                        if (PlayerSwitcher.SelectedPlayer.ObjectOnInteract is IWaterShootable waterShootableObject)
+                        {
+                            // Call Waterable's Interact method
+                            waterShootableObject.Interact();
+                        }
+                    });   //TEMPORARY
             }
         }
     }

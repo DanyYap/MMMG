@@ -539,6 +539,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e623c3b4e1dd04d4f9369cefb2369b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  firePositionOffset: {x: 0, y: 0, z: 0}
+  fireSize: 1
 --- !u!1 &2810222416175551069
 GameObject:
   m_ObjectHideFlags: 0
@@ -1783,6 +1785,8 @@ GameObject:
   - component: {fileID: 4146523088973726028}
   - component: {fileID: 6317997738419030373}
   - component: {fileID: 7538908902439702410}
+  - component: {fileID: 5262068546615056021}
+  - component: {fileID: 930980851217148761}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -1898,6 +1902,33 @@ MonoBehaviour:
   rotationOffset: {x: 0, y: 0, z: 0}
   mainCamera: {fileID: 0}
   playerGrabPoint: {fileID: 469972132786841046}
+--- !u!114 &5262068546615056021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8199584327770361778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de43777399dcc694dbe70dfa977fdeee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &930980851217148761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8199584327770361778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e623c3b4e1dd04d4f9369cefb2369b47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePositionOffset: {x: 0, y: 1, z: 0}
+  fireSize: 8
 --- !u!1 &8238549764248016987
 GameObject:
   m_ObjectHideFlags: 0

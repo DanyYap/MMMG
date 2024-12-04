@@ -1,13 +1,13 @@
 using System;
 using UnityEngine;
 
-public interface IWaterShootable
+public interface IWaterShootable: IInteractable
 {
     void ShootingWater();
     void StopShooting();
 }
 
-public class WaterShootable : MonoBehaviour, IWaterShootable, IInteractable
+public class WaterShootable : MonoBehaviour, IWaterShootable
 {
     public ParticleSystem WaterParticleSystem;
     private event Action waterShootingEvent;
