@@ -5,8 +5,7 @@ public class GameManageSystem : MonoBehaviour
 {
     public static GameManageSystem Instance { get; private set; }
 
-    private IHealthManager healthManager;
-    private bool isExecuting = false;
+    private HealthManager healthManager = new HealthManager();
 
     private void Awake()
     {
@@ -14,7 +13,6 @@ public class GameManageSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            CreateSystem();
             SceneManager.sceneLoaded += OnSceneLoaded; // Register to scene loaded event
             SceneManager.sceneUnloaded += OnSceneUnloaded; // Register to scene unloaded event
         }
@@ -26,68 +24,27 @@ public class GameManageSystem : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Initialize the system when a new scene is loaded
-        InitializeSystem();
+        healthManager.InitializeWithSceneHealthData(); // Initialize HealthManager with all current player health data.
+        Debug.Log($"Scene {scene.name} loaded. HealthManager initialized.");
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
-        // Perform cleanup when the scene is unloaded
-        CleanupSystem();
+        healthManager.Clear(); // Clear HealthManager when a scene is unloaded.
+        Debug.Log($"Scene {scene.name} unloaded. HealthManager cleared.");
+
+        InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, healthManager.GetTotalHealth());
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        ExecuteSystem();
+        SceneManager.sceneLoaded += OnSceneLoaded; // Subscribe to scene loaded event.
+        SceneManager.sceneUnloaded += OnSceneUnloaded; // Subscribe to scene unloaded event.
     }
 
-    private void CreateSystem()
+    private void OnDisable()
     {
-        // Dependency injection of the status manager
-        healthManager = new HealthManager();
-    }
-
-    public void InitializeSystem()
-    {
-        healthManager.ClearAllHealths();
-
-        // Find and register all Health components
-        var objectStatuses = FindObjectsByType<Health>(FindObjectsSortMode.InstanceID);
-        foreach (var status in objectStatuses)
-        {
-            healthManager.RegisterNewHealth(status);
-        }
-
-        // Log the total status value for debugging
-        Debug.Log($"Total Status Value: {healthManager.GetInitialTotalHealths()}");
-    }
-
-    private void ExecuteSystem()
-    {
-        if (!isExecuting) return;
-
-        var healths = healthManager.GetCurrentTotalHealths();
-        if (healths == 0) isExecuting = false;
-
-        InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, healths);
-    }
-
-    public void EnableExecution(bool enabled)
-    {
-        isExecuting = enabled;
-    }
-
-    private void CleanupSystem()
-    {
-        // Perform any necessary cleanup when the scene is unloaded
-        healthManager.ClearAllHealths();
-        Debug.Log("System cleaned up on scene unload.");
-    }
-
-    private void OnDestroy()
-    {
-        // Unregister from the scene events when this object is destroyed
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded; // Unsubscribe from scene loaded event.
+        SceneManager.sceneUnloaded -= OnSceneUnloaded; // Unsubscribe from scene unloaded event.
     }
 }

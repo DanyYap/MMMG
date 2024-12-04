@@ -41,7 +41,7 @@ public class SceneManagerCustom : ISceneManager
         InterfaceManageSystem.Instance.SwitchToPanel(sceneName == SceneNames.MenuScene
             ? PanelIdentifiers.MainMenu
             : PanelIdentifiers.InGame);
-        GameManageSystem.Instance.EnableExecution(sceneName == SceneNames.GameScene);
+        //GameManageSystem.Instance.EnableExecution(sceneName == SceneNames.GameScene);
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)

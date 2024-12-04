@@ -8,9 +8,6 @@ public abstract class FireableBase : MonoBehaviour, IFireable
     protected ParticleSystem fireParticleSystem;
     protected FireBehavior fireBehavior;
 
-    //TESTING ONLY
-    public GameObject FireGO;
-
     protected virtual void Start()
     {
         var effectFactory = FactoryManageSystem.Instance.ParticleSystemFactory;
@@ -20,7 +17,6 @@ public abstract class FireableBase : MonoBehaviour, IFireable
         fireBehavior = new FireBehavior(fireParticleSystem);
 
         fire.transform.SetParent(transform);
-        FireGO = fire;
     }
 
     public abstract void Ignite();
@@ -49,7 +45,13 @@ public abstract class FireableBase : MonoBehaviour, IFireable
         if (fire != null)
         {
             // Keep the fire facing upwards
-            fire.transform.rotation = Quaternion.Euler(-90, 0, 0);
+            Quaternion targetRotation = Quaternion.Euler(-90, 0, 0);
+
+            // If the fire's current rotation is not equal to the target, interpolate smoothly
+            if (fire.transform.rotation != targetRotation)
+            {
+                fire.transform.rotation = Quaternion.Slerp(fire.transform.rotation, targetRotation, Time.deltaTime * 5f);
+            }
 
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)

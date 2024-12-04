@@ -1,69 +1,86 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Abstraction for managing a collection of health status components
-public interface IHealthManager
+public class HealthManager
 {
-    float GetInitialTotalHealths();
-    float GetCurrentTotalHealths();
-    void RegisterNewHealth(Health status);
-    void UnregisterExistedHealth(Health status);
-    void ClearAllHealths();
-}
+    private readonly List<PlayerHealth> playerHealths = new List<PlayerHealth>(); // Stores all player healths.
+    private readonly Dictionary<string, float> playerHealthValues = new Dictionary<string, float>(); // Player health values.
 
-// Manages health status components efficiently
-public class HealthManager : IHealthManager
-{
-    private readonly HashSet<Health> objectHealths = new(); // Use HashSet for efficient lookups
-    private float initialTotalHealths;
-
-    public float GetInitialTotalHealths()
+    // Add a player health to the list.
+    public void RegisterPlayerHealth(PlayerHealth playerHealth)
     {
-        float totalMaxHealth = 0f;
-
-        // Loop through each health object to accumulate maximum health
-        foreach (var health in objectHealths)
+        if (playerHealth != null && !playerHealths.Contains(playerHealth))
         {
-            totalMaxHealth += health.GetMaxHealth();
+            playerHealths.Add(playerHealth);
+            playerHealthValues[playerHealth.gameObject.name] = playerHealth.CurrentHealth; // Initialize health value for new player.
         }
-
-        initialTotalHealths = totalMaxHealth;
-
-        return totalMaxHealth;
     }
 
-    public float GetCurrentTotalHealths()
+    // Remove a player health from the list.
+    public void UnregisterPlayerHealth(PlayerHealth playerHealth)
+    {
+        if (playerHealth != null && playerHealths.Contains(playerHealth))
+        {
+            playerHealths.Remove(playerHealth);
+            playerHealthValues.Remove(playerHealth.gameObject.name); // Remove health value.
+        }
+    }
+
+    // Get a specific player's current health by player name.
+    public float GetPlayerHealth(string playerName)
+    {
+        if (playerHealthValues.ContainsKey(playerName))
+        {
+            return playerHealthValues[playerName];
+        }
+        return 0f; // Return 0 if the player is not found.
+    }
+
+    // Update the health value for a specific player.
+    public void UpdatePlayerHealth(string playerName, float currentHealth)
+    {
+        if (playerHealthValues.ContainsKey(playerName))
+        {
+            playerHealthValues[playerName] = currentHealth; // Update health.
+        }
+    }
+
+    // Get all player healths in a dictionary format.
+    public Dictionary<string, float> GetAllPlayerHealths()
+    {
+        return new Dictionary<string, float>(playerHealthValues);
+    }
+
+    // Get the total summed health of all players.
+    public float GetTotalHealth()
     {
         float totalHealth = 0f;
-
-        // Loop through each health object to accumulate current health
-        foreach (var health in objectHealths)
+        foreach (var health in playerHealthValues.Values)
         {
-            totalHealth += health.CurrentHealth;
+            totalHealth += health; // Sum up each player's health.
         }
-
-        // Calculate percentage based on initial total health
-        float initialTotal = GetInitialTotalHealths();
-
-        // Return 0% if there are no health objects or initial health is 0
-        if (initialTotal <= 0f) return 0f;
-
-        // Calculate current health percentage
-        return Mathf.Clamp((totalHealth / initialTotal) * 100f, 0f, 100f);
+        return totalHealth;
     }
 
-    public void RegisterNewHealth(Health status)
+    // Clear all registered player healths.
+    public void Clear()
     {
-        objectHealths.Add(status); // Add returns false if already exists, no need for check
+        playerHealths.Clear();
+        playerHealthValues.Clear();
     }
 
-    public void UnregisterExistedHealth(Health status)
+    // Initialize the health manager with all current player healths in the scene.
+    public void InitializeWithSceneHealthData()
     {
-        objectHealths.Remove(status); // Remove does nothing if the item is not present
-    }
+        playerHealths.Clear(); // Clear any existing player data.
+        playerHealthValues.Clear();
 
-    public void ClearAllHealths()
-    {
-        objectHealths.Clear(); 
+        // Get all PlayerHealth components in the scene
+        PlayerHealth[] allPlayerHealths = GameObject.FindObjectsByType<PlayerHealth>(FindObjectsSortMode.InstanceID);
+
+        foreach (var playerHealth in allPlayerHealths)
+        {
+            RegisterPlayerHealth(playerHealth); // Add each player to the health manager.
+        }
     }
 }
