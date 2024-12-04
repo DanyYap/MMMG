@@ -1,61 +1,78 @@
-using System.Collections;
 using UnityEngine;
 
-// Base class for fireable objects
 public abstract class FireBase : MonoBehaviour, IFireable
 {
-    protected GameObject fire;
-    protected ParticleSystem fireParticleSystem;
-    protected FireBehavior fireBehavior;
+    protected GameObject fire; // Reference to the fire particle system GameObject
+    protected ParticleSystem fireParticleSystem; // Reference to the fire's Particle System
+    protected FireBehavior fireBehavior; // Handles fire behavior
+    private IHealth health; // Reference to the health system (loosely coupled)
 
     protected virtual void Start()
     {
+        // Try to find an IHealth implementation in the same GameObject
+        health = GetComponent<IHealth>();
+
+        if (health == null)
+        {
+            Debug.LogError($"No IHealth component found on {gameObject.name}. Fire behavior requires a health system.");
+            return;
+        }
+
+        // Create the fire particle system instance
         fire = FactoryManageSystem.Instance.ParticleSystemFactory.CreateInstance("Fire", transform.position, transform.rotation);
         fireParticleSystem = fire.GetComponent<ParticleSystem>();
-        fireBehavior = new FireBehavior(fireParticleSystem);
+        fireBehavior = new FireBehavior(fireParticleSystem, health.MaxHealth); // Initialize with max health as max flammable value
 
+        // Attach fire to this object
         fire.transform.SetParent(transform);
+
+        UpdateFireBehavior(); // Sync fire visuals with the current health value
+
+        // Subscribe to the health's death event
+        if (health is HealthBase healthBase)
+        {
+            // Add a listener method to the OnDeathEvent
+            healthBase.AddOnDeathListener(HandleDeath);
+        }
     }
 
-    public abstract void Ignite();
-    public abstract void Extinguish();
-    public abstract void Interact();
+    public abstract void Ignite(); // Abstract method to ignite the object
+    public abstract void Extinguished(); // Abstract method to extinguish the object
+    public abstract void Interact(); // Abstract method for interaction
 
-    public float GetFlammableValue()
+    // Update fire visuals based on current health
+    protected void UpdateFireBehavior()
     {
-        if (fireBehavior == null) return 0f;
-
-        return fireBehavior.FlammableValue;
-    }
-
-    protected IEnumerator FadeInFireEffect()
-    {
-        return fireBehavior.FadeInFireEffect(); 
-    }
-
-    protected IEnumerator FadeOutFireEffect()
-    {
-        return fireBehavior.FadeOutFireEffect(); 
+        if (health != null)
+        {
+            fireBehavior.SetFlammableValue(health.CurrentHealth); // Set flammable value to match current health
+        }
     }
 
     private void FixedUpdate()
     {
+        if (fire != null && health != null)
+        {
+            // Dynamically sync flammable value with health in each frame
+            UpdateFireBehavior();
+        }
+    }
+
+    private void HandleDeath()
+    {
         if (fire != null)
         {
-            // Keep the fire facing upwards
-            Quaternion targetRotation = Quaternion.Euler(-90, 0, 0);
+            // Return the fire to the pool
+            FactoryManageSystem.Instance.ParticleSystemFactory.ReturnToPool("Fire", fire);
+            fire = null;
+        }
+    }
 
-            // If the fire's current rotation is not equal to the target, interpolate smoothly
-            if (fire.transform.rotation != targetRotation)
-            {
-                fire.transform.rotation = Quaternion.Slerp(fire.transform.rotation, targetRotation, Time.deltaTime * 5f);
-            }
-
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                fireBehavior.UpdateFire(rb.linearVelocity.y);
-            }
+    protected virtual void OnDestroy()
+    {
+        if (health is HealthBase healthBase)
+        {
+            healthBase.RemoveOnDeathListener(HandleDeath); // Unsubscribe to avoid memory leaks
         }
     }
 }

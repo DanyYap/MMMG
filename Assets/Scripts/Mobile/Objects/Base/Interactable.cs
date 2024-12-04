@@ -7,5 +7,5 @@ public interface IInteractable
 public interface IFireable : IInteractable
 {
     void Ignite(); // Method to start fire
-    void Extinguish(); // Method to extinguish fire
+    void Extinguished(); // Method to extinguish fire
 }

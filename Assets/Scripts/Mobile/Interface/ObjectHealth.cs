@@ -16,8 +16,9 @@ public class ObjectHealth : HealthBase
 
     protected override void OnDeath()
     {
+        base.OnDeath();
         Debug.Log($"{gameObject.name} has been destroyed!");
         // Add object-specific death logic here (e.g., destroy object or trigger animation).
-        Destroy(gameObject); // Example: Destroy the object when health reaches 0.
+        //Destroy(gameObject); // Example: Destroy the object when health reaches 0.
     }
 }

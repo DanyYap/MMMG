@@ -12,18 +12,18 @@ public class PlayerFireable : FireBase
 
     public override void Ignite()
     {
-        StartCoroutine(FadeInFireEffect());
+        fireParticleSystem.Play();
 
         // Set player burning state
         PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
             flag => PlayerSwitcher.SelectedPlayer.PlayerState.IsBurning = flag, true);
     }
 
-    public override void Extinguish()
+    public override void Extinguished()
     {
         if (fire != null)
         {
-            StartCoroutine(FadeOutFireEffect());
+            fireParticleSystem.Stop();
 
             // Reset player burning state
             PlayerSwitcher.SelectedPlayer.PlayerState.SetState(

@@ -1,11 +1,10 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public interface IGrabbable : IInteractable
 {
-    void OnGrab(); // Method to be called when the object is grabbed
-    void OnRelease(); // Method to be called when the object is released
+    void OnGrab(); // Called when the object is grabbed
+    void OnRelease(); // Called when the object is released
 }
 
 [RequireComponent(typeof(Collider))]
@@ -13,171 +12,159 @@ public class Grabbable : MonoBehaviour, IGrabbable
 {
     public event Action OnGrabEvent;
     public event Action OnReleaseEvent;
-    private event Action outsideEvent;
+    private event Action customEvent;
 
-    // self
+    // Self references
     public bool isSelf = true;
-    private Collider selfCollider;
-
-    // self parent
-    private GameObject selfParent;
-    private Outline parentOutline;
+    private Collider grabbableCollider;
+    private GameObject parentObject;
     private Rigidbody parentRigidbody;
-    private Collider parentCollider;
+    private Outline parentOutline;
 
-    // target
+    // Player references
     private Transform playerHand;
     private PlayerController owner;
 
-    //
-    
-
     private void Awake()
     {
+        // Initialize self properties
+        grabbableCollider = GetComponent<Collider>();
+        grabbableCollider.isTrigger = true;
+        parentObject = transform.parent?.gameObject ?? gameObject;
+
+        // Initialize parent object references
+        parentRigidbody = parentObject.GetComponent<Rigidbody>();
+        parentOutline = parentObject.GetComponent<Outline>();
+
+        // Set up outline visibility
+        SetOutline(false);
+    }
+
+    private void OnEnable()
+    {
+        // Subscribe to events
         OnGrabEvent += OnGrab;
         OnReleaseEvent += OnRelease;
+    }
 
-        selfCollider = GetComponent<Collider>();
-        selfCollider.isTrigger = true;
-
-        selfParent = transform.parent?.gameObject;
-        if (selfParent == null || isSelf) selfParent = gameObject;
-
-        parentRigidbody = selfParent.GetComponent<Rigidbody>();
-        parentOutline = selfParent.GetComponent<Outline>();
-        parentCollider = selfParent.GetComponent<Collider>();
-        OutlineObject(false);
+    private void OnDisable()
+    {
+        // Unsubscribe to events
+        OnGrabEvent -= OnGrab;
+        OnReleaseEvent -= OnRelease;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
+        var player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
             playerHand = player.playerGrabPoint;
             InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.InteractButton, () => Interact());
-            OutlineObject(true);
+            SetOutline(true);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        PlayerController player = other.GetComponent<PlayerController>();
+        var player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
             InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.InteractButton, null);
-            OutlineObject(false);
+            SetOutline(false);
         }
     }
 
     public void Interact()
     {
-        OutlineObject(false);
+        SetOutline(false);
 
         if (owner == null || PlayerSwitcher.SelectedPlayer == owner)
         {
             if (PlayerSwitcher.SelectedPlayer.PlayerState.IsGrabbing)
             {
-                OnReleaseEvent.Invoke();
+                OnReleaseEvent?.Invoke();
             }
             else
             {
-                OnGrabEvent.Invoke();
+                OnGrabEvent?.Invoke();
             }
         }
     }
 
     public void OnGrab()
     {
-        owner = PlayerSwitcher.SelectedPlayer; // Assign the owner
-        SetPlayerGrabbingState(true);
+        owner = PlayerSwitcher.SelectedPlayer;
+        SetGrabbingState(true);
         AttachToPlayerHand();
 
-        if (outsideEvent == null) return;
-        outsideEvent.Invoke();
+        customEvent?.Invoke();
     }
 
     public void OnRelease()
     {
-        SetPlayerGrabbingState(false);
+        SetGrabbingState(false);
         DetachFromPlayerHand();
-        owner = null; // Clear the owner on release
+        owner = null;
 
-        if (outsideEvent == null) return;
-        outsideEvent.Invoke();
-        outsideEvent = null;
+        customEvent?.Invoke();
+        customEvent = null;
     }
 
     public void AssignNewEvent(Action newEvent)
     {
-        outsideEvent = null;
-        outsideEvent = newEvent;
+        customEvent = newEvent;
     }
 
     private void AttachToPlayerHand()
     {
-        // Lock rigidbody constraints while grabbing
+        // Disable physics interactions during grabbing
         if (parentRigidbody != null)
         {
-            parentRigidbody.isKinematic = true; // Disable physics interactions
+            parentRigidbody.isKinematic = true;
             parentRigidbody.detectCollisions = false;
         }
 
-        selfParent.transform.SetParent(playerHand);
-        selfParent.transform.localPosition = Vector3.zero;
-        selfParent.transform.localRotation = Quaternion.identity;
-        
+        parentObject.transform.SetParent(playerHand);
+        parentObject.transform.localPosition = Vector3.zero;
+        parentObject.transform.localRotation = Quaternion.identity;
+
         PlayerSwitcher.SelectedPlayer.ObjectOnInteract = this;
     }
 
     private void DetachFromPlayerHand()
     {
-        // Move the object away from the player's facing direction
-        Vector3 detachDirection = playerHand.forward; // Get the player's forward direction
-        Vector3 detachOffset = detachDirection * -1f; // Adjust this value as needed (1 unit away)
-        Vector3 newPosition = selfParent.transform.position + detachOffset;
+        // Detach the object and re-enable physics
+        Vector3 detachDirection = playerHand.forward * -1f;
+        parentObject.transform.position += detachDirection;
 
-        // Set the position first, then unlock rigidbody constraints
-        selfParent.transform.position = newPosition;
-        
-        // Unlock rigidbody constraints when released
         if (parentRigidbody != null)
         {
-            parentRigidbody.isKinematic = false; // Enable physics interactions
-            parentRigidbody.detectCollisions = true; // Re-enable collisions
+            parentRigidbody.isKinematic = false;
+            parentRigidbody.detectCollisions = true;
         }
-        
-        selfParent.transform.SetParent(null);
-        
+
+        parentObject.transform.SetParent(null);
         PlayerSwitcher.SelectedPlayer.ObjectOnInteract = null;
     }
 
-    private void SetPlayerGrabbingState(bool isGrabbing)
+    private void SetGrabbingState(bool isGrabbing)
     {
         PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
             flag => PlayerSwitcher.SelectedPlayer.PlayerState.IsGrabbing = flag,
             isGrabbing);
     }
 
-    private void OutlineObject(bool enable)
+    private void SetOutline(bool enable)
     {
         if (parentOutline == null) return;
 
+        parentOutline.enabled = enable;
         if (enable)
         {
-            parentOutline.enabled = true;
             parentOutline.OutlineMode = Outline.Mode.OutlineVisible;
-
-            Color outlineColor = Color.red;
-            outlineColor.a = 0.5f; // Set the alpha value
-
-            // Assign the modified color back to OutlineColor
-            parentOutline.OutlineColor = outlineColor;
+            parentOutline.OutlineColor = new Color(1f, 0f, 0f, 0.5f);
             parentOutline.OutlineWidth = 7.5f;
-        }
-        else
-        {
-            parentOutline.enabled = false;
         }
     }
 }

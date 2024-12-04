@@ -1,9 +1,7 @@
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement; // For scene management
 
-// Factory for creating and reusing particle systems by key, with configurable initial pool sizes.
-[CreateAssetMenu(fileName = "ParticleSystemFactory", menuName = "Scriptable Objects/ParticleSystemFactory")]
 public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
 {
     [System.Serializable]
@@ -11,7 +9,7 @@ public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
     {
         public string key; // Name to identify the particle (e.g., "Explosion").
         public GameObject prefab; // The prefab (GameObject) to create.
-        public int initialPoolSize = 5; // Number of prefabs to pre-create for this key.
+        public int initialPoolSize = 1; // Number of prefabs to pre-create for this key.
     }
 
     [SerializeField] private List<ParticleEntry> particlePrefabs; // List of all particles.
@@ -31,16 +29,24 @@ public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
         {
             prefabDictionary.Add(entry.key, entry.prefab);
 
-            // Initialize pool and create initial instances.
-            var pool = new Queue<GameObject>();
-            poolDictionary.Add(entry.key, pool);
-            activeParticles.Add(entry.key, new List<GameObject>());
-
-            for (int i = 0; i < entry.initialPoolSize; i++)
+            // Initialize pool only if initialPoolSize > 1.
+            if (entry.initialPoolSize > 1)
             {
-                var instance = Instantiate(entry.prefab);
-                instance.SetActive(false); // Keep inactive until needed
-                pool.Enqueue(instance); // Add to the pool
+                var pool = new Queue<GameObject>();
+                poolDictionary.Add(entry.key, pool);
+                activeParticles.Add(entry.key, new List<GameObject>());
+
+                for (int i = 0; i < entry.initialPoolSize; i++)
+                {
+                    var instance = Instantiate(entry.prefab);
+                    instance.SetActive(false); // Keep inactive until needed
+                    pool.Enqueue(instance); // Add to the pool
+                }
+            }
+            else
+            {
+                // If initialPoolSize <= 1, don't create a pool, just track active particles.
+                activeParticles.Add(entry.key, new List<GameObject>());
             }
         }
 
@@ -68,28 +74,21 @@ public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // Reinitialize particle pools and reattach any particles if necessary.
-        // This could be used for ensuring that certain particles are ready or reactivate any needed instances.
-
-        // For example, we could load particles that are needed for the current scene:
         foreach (var entry in particlePrefabs)
         {
-            // Check if there's any particle system we want to initialize for the new scene.
-            if (!activeParticles.ContainsKey(entry.key))
+            // Ensure the pool has the correct number of particles, but only if the pool exists.
+            if (entry.initialPoolSize > 1)
             {
-                activeParticles.Add(entry.key, new List<GameObject>());
-            }
-
-            // Re-add to the pool if there were any leftover particles.
-            var pool = poolDictionary[entry.key];
-            for (int i = pool.Count; i < entry.initialPoolSize; i++)
-            {
-                var instance = Instantiate(entry.prefab);
-                instance.SetActive(false); // Keep inactive until needed.
-                pool.Enqueue(instance); // Add to the pool.
+                // Re-add to the pool if there were any leftover particles.
+                var pool = poolDictionary[entry.key];
+                for (int i = pool.Count; i < entry.initialPoolSize; i++)
+                {
+                    var instance = Instantiate(entry.prefab);
+                    instance.SetActive(false); // Keep inactive until needed.
+                    pool.Enqueue(instance); // Add to the pool.
+                }
             }
         }
-
-        // Optionally, you could reactivate specific particles if needed here.
     }
 
     public override GameObject CreateInstance(string key, Vector3? position = null, Quaternion? rotation = null)
@@ -100,32 +99,40 @@ public class ParticleSystemFactory : ScriptableFactoryBase<ParticleSystem>
 
         if (prefabDictionary.TryGetValue(key, out var prefab))
         {
-            var pool = poolDictionary[key];
-
-            // Reuse a GameObject from the pool if available.
-            if (pool.Count > 0)
+            // Ensure the key exists in the activeParticles dictionary
+            if (!activeParticles.ContainsKey(key))
             {
-                var particleObject = pool.Dequeue();
-
-                // Check if the particleObject has been destroyed or is inactive
-                if (particleObject == null)
-                {
-                    Debug.LogWarning($"Particle object for key '{key}' has been destroyed or is inactive, creating a new one.");
-                    // Renamed variable to avoid conflict
-                    var newParticleObjectFromPool = Instantiate(prefab, spawnPosition, spawnRotation);
-                    activeParticles[key].Add(newParticleObjectFromPool); // Track new particle object in the scene
-                    return newParticleObjectFromPool;
-                }
-
-                particleObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
-                particleObject.SetActive(true);
-
-                // Track active particle in the current scene
-                activeParticles[key].Add(particleObject);
-                return particleObject;
+                activeParticles.Add(key, new List<GameObject>());
             }
 
-            // If the pool is empty, create a new GameObject and check for the component.
+            if (poolDictionary.ContainsKey(key))
+            {
+                var pool = poolDictionary[key];
+
+                // Reuse a GameObject from the pool if available.
+                if (pool.Count > 0)
+                {
+                    var particleObject = pool.Dequeue();
+
+                    // Check if the particleObject has been destroyed or is inactive
+                    if (particleObject == null)
+                    {
+                        Debug.LogWarning($"Particle object for key '{key}' has been destroyed or is inactive, creating a new one.");
+                        var newParticleObjectFromPool = Instantiate(prefab, spawnPosition, spawnRotation);
+                        activeParticles[key].Add(newParticleObjectFromPool); // Track new particle object in the scene
+                        return newParticleObjectFromPool;
+                    }
+
+                    particleObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+                    particleObject.SetActive(true);
+
+                    // Track active particle in the current scene
+                    activeParticles[key].Add(particleObject);
+                    return particleObject;
+                }
+            }
+
+            // If no pool exists, or if the pool is empty, create a new GameObject.
             var newParticleObject = Instantiate(prefab, spawnPosition, spawnRotation);
             activeParticles[key].Add(newParticleObject); // Track new particle object in the scene
             return newParticleObject;

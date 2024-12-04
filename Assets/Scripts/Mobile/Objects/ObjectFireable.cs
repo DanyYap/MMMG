@@ -17,16 +17,12 @@ public class ObjectFireable : FireBase
 
     public override void Ignite()
     {
-        StartCoroutine(FadeInFireEffect());
+        fireParticleSystem.Play();
     }
 
-    public override void Extinguish()
+    public override void Extinguished()
     {
-        if (fire != null)
-        {
-            StartCoroutine(FadeOutFireEffect());
-            Debug.Log("extinguish");
-        }
+        fireParticleSystem.Stop();
     }
 
     private void OnTriggerEnter(Collider other)
