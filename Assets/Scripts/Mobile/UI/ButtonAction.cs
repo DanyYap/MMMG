@@ -18,7 +18,6 @@ public class StartGameAction : IButtonAction
 
     public void Execute()
     {
-        Debug.Log("load game scene");
         sceneManageSystem.GetSceneManager().LoadScene(SceneNames.GameScene);
     }
 }
