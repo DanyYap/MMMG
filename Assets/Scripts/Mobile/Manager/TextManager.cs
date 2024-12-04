@@ -25,7 +25,7 @@ public class TextManager : ITextManager
         CreateOrUpdateText(TextNames.TimerText, TextType.TimerText);
     }
 
-    // Update text value
+    // UpdateFire text value
     public void UpdateText(TextType textType, string textName, object value)
     {
         if (textEntryManager.TryGetTextEntry(textType, textName, out var entry))

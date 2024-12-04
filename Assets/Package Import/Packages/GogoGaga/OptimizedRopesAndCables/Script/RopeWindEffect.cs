@@ -36,7 +36,7 @@ namespace GogoGaga.OptimizedRopesAndCables
             windSeed = Random.Range(-0.3f, 0.3f);
         }
 
-        // Update is called once per frame
+        // UpdateFire is called once per frame
         void Update()
         {
             GenerateWind();

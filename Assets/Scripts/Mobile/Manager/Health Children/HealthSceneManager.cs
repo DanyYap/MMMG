@@ -50,7 +50,7 @@ public class HealthSceneManager : HealthDataManager
             RegisterHealthData(healthType, component.gameObject.name, component.CurrentHealth); // Register new entities' health data
         }
 
-        // Update the list of entities for the health type in the last scene
+        // UpdateFire the list of entities for the health type in the last scene
         lastSceneEntities[healthType] = new List<string>();
         foreach (var component in newSceneHealthComponents)
         {

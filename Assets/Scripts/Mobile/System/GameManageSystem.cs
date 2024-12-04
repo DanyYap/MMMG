@@ -27,6 +27,10 @@ public class GameManageSystem : MonoBehaviour
         playerHealthSceneManager.InitializeHealthDataForScene("player"); // Initialize health data for players
         playerHealthSceneManager.InitializeHealthDataForScene("object"); // Example: Initialize health data for enemies
 
+        // Optionally update the interface with total health of players in the scene
+        InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, playerHealthSceneManager.GetTotalHealthData("object"));
+        Debug.Log(playerHealthSceneManager.GetTotalHealthData("object"));
+
         Debug.Log($"Scene {scene.name} loaded. PlayerHealthSceneManager initialized.");
     }
 
@@ -38,10 +42,6 @@ public class GameManageSystem : MonoBehaviour
         playerHealthSceneManager.OnSceneChanged("object"); // Example: Unregister enemy health data
 
         Debug.Log($"Scene {scene.name} unloaded. PlayerHealthSceneManager cleared.");
-
-        // Optionally update the interface with total health of players in the scene
-        InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, playerHealthSceneManager.GetTotalHealthData("object"));
-        Debug.Log(playerHealthSceneManager.GetTotalHealthData("object"));
     }
 
     private void OnEnable()

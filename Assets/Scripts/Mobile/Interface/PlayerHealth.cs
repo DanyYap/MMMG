@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class PlayerHealth : HealthBase
 {
-    [SerializeField] private float playerMaxHealth = 150f; // Custom max health for the player.
-
-    protected override void Awake()
-    {
-        base.Awake(); // Call base logic to initialize health.
-        maxHealth = playerMaxHealth; // Set a new maximum health specific to the player.
-    }
-
     public override void ReceiveDamage(float damageAmount)
     {
         base.ReceiveDamage(damageAmount); // Use base behavior to handle damage.

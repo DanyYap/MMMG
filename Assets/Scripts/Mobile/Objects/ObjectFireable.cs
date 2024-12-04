@@ -1,7 +1,7 @@
 // Class for object fire behavior
 using UnityEngine;
 
-public class ObjectFireable : FireableBase
+public class ObjectFireable : FireBase
 {
     [SerializeField] private bool isFiredAtStart = false;
 

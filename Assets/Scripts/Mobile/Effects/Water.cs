@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticleCollisionDestroyer : MonoBehaviour
+public class Water : MonoBehaviour
 {
-    private ParticleSystem particleSystem;
-    public ParticleSystem spreadParticlePrefab; // Prefab for spreading water particles
+    private ParticleSystem ParticleSystem;
 
     private void Start()
-    {
-        particleSystem = GetComponent<ParticleSystem>();
+    {  
+        ParticleSystem = GetComponent<ParticleSystem>();
 
         // Set up the ParticleSystem to detect collisions
-        var collisionModule = particleSystem.collision;
+        var collisionModule = ParticleSystem.collision; // Get the collision module from the ParticleSystem instance
         collisionModule.enabled = true;
         collisionModule.type = ParticleSystemCollisionType.World;
         collisionModule.mode = ParticleSystemCollisionMode.Collision3D;
@@ -19,21 +18,12 @@ public class ParticleCollisionDestroyer : MonoBehaviour
 
     private void OnParticleCollision(GameObject other)
     {
-        Debug.Log(other.tag);
-        // Only trigger when the water particles collide with a surface (e.g., ground, wall, etc.)
-        if (other.CompareTag("Fire")) // Ensure the collider is tagged appropriately
+        //Debug.Log(other.tag);
+        
+        if (other.CompareTag("Fire")) 
         {
             Debug.Log(other);
+            other.GetComponent<ObjectHealth>().ReceiveDamage(1f);
         }
-    }
-
-    private void SpreadWater(Vector3 collisionPoint)
-    {
-        // Instantiate a new particle system to create spreading water at the collision point
-        ParticleSystem spreadParticles = Instantiate(spreadParticlePrefab, collisionPoint, Quaternion.identity);
-        spreadParticles.Play();
-
-        // Optionally, you can destroy the particle system after some time to avoid memory buildup
-        Destroy(spreadParticles.gameObject, spreadParticles.main.duration);
     }
 }

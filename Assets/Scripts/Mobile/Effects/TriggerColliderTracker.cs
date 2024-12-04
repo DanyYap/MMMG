@@ -82,8 +82,8 @@ public class TriggerColliderTracker : MonoBehaviour
             float distanceSquared = (collider.transform.position - transform.position).sqrMagnitude;
             if (distanceSquared < nearestDistanceSquared)
             {
-                nearestDistanceSquared = distanceSquared; // Update the nearest distance.
-                nearestCollider = collider; // Update the nearest object.
+                nearestDistanceSquared = distanceSquared; // UpdateFire the nearest distance.
+                nearestCollider = collider; // UpdateFire the nearest object.
             }
         }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 // Base class for fireable objects
-public abstract class FireableBase : MonoBehaviour, IFireable
+public abstract class FireBase : MonoBehaviour, IFireable
 {
     protected GameObject fire;
     protected ParticleSystem fireParticleSystem;
@@ -10,9 +10,7 @@ public abstract class FireableBase : MonoBehaviour, IFireable
 
     protected virtual void Start()
     {
-        var effectFactory = FactoryManageSystem.Instance.ParticleSystemFactory;
-
-        fire = effectFactory.CreateInstance("Fire", transform.position, transform.rotation);
+        fire = FactoryManageSystem.Instance.ParticleSystemFactory.CreateInstance("Fire", transform.position, transform.rotation);
         fireParticleSystem = fire.GetComponent<ParticleSystem>();
         fireBehavior = new FireBehavior(fireParticleSystem);
 
@@ -56,7 +54,7 @@ public abstract class FireableBase : MonoBehaviour, IFireable
             Rigidbody rb = GetComponent<Rigidbody>();
             if (rb != null)
             {
-                fireBehavior.Update(rb.linearVelocity.y);
+                fireBehavior.UpdateFire(rb.linearVelocity.y);
             }
         }
     }

@@ -25,15 +25,15 @@ public class FireBehavior
         fireParticleSystem.Stop(); // Ensure fire is not emitting at the start
     }
 
-    // Update method to check and update the fire state based on vertical velocity
-    public void Update(float verticalVelocity)
+    // UpdateFire method to check and update the fire state based on vertical velocity
+    public void UpdateFire(float verticalVelocity)
     {
         FireState newState = GetFireState(verticalVelocity);
 
         if (newState != currentState) // If the state has changed
         {
-            currentState = newState; // Update the current state
-            UpdateFireEffect(); // Update the fire's visual effects
+            currentState = newState; // UpdateFire the current state
+            UpdateFireEffect(); // UpdateFire the fire's visual effects
         }
 
         AdjustFlammableValue(); // Adjust the flammable value based on current state
@@ -47,7 +47,7 @@ public class FireBehavior
         return currentState == FireState.Extinguished ? FireState.Extinguished : FireState.Idle; // Idle or Extinguished
     }
 
-    // Update the fire's visual effects based on the current state
+    // UpdateFire the fire's visual effects based on the current state
     private void UpdateFireEffect()
     {
         ParticleSystem.MainModule mainModule = fireParticleSystem.main; // Access the main module of the Particle System

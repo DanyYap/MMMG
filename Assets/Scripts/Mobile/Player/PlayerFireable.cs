@@ -1,7 +1,7 @@
 // Class for player fire behavior
 using UnityEngine;
 
-public class PlayerFireable : FireableBase
+public class PlayerFireable : FireBase
 {
     private PlayerController self;
 

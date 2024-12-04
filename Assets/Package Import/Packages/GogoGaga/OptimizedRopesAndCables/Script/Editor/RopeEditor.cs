@@ -122,7 +122,7 @@ namespace GogoGaga.OptimizedRopesAndCables
                         component.SetMidPoint(newMidPoint,true);
                     }
 
-                    serializedObject.Update(); // Update serialized object to reflect changes
+                    serializedObject.Update(); // UpdateFire serialized object to reflect changes
                 }
             }
         }

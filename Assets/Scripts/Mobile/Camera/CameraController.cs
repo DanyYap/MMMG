@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
         // Smoothly transition the current width towards the target width
         currentWidth = Mathf.Lerp(currentWidth, targetWidth, Time.deltaTime * transitionSpeed);
 
-        // Update the followZoom width
+        // UpdateFire the followZoom width
         followZoom.Width = currentWidth;
     }
 
@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
             float distance = Vector3.Distance(centerPoint, target.Object.transform.position); // Calculate distance
             if (distance > maxDistance)
             {
-                maxDistance = distance; // Update max distance
+                maxDistance = distance; // UpdateFire max distance
             }
         }
         return maxDistance; // Return the maximum distance
