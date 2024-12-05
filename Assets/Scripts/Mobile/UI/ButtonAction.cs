@@ -18,7 +18,7 @@ public class StartGameAction : IButtonAction
 
     public void Execute()
     {
-        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.GameScene);
+        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.Level1Scene);
     }
 }
 
