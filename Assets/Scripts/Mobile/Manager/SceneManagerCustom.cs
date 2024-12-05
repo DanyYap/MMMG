@@ -39,18 +39,23 @@ public class SceneManagerCustom : ISceneManager
         int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
         int totalScenes = SceneManager.sceneCountInBuildSettings;
 
-        if (currentBuildIndex + 1 < totalScenes) // Ensure there's a next scene
+        int nextSceneIndex;
+
+        if (currentBuildIndex + 1 < totalScenes) // Check if there's a next scene
         {
-            int nextSceneIndex = currentBuildIndex + 1;
-            string nextSceneName = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
-            Debug.Log($"Loading next scene: {nextSceneName}");
-            LoadScene(SceneUtility.GetScenePathByBuildIndex(nextSceneIndex));
+            nextSceneIndex = currentBuildIndex + 1; // Load the next scene
         }
         else
         {
-            Debug.LogWarning("No next scene available. Already at the last scene.");
+            nextSceneIndex = 0; // Loop back to the first scene
+            Debug.Log("Reached the last scene. Looping back to the first scene.");
         }
+
+        string nextSceneName = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
+        Debug.Log($"Loading scene: {nextSceneName}");
+        LoadScene(nextSceneName);
     }
+
 
     public void OnSceneChanged(string sceneName)
     {
