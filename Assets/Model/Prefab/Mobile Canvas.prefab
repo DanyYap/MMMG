@@ -163,7 +163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1221211196915213925
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2971,7 +2971,7 @@ GameObject:
   - component: {fileID: 8388154821818392970}
   - component: {fileID: 4325710458442932505}
   m_Layer: 5
-  m_Name: Quit Button
+  m_Name: Quit Game Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,6 +1,7 @@
 // Class for player fire behavior
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerFireable : FireBase
 {
     private PlayerController self;

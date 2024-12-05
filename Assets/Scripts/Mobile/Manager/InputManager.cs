@@ -81,11 +81,11 @@ public class MobileInputManager : IInputManager
     public void InitializeButtonActions()
     {
         // Adding actions for each button identifier
-        SetButtonAction(ButtonIdentifiers.SoloGameButton, () => new StartGameAction(sceneManageSystem).Execute());
-        SetButtonAction(ButtonIdentifiers.PlayerSwitchButton, () => new SwitchPlayerAction(playerManageSystem).Execute());
-        SetButtonAction(ButtonIdentifiers.BackToMenuButton, () => new BackMenuAction(sceneManageSystem).Execute());
-        SetButtonAction(ButtonIdentifiers.InteractButton, () => new InteractObjectAction());
-        SetButtonAction(ButtonIdentifiers.UseToolButton, () => new InteractObjectAction());
-        SetButtonAction(ButtonIdentifiers.RotateCameraButton, () => new RotateCameraAction(cameraController).Execute());
+        SetButtonAction(ButtonIdentifiers.SoloGameButton,       () => new StartGameAction(sceneManageSystem).Execute());
+        SetButtonAction(ButtonIdentifiers.PlayerSwitchButton,   () => new SwitchPlayerAction(playerManageSystem).Execute());
+        SetButtonAction(ButtonIdentifiers.QuitGameButton,       () => new QuitGameAction().Execute());
+        SetButtonAction(ButtonIdentifiers.InteractButton,       () => new InteractObjectAction());
+        SetButtonAction(ButtonIdentifiers.UseToolButton,        () => new InteractObjectAction());
+        SetButtonAction(ButtonIdentifiers.RotateCameraButton,   () => new RotateCameraAction(cameraController).Execute());
     }
 }

@@ -39,6 +39,15 @@ public class BackMenuAction : IButtonAction
     }
 }
 
+public class QuitGameAction : IButtonAction
+{
+    public void Execute()
+    {
+        Application.Quit();
+        Debug.Log("Quit Game");
+    }
+}
+
 public class SwitchPlayerAction : IButtonAction
 {
     private PlayerManageSystem playerManageSystem;
