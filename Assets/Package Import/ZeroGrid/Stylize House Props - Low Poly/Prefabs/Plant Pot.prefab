@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1031786987949076328}
   - component: {fileID: 3005400158889565090}
   - component: {fileID: 1265533395554562350}
-  - component: {fileID: -4983676869698686146}
   m_Layer: 0
   m_Name: Plant Pot
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654020140962183799}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -110,16 +109,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5455339040329443478, guid: 89c8943fe86cafa488bf36f17cc0ed0c, type: 3}
---- !u!114 &-4983676869698686146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3654020140962183799}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1df3c8bd3ffc751448e808ccb945231d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isFiredAtStart: 0

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 953053617125750859}
   - component: {fileID: 3088654052053912705}
   - component: {fileID: 1366941514178045453}
-  - component: {fileID: -4518322060946047398}
   m_Layer: 0
   m_Name: Jar
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3593281028737805652}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -110,16 +109,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7065439566198968859, guid: b38a95e07877d354ea28a6ea4111c154, type: 3}
---- !u!114 &-4518322060946047398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3593281028737805652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1df3c8bd3ffc751448e808ccb945231d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isFiredAtStart: 0

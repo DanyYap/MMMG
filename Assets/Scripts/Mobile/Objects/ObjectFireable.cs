@@ -26,7 +26,7 @@ public class ObjectFireable : FireBase
     public override void Extinguished()
     {
         fireParticleSystem.Stop();
-        FireBurnSound.Stop();
+        FireBurnSound.Pause();
     }
 
     private void OnTriggerEnter(Collider other)
