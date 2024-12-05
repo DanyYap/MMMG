@@ -1,0 +1,2 @@
+C:\GitHub Repo\Repo File\MMMG Git\MMMG\MMMG\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\GitHub Repo\Repo File\MMMG Git\MMMG\MMMG\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
