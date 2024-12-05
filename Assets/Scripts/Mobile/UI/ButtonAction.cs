@@ -18,7 +18,7 @@ public class StartGameAction : IButtonAction
 
     public void Execute()
     {
-        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.GameScene);
+        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.Level1Scene);
     }
 }
 
@@ -36,6 +36,15 @@ public class BackMenuAction : IButtonAction
     public void Execute()
     {
         sceneManageSystem.GetSceneManager().LoadScene(SceneNames.MenuScene);
+    }
+}
+
+public class QuitGameAction : IButtonAction
+{
+    public void Execute()
+    {
+        Application.Quit();
+        Debug.Log("Quit Game");
     }
 }
 

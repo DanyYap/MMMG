@@ -1,6 +1,7 @@
 // Class for object fire behavior
 using UnityEngine;
 
+[RequireComponent(typeof(ObjectHealth))]
 public class ObjectFireable : FireBase
 {
     public AudioSource FireBurnSound;

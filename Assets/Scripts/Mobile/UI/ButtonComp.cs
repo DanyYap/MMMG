@@ -1,11 +1,11 @@
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 public static class ButtonIdentifiers
 {
     // main menu buttons
     public const string SoloGameButton      = "Solo Game Button";
     public const string CoopButton          = "Coop Game Button";
+    public const string QuitGameButton      = "Quit Game Button";
 
     // pause buttons
     public const string BackToMenuButton    = "Back To Menu Button";
