@@ -2798,12 +2798,12 @@ GameObject:
   - component: {fileID: 8391823106666746787}
   - component: {fileID: 3984421406351745941}
   m_Layer: 5
-  m_Name: Timer Text
+  m_Name: Fire Healths Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5261485740670362736
 RectTransform:
   m_ObjectHideFlags: 0

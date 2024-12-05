@@ -5,7 +5,10 @@ public class GameManageSystem : MonoBehaviour
 {
     public static GameManageSystem Instance { get; private set; }
 
-    private HealthSceneManager playerHealthSceneManager = new HealthSceneManager(); // Use HealthSceneManager to manage health in the scene
+    private HealthSceneManager healthSceneManager = new HealthSceneManager(); // Use HealthSceneManager to manage health in the scene
+    private HealthTextManager healthTextManager;
+
+    private bool hasSceneTransitioned = false; // Flag to ensure LoadNextScene is called only once
 
     private void Awake()
     {
@@ -20,28 +23,60 @@ public class GameManageSystem : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (healthTextManager == null)
+        {
+            return;
+        }
+
+        // Skip processing if in MenuScene
+        if (SceneManager.GetActiveScene().name == SceneNames.MenuScene)
+        {
+            return;
+        }
+
+        // Check if total fire healths have dropped to 0
+        var fireHealths = healthSceneManager.GetTotalHealthData("object");
+        //Debug.Log(fireHealths);
+        if (fireHealths == 0)
+        {
+            Debug.Log("load next scene");
+        }
+        if (fireHealths == 0 && !hasSceneTransitioned)
+        {
+            hasSceneTransitioned = true; // Set the flag to prevent repeated transitions
+            SceneManageSystem.Instance.GetSceneManager().LoadNextScene();
+        }
+    }
+
     // Called when a new scene is loaded
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Initialize health data for player and other entities in the new scene
-        playerHealthSceneManager.InitializeHealthDataForScene("player"); // Initialize health data for players
-        playerHealthSceneManager.InitializeHealthDataForScene("object"); // Example: Initialize health data for enemies
+        // Reset the flag to allow scene transitions in the new scene
+        hasSceneTransitioned = false;
 
-        // Optionally update the interface with total health of players in the scene
-        InterfaceManageSystem.Instance.GetTextManager().UpdateText(TextType.TimerText, TextNames.TimerText, playerHealthSceneManager.GetTotalHealthData("object"));
-        Debug.Log(playerHealthSceneManager.GetTotalHealthData("object"));
+        // Initialize health data for player and other entities in the new scene
+        healthSceneManager.InitializeHealthDataForScene("player"); // Initialize health data for players
+        healthSceneManager.InitializeHealthDataForScene("object"); // Example: Initialize health data for enemies
 
         Debug.Log($"Scene {scene.name} loaded. PlayerHealthSceneManager initialized.");
+
+        // TEMP - HealthTextManager
+        healthTextManager = new HealthTextManager(healthSceneManager, "object");
     }
 
     // Called when a scene is unloaded
     private void OnSceneUnloaded(Scene scene)
     {
         // Clear health data for player and other entities when the scene is unloaded
-        playerHealthSceneManager.OnSceneChanged("player"); // Unregister player health data for the previous scene
-        playerHealthSceneManager.OnSceneChanged("object"); // Example: Unregister enemy health data
+        healthSceneManager.OnSceneChanged("player"); // Unregister player health data for the previous scene
+        healthSceneManager.OnSceneChanged("object"); // Example: Unregister enemy health data
 
         Debug.Log($"Scene {scene.name} unloaded. PlayerHealthSceneManager cleared.");
+
+        // TEMP - HealthTextManager
+        healthTextManager = null;
     }
 
     private void OnEnable()
@@ -55,4 +90,6 @@ public class GameManageSystem : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded; // Unsubscribe from scene loaded event
         SceneManager.sceneUnloaded -= OnSceneUnloaded; // Unsubscribe from scene unloaded event
     }
+
+    public HealthSceneManager GetHealthSceneManager => healthSceneManager;
 }

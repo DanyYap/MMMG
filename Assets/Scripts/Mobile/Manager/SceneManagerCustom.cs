@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public interface ISceneManager
 {
     void LoadScene(string sceneName);
+    void LoadNextScene();
     void OnSceneChanged(string sceneName);
 }
 
@@ -18,12 +19,12 @@ public class SceneManagerCustom : ISceneManager
         currentSceneName = SceneManager.GetActiveScene().name;
     }
 
+    // Load a specific scene by name
     public void LoadScene(string sceneName)
     {
         if (!isLoadingScene && currentSceneName != sceneName)
         {
             isLoadingScene = true;
-            
             SceneManageSystem.Instance.StartCoroutine(LoadSceneAsync(sceneName));
         }
         else
@@ -31,6 +32,30 @@ public class SceneManagerCustom : ISceneManager
             Debug.Log($"Scene {sceneName} is already loaded or currently loading.");
         }
     }
+
+    // Load the next scene in the build index
+    public void LoadNextScene()
+    {
+        int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
+        int totalScenes = SceneManager.sceneCountInBuildSettings;
+
+        int nextSceneIndex;
+
+        if (currentBuildIndex + 1 < totalScenes) // Check if there's a next scene
+        {
+            nextSceneIndex = currentBuildIndex + 1; // Load the next scene
+        }
+        else
+        {
+            nextSceneIndex = 0; // Loop back to the first scene
+            Debug.Log("Reached the last scene. Looping back to the first scene.");
+        }
+
+        string nextSceneName = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
+        Debug.Log($"Loading scene: {nextSceneName}");
+        LoadScene(nextSceneName);
+    }
+
 
     public void OnSceneChanged(string sceneName)
     {
@@ -46,7 +71,7 @@ public class SceneManagerCustom : ISceneManager
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
-        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
         if (asyncLoad == null)
         {
             Debug.LogError($"Failed to load scene {sceneName}.");
@@ -59,7 +84,7 @@ public class SceneManagerCustom : ISceneManager
         }
 
         isLoadingScene = false;
-        currentSceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        currentSceneName = SceneManager.GetActiveScene().name;
         OnSceneChanged(currentSceneName);
     }
 }

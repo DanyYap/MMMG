@@ -23,12 +23,12 @@ public class Water : MonoBehaviour
         if (other.CompareTag("Player")) 
         {
             Debug.Log(other);
-            other.GetComponent<PlayerHealth>().ReceiveDamage(1f);
+            other.GetComponent<PlayerHealth>()?.ReceiveDamage(1f);
         }
-        else if (other.CompareTag("Fire"))
+        else if (other.CompareTag("Fire") || other.CompareTag("Untagged"))
         {
             Debug.Log(other);
-            other.GetComponent<ObjectHealth>().ReceiveDamage(1f);
+            other.GetComponent<ObjectHealth>()?.ReceiveDamage(1f);
         }
     }
 }
