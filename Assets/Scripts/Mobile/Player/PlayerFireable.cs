@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PlayerFireable : FireBase
 {
+    public AudioSource GetBurnSoundEffect;
     private PlayerController self;
 
     private void Awake()
@@ -13,6 +14,7 @@ public class PlayerFireable : FireBase
     public override void Ignite()
     {
         fireParticleSystem.Play();
+        GetBurnSoundEffect.Play();
 
         // Set player burning state
         PlayerSwitcher.SelectedPlayer.PlayerState.SetState(
@@ -24,6 +26,7 @@ public class PlayerFireable : FireBase
         if (fire != null)
         {
             fireParticleSystem.Stop();
+            GetBurnSoundEffect.Stop();
 
             // Reset player burning state
             PlayerSwitcher.SelectedPlayer.PlayerState.SetState(

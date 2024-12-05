@@ -10,6 +10,7 @@ public interface IWaterShootable: IInteractable
 public class WaterShootable : MonoBehaviour, IWaterShootable
 {
     public ParticleSystem WaterParticleSystem;
+    public AudioSource ExtinguishSoundEffect;
     private event Action waterShootingEvent;
     private event Action initializeButtonEvent;
     [SerializeField] private Grabbable grabbableObject;
@@ -31,6 +32,7 @@ public class WaterShootable : MonoBehaviour, IWaterShootable
     public void ShootingWater()
     {
         WaterParticleSystem.Play();
+        ExtinguishSoundEffect.Play();
 
         waterShootingEvent -= ShootingWater;
         waterShootingEvent += StopShooting;
@@ -39,6 +41,7 @@ public class WaterShootable : MonoBehaviour, IWaterShootable
     public void StopShooting()
     {
         WaterParticleSystem.Stop();
+        ExtinguishSoundEffect.Stop();
 
         waterShootingEvent -= StopShooting;
         waterShootingEvent += ShootingWater;

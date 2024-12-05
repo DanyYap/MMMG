@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ObjectFireable : FireBase
 {
+    public AudioSource FireBurnSound;
     [SerializeField] private bool isFiredAtStart = false;
 
     private new void Start()
@@ -18,11 +19,13 @@ public class ObjectFireable : FireBase
     public override void Ignite()
     {
         fireParticleSystem.Play();
+        FireBurnSound.Play();
     }
 
     public override void Extinguished()
     {
         fireParticleSystem.Stop();
+        FireBurnSound.Stop();
     }
 
     private void OnTriggerEnter(Collider other)
