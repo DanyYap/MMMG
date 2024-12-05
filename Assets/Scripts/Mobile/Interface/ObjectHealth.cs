@@ -5,6 +5,7 @@ public class ObjectHealth : HealthBase
     public override void ReceiveDamage(float damageAmount)
     {
         base.ReceiveDamage(damageAmount); // Use base behavior to handle damage.
+        GameManageSystem.Instance.GetHealthSceneManager.UpdateHealthData("object", gameObject.name, CurrentHealth);
         Debug.Log($"Object-specific logic: Play a hit animation or sound.");
     }
 

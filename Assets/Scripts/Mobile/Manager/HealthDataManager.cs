@@ -37,7 +37,7 @@ public class HealthDataManager
         return 0f; // Return 0 if the entity is not found.
     }
 
-    // UpdateFire the health value for a specific entity under a health type.
+    // Update the health value for a specific entity under a health type.
     public void UpdateHealthData(string healthType, string entityName, float newHealthValue)
     {
         if (healthDataByType.ContainsKey(healthType) && healthDataByType[healthType].ContainsKey(entityName))

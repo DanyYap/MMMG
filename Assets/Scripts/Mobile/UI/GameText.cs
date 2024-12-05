@@ -10,7 +10,7 @@ public enum TextType
 // Static class for text names
 public static class TextNames
 {
-    public const string TimerText = "Timer Text";
+    public const string FireHealths = "Fire Healths Text";
 }
 
 // Interface for text components

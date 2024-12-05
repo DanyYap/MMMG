@@ -6,7 +6,6 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private IPanelManager panelManager;
     private MobileInputManager inputManager;
-    private TextManager textManager;
 
     private void Awake()
     {
@@ -30,10 +29,7 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private void CreateSystem()
     {
-        panelManager = new PanelManager();
-
-        ITextComponentFactory textFactory = new TextComponentFactory(); // Create textFactory instance
-        textManager = new TextManager(textFactory);
+        panelManager = new PanelManager();        
     }
 
     public void InitializeSystem()
@@ -45,7 +41,6 @@ public class InterfaceManageSystem : MonoBehaviour
 
         inputManager = new MobileInputManager(sceneManageSystem, playerManageSystem, cameraController);
         panelManager.InitializePanels();
-        textManager.SetupTexts();
     }
 
     public MobileInputManager GetInputManager()
@@ -53,16 +48,10 @@ public class InterfaceManageSystem : MonoBehaviour
         return inputManager;
     }
 
-    public TextManager GetTextManager()
-    {
-        return textManager;
-    }
-
     public void SwitchToPanel(string panel)
     {
         panelManager.SwitchToPanel(panel);
         inputManager.SetJoystick();
         inputManager.InitializeButtonActions();
-        textManager.SetupTexts();
     }
 }

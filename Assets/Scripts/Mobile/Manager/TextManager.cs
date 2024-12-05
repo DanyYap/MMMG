@@ -22,7 +22,7 @@ public class TextManager : ITextManager
     // Initialize texts
     public void SetupTexts()
     {
-        CreateOrUpdateText(TextNames.TimerText, TextType.TimerText);
+        CreateOrUpdateText(TextNames.FireHealths, TextType.TimerText);
     }
 
     // UpdateFire text value
