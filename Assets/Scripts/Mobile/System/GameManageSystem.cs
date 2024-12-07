@@ -38,6 +38,8 @@ public class GameManageSystem : MonoBehaviour
 
         // Check if total fire healths have dropped to 0
         var fireHealths = healthSceneManager.GetTotalHealthData("object");
+        InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.CountdownText, fireHealths);
+
         //Debug.Log(fireHealths);
         if (fireHealths == 0)
         {

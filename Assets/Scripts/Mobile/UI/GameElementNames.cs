@@ -1,26 +1,23 @@
 public static class SceneNames
 {
-    public const string MenuScene = "MenuScene";
-    public const string GameScene = "GameScene";
-    public const string FireHoseScene = "FireHoseScene";
+    public const string MenuScene           = "MenuScene";
 
-    public const string Level1Scene = "Level 1";
-    public const string Level2Scene = "Level 2";
-    public const string Level3Scene = "Level 3";
-    public const string Level4Scene = "Level 4";
+    public const string Level1Scene         = "Level 1";
+    public const string Level2Scene         = "Level 2";
+    public const string Level3Scene         = "Level 3";
 }
 
 public static class UiElementNames
 {
     public static class Canvas
     {
-        public const string Mobile = "Mobile Canvas";
+        public const string Mobile          = "Mobile Canvas";
     }
 
     public static class Panels
     {
-        public const string MainMenu = "Main Menu Panel";
-        public const string InGame = "In Game Panel";
+        public const string MainMenu        = "Main Menu Panel";
+        public const string InGame          = "In Game Panel";
     }
 
     public static class Buttons
@@ -39,7 +36,7 @@ public static class UiElementNames
 
     public static class Texts
     {
-        public const string WelcomeText     = "Welcome to the Game!";
-        public const string GameOverText    = "Game Over!";
+        // in game
+        public const string CountdownText   = "Countdown Text";
     }
 }

@@ -63,24 +63,4 @@ public class ButtonManager
         buttonComponents.Clear();
         buttonActions.Clear();
     }
-
-    // Initialize buttons after a new scene has loaded
-    public void OnSceneLoaded()
-    {
-        // Re-initialize button actions in the new scene
-        foreach (var button in buttonComponents.Values)
-        {
-            button.gameObject.SetActive(true); // Ensure buttons are active in the new scene
-        }
-
-        Debug.Log("Scene loaded. Button actions initialized.");
-    }
-
-    // Clear all button actions after a scene is unloaded
-    public void OnSceneUnloaded()
-    {
-        // Clear button actions when the scene is unloaded
-        ClearAllButtonActions();
-        Debug.Log("Scene unloaded. Button actions cleared.");
-    }
 }

@@ -9,6 +9,7 @@ public class InterfaceManageSystem : MonoBehaviour
     private PanelManager panelManager;
     private JoystickManager joystickManager;
     private ButtonManager buttonManager = new ButtonManager();
+    private TextManager textManager = new TextManager();
 
     private void Awake()
     {
@@ -48,6 +49,7 @@ public class InterfaceManageSystem : MonoBehaviour
 
         InitializeJoystick();
         InitializeButtons();
+        InitializeTexts();
     }
 
     private void InitializeJoystick()
@@ -79,9 +81,20 @@ public class InterfaceManageSystem : MonoBehaviour
         buttonManager.InitializeButtonActions(buttonActions);
     }
 
+    private void InitializeTexts()
+    {
+        var textActions = new Dictionary<string, ITextAction>
+        {
+            { UiElementNames.Texts.CountdownText, new CountdownAction() }
+        };
+
+        textManager.InitializeTextActions(textActions);
+    }
+
     private void ClearForScene(Scene scene)
     {
         buttonManager.ClearAllButtonActions();
+        textManager.ClearAllTextActions();
 
         if (panelManager != null)
         {
@@ -94,13 +107,11 @@ public class InterfaceManageSystem : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         InitializeForScene(scene);
-        Debug.Log($"Scene {scene.name} initialized.");
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
         ClearForScene(scene);
-        Debug.Log($"Scene {scene.name} cleared.");
     }
 
     private void OnDestroy()
@@ -118,5 +129,10 @@ public class InterfaceManageSystem : MonoBehaviour
     public JoystickManager GetJoystickManager()
     {
         return joystickManager;
+    }
+
+    public TextManager GetTextManager()
+    {
+        return textManager;
     }
 }
