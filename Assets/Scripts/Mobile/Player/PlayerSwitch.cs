@@ -37,22 +37,26 @@ public class PlayerSwitcher : IPlayerSwitcher
 
             if (i == index)
             {
-                PlayerSwitcher.SelectedPlayer = playerController;
+                SelectedPlayer = playerController;
 
-                // update interact button of object owned by current player
-                InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(
-                    ButtonIdentifiers.InteractButton, 
-                    () => PlayerSwitcher.SelectedPlayer.ObjectOnInteract.Interact());
+                InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(
+                    UiElementNames.Buttons.Interact, 
+                    new InteractObjectAction(SelectedPlayer.ObjectOnInteract));
 
-                InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(
-                    ButtonIdentifiers.UseToolButton,
-                    () => {
+                /*
+                InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(
+                    UiElementNames.Buttons.UseTool,
+                    new InteractObjectAction(
+                    {
                         if (PlayerSwitcher.SelectedPlayer.ObjectOnInteract is IWaterShootable waterShootableObject)
                         {
                             // Call Waterable's Interact method
-                            waterShootableObject.Interact();
+                            this;
                         }
-                    });   //TEMPORARY
+                    })
+                
+            );
+                */
             }
         }
     }

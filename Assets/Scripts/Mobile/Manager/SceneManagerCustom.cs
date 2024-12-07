@@ -4,9 +4,8 @@ using UnityEngine.SceneManagement;
 
 public interface ISceneManager
 {
-    void LoadScene(string sceneName);
+    void LoadSceneName(string sceneName);
     void LoadNextScene();
-    void OnSceneChanged(string sceneName);
 }
 
 public class SceneManagerCustom : ISceneManager
@@ -20,12 +19,12 @@ public class SceneManagerCustom : ISceneManager
     }
 
     // Load a specific scene by name
-    public void LoadScene(string sceneName)
+    public void LoadSceneName(string sceneName)
     {
-        if (!isLoadingScene && currentSceneName != sceneName)
+        if (currentSceneName != sceneName)
         {
-            isLoadingScene = true;
-            SceneManageSystem.Instance.StartCoroutine(LoadSceneAsync(sceneName));
+            currentSceneName = sceneName;
+            SceneManager.LoadScene(sceneName);
         }
         else
         {
@@ -53,20 +52,7 @@ public class SceneManagerCustom : ISceneManager
 
         string nextSceneName = SceneUtility.GetScenePathByBuildIndex(nextSceneIndex);
         Debug.Log($"Loading scene: {nextSceneName}");
-        LoadScene(nextSceneName);
-    }
-
-
-    public void OnSceneChanged(string sceneName)
-    {
-        Debug.Log($"Scene changed to: {sceneName}");
-
-        InterfaceManageSystem.Instance.InitializeSystem();
-
-        InterfaceManageSystem.Instance.SwitchToPanel(sceneName == SceneNames.MenuScene
-            ? PanelIdentifiers.MainMenu
-            : PanelIdentifiers.InGame);
-        //GameManageSystem.Instance.EnableExecution(sceneName == SceneNames.GameScene);
+        LoadSceneName(nextSceneName);
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)
@@ -80,11 +66,17 @@ public class SceneManagerCustom : ISceneManager
 
         while (!asyncLoad.isDone)
         {
+            // Optional: Update a loading bar or display progress
+            //float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f); // Normalize progress
+            //Debug.Log($"Loading progress: {progress * 100}%");
+
             yield return null;
         }
 
+        // Optional: Hide loading screen
+        // HideLoadingScreen();
+
         isLoadingScene = false;
         currentSceneName = SceneManager.GetActiveScene().name;
-        OnSceneChanged(currentSceneName);
     }
 }

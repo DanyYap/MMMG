@@ -18,7 +18,7 @@ public class StartGameAction : IButtonAction
 
     public void Execute()
     {
-        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.Level1Scene);
+        sceneManageSystem.GetSceneManager().LoadSceneName(SceneNames.Level1Scene);
     }
 }
 
@@ -35,7 +35,7 @@ public class BackMenuAction : IButtonAction
 
     public void Execute()
     {
-        sceneManageSystem.GetSceneManager().LoadScene(SceneNames.MenuScene);
+        sceneManageSystem.GetSceneManager().LoadSceneName(SceneNames.MenuScene);
     }
 }
 
@@ -92,6 +92,7 @@ public class RotateCameraAction : IButtonAction
 
     public RotateCameraAction(CameraController camera)
     {
+        if (camera == null) return;
         this.camera = camera;
         rotate = camera.CameraRotate;
     }

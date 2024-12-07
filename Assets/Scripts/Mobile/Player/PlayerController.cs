@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         if (interfaceManageSystem == null) return;
-        moveDirection = interfaceManageSystem.GetInputManager().GetJoystickDirection();
+        moveDirection = interfaceManageSystem.GetJoystickManager().GetJoystickDirection();
 
         PlayerState.IsMoving = moveDirection != Vector2.zero;
         playerMover.Move(rb, moveDirection);

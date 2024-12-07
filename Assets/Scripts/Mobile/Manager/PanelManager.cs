@@ -1,78 +1,114 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public interface IPanelManager
+public class PanelManager
 {
-    void InitializePanels();
-    void SwitchToPanel(string panelId);
-}
+    private readonly Canvas canvas;  // Reference to the canvas that holds the panels
+    private readonly GameObject[] panels;  // Array to hold all the panel objects
 
-public class PanelManager : IPanelManager
-{
-    private readonly Dictionary<string, IPanel> panels = new();
-    private IPanel currentPanel;
-
-    public void InitializePanels()
+    public PanelManager(Canvas canvas)
     {
-        var canvasLibrary = FactoryManageSystem.Instance.CanvasFactory;
-        var canvasPrefab = canvasLibrary.CreateInstance("Mobile Canvas");
+        this.canvas = canvas;
 
-        panels[PanelIdentifiers.MainMenu] = PanelFactory.CreatePanel(
-            PanelIdentifiers.MainMenu, FindPanelByName(canvasPrefab.transform, PanelIdentifiers.MainMenu));
-        panels[PanelIdentifiers.InGame] = PanelFactory.CreatePanel(
-            PanelIdentifiers.InGame, FindPanelByName(canvasPrefab.transform, PanelIdentifiers.InGame));
+        // Collect all the panels based on the names defined in UiElementNames.Panels
+        panels = new GameObject[]
+        {
+            canvas.transform.Find(UiElementNames.Panels.MainMenu)?.gameObject,
+            canvas.transform.Find(UiElementNames.Panels.InGame)?.gameObject,
+            // Add more panels here as needed
+        };
+
+        // Register for scene load/unload events
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
-    public void SwitchToPanel(string panelId)
+    // Initialize panels when a scene is loaded
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Safely handle the current panel
-        if (currentPanel != null)
+        // Ensure all panels are initialized in the new scene
+        foreach (var panel in panels)
         {
-            if (IsPanelDestroyed(currentPanel) || !IsPanelInCurrentScene(currentPanel))
+            if (panel != null)
             {
-                Debug.LogWarning($"Current panel '{panelId}' is no longer valid. Clearing reference.");
-                currentPanel = null;
-                InitializePanels();
-            }
-            else
-            {
-                currentPanel.Hide(); // Only hide if the panel is valid
+                panel.SetActive(true); // Activate panels if needed (if they are active in this scene)
             }
         }
 
-        // Switch to the new panel
-        if (panels.TryGetValue(panelId, out var newPanel) && !IsPanelDestroyed(newPanel))
+        Debug.Log($"Scene {scene.name} loaded. Panels initialized.");
+    }
+
+    // Clear panels when a scene is unloaded
+    private void OnSceneUnloaded(Scene scene)
+    {
+        // Deactivate and clear all panel references when the scene is unloaded
+        foreach (var panel in panels)
         {
-            currentPanel = newPanel;
-            currentPanel.Show(); // Show the new panel safely
+            if (panel != null)
+            {
+                panel.SetActive(false); // Deactivate the panel
+            }
         }
-        else
+
+        Debug.Log($"Scene {scene.name} unloaded. Panels cleared.");
+    }
+
+    // Show the specified panel by its name
+    public void ShowPanel(string panelName)
+    {
+        foreach (var panel in panels)
         {
-            Debug.LogError($"Panel '{panelId}' not found or has been destroyed.");
+            if (panel != null && panel.name == panelName)
+            {
+                panel.SetActive(true);  // Activate the panel
+            }
+            else if (panel != null)
+            {
+                panel.SetActive(false);  // Deactivate the other panels
+            }
         }
     }
 
-    private bool IsPanelDestroyed(IPanel panel)
+    // Hide the specified panel by its name
+    public void HidePanel(string panelName)
     {
-        var panelObject = (panel as BasePanel)?.PanelObject;
-        // Check if the object is null or destroyed
-        return panelObject == null || !panelObject;
-    }
-
-    private bool IsPanelInCurrentScene(IPanel panel)
-    {
-        var panelObject = (panel as BasePanel)?.PanelObject;
-        return panelObject != null && panelObject.scene == UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-    }
-
-    private GameObject FindPanelByName(Transform parent, string panelName)
-    {
-        var panelTransform = parent.Find(panelName);
-        if (panelTransform == null)
+        foreach (var panel in panels)
         {
-            Debug.LogError($"Panel '{panelName}' not found.");
-            return null;
+            if (panel != null && panel.name == panelName)
+            {
+                panel.SetActive(false);  // Deactivate the panel
+            }
         }
-        return panelTransform.gameObject;
+    }
+
+    // Toggle the visibility of a panel
+    public void TogglePanel(string panelName)
+    {
+        foreach (var panel in panels)
+        {
+            if (panel != null && panel.name == panelName)
+            {
+                panel.SetActive(!panel.activeSelf);  // Toggle the active state
+            }
+        }
+    }
+
+    // Hide all panels (useful for clearing the screen or when transitioning between scenes)
+    public void HideAllPanels()
+    {
+        foreach (var panel in panels)
+        {
+            if (panel != null)
+            {
+                panel.SetActive(false);  // Deactivate all panels
+            }
+        }
+    }
+
+    // Unregister from scene loaded and unloaded events
+    public void Cleanup()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 }

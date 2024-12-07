@@ -49,11 +49,11 @@ public class WaterShootable : MonoBehaviour, IWaterShootable
 
     private void InitializeButton()
     {
-        var gameButton = GameObject.Find(ButtonIdentifiers.UseToolButton);
+        var gameButton = GameObject.Find(UiElementNames.Buttons.UseTool);
 
         if (gameButton != null)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.UseToolButton, () => Interact());
+            InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(UiElementNames.Buttons.UseTool, new InteractObjectAction(this));
         }
 
         initializeButtonEvent -= InitializeButton;
@@ -62,11 +62,11 @@ public class WaterShootable : MonoBehaviour, IWaterShootable
 
     private void ResetButton()
     {
-        var gameButton = GameObject.Find(ButtonIdentifiers.UseToolButton);
+        var gameButton = GameObject.Find(UiElementNames.Buttons.UseTool);
 
         if (gameButton != null)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.UseToolButton);
+            InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(UiElementNames.Buttons.UseTool);
         }
 
         initializeButtonEvent -= ResetButton;

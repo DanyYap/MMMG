@@ -1,11 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InterfaceManageSystem : MonoBehaviour
 {
     public static InterfaceManageSystem Instance { get; private set; }
 
-    private IPanelManager panelManager;
-    private MobileInputManager inputManager;
+    private PanelManager panelManager;
+    private JoystickManager joystickManager;
+    private ButtonManager buttonManager = new ButtonManager();
 
     private void Awake()
     {
@@ -13,8 +16,6 @@ public class InterfaceManageSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            CreateSystem();
-            InitializeSystem();
         }
         else
         {
@@ -24,34 +25,98 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private void Start()
     {
-        SwitchToPanel(PanelIdentifiers.MainMenu);
+        // Register for scene load and unload events
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+        InitializeForScene(SceneManager.GetActiveScene());
     }
 
-    private void CreateSystem()
+    private void InitializeForScene(Scene scene)
     {
-        panelManager = new PanelManager();        
+        var canvas = FactoryManageSystem.Instance.CanvasFactory.CreateInstance(UiElementNames.Canvas.Mobile);
+        panelManager = new PanelManager(canvas.GetComponent<Canvas>());
+
+        if (scene.name == SceneNames.MenuScene)
+        {
+            panelManager.ShowPanel(UiElementNames.Panels.MainMenu);
+        }
+        else
+        {
+            panelManager.ShowPanel(UiElementNames.Panels.InGame);
+        }
+
+        InitializeJoystick();
+        InitializeButtons();
     }
 
-    public void InitializeSystem()
+    private void InitializeJoystick()
     {
-        // Dependency injection
-        var sceneManageSystem = SceneManageSystem.Instance;
-        var playerManageSystem = PlayerManageSystem.Instance;
-        var cameraController = FindAnyObjectByType<CameraController>();
-
-        inputManager = new MobileInputManager(sceneManageSystem, playerManageSystem, cameraController);
-        panelManager.InitializePanels();
+        FixedJoystick joystick = Object.FindAnyObjectByType<FixedJoystick>();
+        if (joystick != null)
+        {
+            joystickManager = new JoystickManager(joystick);
+        }
+        else
+        {
+            Debug.LogWarning("FixedJoystick not found in the scene.");
+        }
     }
 
-    public MobileInputManager GetInputManager()
+    private void InitializeButtons()
     {
-        return inputManager;
+        var buttonActions = new Dictionary<string, IButtonAction>
+        {
+            { UiElementNames.Buttons.QuitGame, new QuitGameAction() },
+            { UiElementNames.Buttons.Interact, new InteractObjectAction() },
+            { UiElementNames.Buttons.UseTool, new InteractObjectAction() },
+            { UiElementNames.Buttons.StartGame, new StartGameAction(SceneManageSystem.Instance) },
+            { UiElementNames.Buttons.BackToMenu, new BackMenuAction(SceneManageSystem.Instance) },
+            { UiElementNames.Buttons.SwitchPlayer, new SwitchPlayerAction(PlayerManageSystem.Instance) },
+            { UiElementNames.Buttons.RotateCamera, new RotateCameraAction(FindAnyObjectByType<CameraController>()) }
+        };
+
+        buttonManager.InitializeButtonActions(buttonActions);
     }
 
-    public void SwitchToPanel(string panel)
+    private void ClearForScene(Scene scene)
     {
-        panelManager.SwitchToPanel(panel);
-        inputManager.SetJoystick();
-        inputManager.InitializeButtonActions();
+        buttonManager.ClearAllButtonActions();
+
+        if (panelManager != null)
+        {
+            panelManager.HideAllPanels();
+        }
+
+        joystickManager = null; // Clear joystick manager
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        InitializeForScene(scene);
+        Debug.Log($"Scene {scene.name} initialized.");
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        ClearForScene(scene);
+        Debug.Log($"Scene {scene.name} cleared.");
+    }
+
+    private void OnDestroy()
+    {
+        // Unregister from scene events
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    public ButtonManager GetButtonManager()
+    {
+        return buttonManager;
+    }
+
+    public JoystickManager GetJoystickManager()
+    {
+        return joystickManager;
     }
 }

@@ -60,7 +60,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
             playerHand = player.playerGrabPoint;
-            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.InteractButton, () => Interact());
+            InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(UiElementNames.Buttons.Interact, new InteractObjectAction(this));
             SetOutline(true);
         }
     }
@@ -70,7 +70,7 @@ public class Grabbable : MonoBehaviour, IGrabbable
         var player = other.GetComponent<PlayerController>();
         if (player != null && owner == null && !player.PlayerState.IsGrabbing)
         {
-            InterfaceManageSystem.Instance.GetInputManager().SetButtonAction(ButtonIdentifiers.InteractButton, null);
+            InterfaceManageSystem.Instance.GetButtonManager().SetButtonAction(UiElementNames.Buttons.Interact);
             SetOutline(false);
         }
     }
