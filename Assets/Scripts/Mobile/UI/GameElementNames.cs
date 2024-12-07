@@ -37,6 +37,7 @@ public static class UiElementNames
     public static class Texts
     {
         // in game
-        public const string CountdownText   = "Countdown Text";
+        public const string FireHealthLeftText  = "Fire Health Left Text";
+        public const string CountdownText       = "Countdown Text";
     }
 }

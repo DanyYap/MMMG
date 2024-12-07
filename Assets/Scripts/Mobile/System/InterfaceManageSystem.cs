@@ -83,9 +83,10 @@ public class InterfaceManageSystem : MonoBehaviour
 
     private void InitializeTexts()
     {
-        var textActions = new Dictionary<string, ITextAction>
+        var textActions = new Dictionary<string, ITextUpdate>
         {
-            { UiElementNames.Texts.CountdownText, new CountdownAction() }
+            { UiElementNames.Texts.FireHealthLeftText, new FireHealthLeft() },
+            { UiElementNames.Texts.CountdownText, new Countdown(GameManageSystem.Instance.GetTimeManager.GetCountdownTimer()) }
         };
 
         textManager.InitializeTextActions(textActions);

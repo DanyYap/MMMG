@@ -14,6 +14,9 @@ public class PlayerFireable : FireBase
 
     public override void Ignite()
     {
+        //TEMPORARY ATM
+        return;
+
         fireParticleSystem.Play();
         GetBurnSoundEffect.Play();
 
