@@ -1,9 +1,9 @@
-using UnityEngine;
+using System;
 
 public class TimeManager
 {
     private CountdownTimer timer;
-
+    
     public TimeManager(GameLevelSettings levelSettings)
     {
         this.timer = new CountdownTimer(levelSettings.countdownTimerSettings);

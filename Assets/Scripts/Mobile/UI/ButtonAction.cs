@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Button action interface
 public interface IButtonAction
@@ -22,19 +23,54 @@ public class StartGameAction : IButtonAction
     }
 }
 
-// TODO: will implement start coop button action
-
-public class BackMenuAction : IButtonAction
+public class RetryLevelAction : IButtonAction
 {
     private SceneManageSystem sceneManageSystem;
 
-    public BackMenuAction(SceneManageSystem sceneManageSystem)
+    public RetryLevelAction(SceneManageSystem sceneManageSystem)
     {
         this.sceneManageSystem = sceneManageSystem;
     }
 
     public void Execute()
     {
+        var currentSceneName = SceneManager.GetActiveScene().name;
+        sceneManageSystem.GetSceneManager().LoadSceneName(currentSceneName);
+    }
+}
+
+public class NextLevelAction : IButtonAction
+{
+    private SceneManageSystem sceneManageSystem;
+
+    public NextLevelAction(SceneManageSystem sceneManageSystem)
+    {
+        this.sceneManageSystem = sceneManageSystem;
+    }
+
+    public void Execute()
+    {
+        var currentSceneName = SceneManager.GetActiveScene().name;
+        sceneManageSystem.GetSceneManager().LoadNextScene();
+    }
+}
+
+// TODO: will implement start coop button action
+
+public class BackMenuAction : IButtonAction
+{
+    private SceneManageSystem sceneManageSystem;
+    private GameManageSystem gameManageSystem;
+
+    public BackMenuAction(SceneManageSystem sceneManageSystem, GameManageSystem gameManageSystem)
+    {
+        this.sceneManageSystem = sceneManageSystem;
+        this.gameManageSystem = gameManageSystem;
+    }
+
+    public void Execute()
+    {
+        gameManageSystem.ResetGame();
         sceneManageSystem.GetSceneManager().LoadSceneName(SceneNames.MenuScene);
     }
 }

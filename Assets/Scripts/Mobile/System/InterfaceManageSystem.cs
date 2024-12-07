@@ -47,6 +47,11 @@ public class InterfaceManageSystem : MonoBehaviour
             panelManager.ShowPanel(UiElementNames.Panels.InGame);
         }
 
+        InitializeUiElements();
+    }
+
+    public void InitializeUiElements()
+    {
         InitializeJoystick();
         InitializeButtons();
         InitializeTexts();
@@ -73,9 +78,11 @@ public class InterfaceManageSystem : MonoBehaviour
             { UiElementNames.Buttons.Interact, new InteractObjectAction() },
             { UiElementNames.Buttons.UseTool, new InteractObjectAction() },
             { UiElementNames.Buttons.StartGame, new StartGameAction(SceneManageSystem.Instance) },
-            { UiElementNames.Buttons.BackToMenu, new BackMenuAction(SceneManageSystem.Instance) },
+            { UiElementNames.Buttons.BackToMenu, new BackMenuAction(SceneManageSystem.Instance, GameManageSystem.Instance) },
             { UiElementNames.Buttons.SwitchPlayer, new SwitchPlayerAction(PlayerManageSystem.Instance) },
-            { UiElementNames.Buttons.RotateCamera, new RotateCameraAction(FindAnyObjectByType<CameraController>()) }
+            { UiElementNames.Buttons.RotateCamera, new RotateCameraAction(FindAnyObjectByType<CameraController>())},
+            { UiElementNames.Buttons.RetryLevel, new RetryLevelAction(SceneManageSystem.Instance)},
+            { UiElementNames.Buttons.NextLevel, new NextLevelAction(SceneManageSystem.Instance)},
         };
 
         buttonManager.InitializeButtonActions(buttonActions);
@@ -86,7 +93,8 @@ public class InterfaceManageSystem : MonoBehaviour
         var textActions = new Dictionary<string, ITextUpdate>
         {
             { UiElementNames.Texts.FireHealthLeftText, new FireHealthLeft() },
-            { UiElementNames.Texts.CountdownText, new Countdown(GameManageSystem.Instance.GetTimeManager.GetCountdownTimer()) }
+            { UiElementNames.Texts.CountdownText, new Countdown(GameManageSystem.Instance.GetTimeManager.GetCountdownTimer()) },
+            { UiElementNames.Texts.ResultText, new Result()}
         };
 
         textManager.InitializeTextActions(textActions);
@@ -122,18 +130,11 @@ public class InterfaceManageSystem : MonoBehaviour
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
-    public ButtonManager GetButtonManager()
-    {
-        return buttonManager;
-    }
+    public PanelManager GetPanelManager() => panelManager;
 
-    public JoystickManager GetJoystickManager()
-    {
-        return joystickManager;
-    }
+    public ButtonManager GetButtonManager() => buttonManager;
 
-    public TextManager GetTextManager()
-    {
-        return textManager;
-    }
+    public JoystickManager GetJoystickManager() => joystickManager;
+
+    public TextManager GetTextManager() => textManager;
 }

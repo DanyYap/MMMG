@@ -21,6 +21,7 @@ public class SceneManagerCustom : ISceneManager
     // Load a specific scene by name
     public void LoadSceneName(string sceneName)
     {
+        /*
         if (currentSceneName != sceneName)
         {
             currentSceneName = sceneName;
@@ -30,6 +31,11 @@ public class SceneManagerCustom : ISceneManager
         {
             Debug.Log($"Scene {sceneName} is already loaded or currently loading.");
         }
+        */
+
+        currentSceneName = sceneName;
+        SceneManager.LoadScene(sceneName);
+        Debug.Log(sceneName + " is loaded!!!!");
     }
 
     // Load the next scene in the build index

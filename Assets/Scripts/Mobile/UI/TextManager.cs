@@ -50,7 +50,7 @@ public class TextManager
     }
 
     // Update the text value for a specific text element
-    public void UpdateText(string textIdentifier, float value)
+    public void UpdateText(string textIdentifier, object value)
     {
         if (textActions.TryGetValue(textIdentifier, out var action))
         {

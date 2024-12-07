@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;  
+using UnityEngine.UI;
 
 public class ButtonManager
 {
     private readonly Dictionary<string, IButtonAction> buttonActions = new Dictionary<string, IButtonAction>();
-    private readonly Dictionary<string, Button> buttonComponents = new Dictionary<string, Button>();
+    private readonly Dictionary<string, List<Button>> buttonComponents = new Dictionary<string, List<Button>>();
 
     // Initialize button actions for a given set of buttons and their actions
     public void InitializeButtonActions(Dictionary<string, IButtonAction> actions)
@@ -16,48 +16,69 @@ public class ButtonManager
         }
     }
 
-    // Set or remove an action for a button using the button identifier
+    // Set or remove an action for buttons using the button identifier
     public void SetButtonAction(string buttonIdentifier, IButtonAction action = null)
     {
-        if (!buttonComponents.ContainsKey(buttonIdentifier))
-        {
-            // Find the button in the scene and add it to the dictionary if it doesn't exist
-            Button gameButton = GameObject.Find(buttonIdentifier)?.GetComponent<Button>();
+        // Find all buttons in the scene with the specified name, regardless of the cache
+        Button[] gameButtons = GameObject.FindObjectsByType<Button>(FindObjectsSortMode.InstanceID);
+        List<Button> matchingButtons = new List<Button>();
 
-            if (gameButton != null)
+        foreach (var button in gameButtons)
+        {
+            if (button.name == buttonIdentifier)
             {
-                buttonComponents[buttonIdentifier] = gameButton; // Add or update the button in the dictionary
-            }
-            else
-            {
-                Debug.LogWarning($"Button with identifier {buttonIdentifier} not found in the scene.");
-                return;
+                matchingButtons.Add(button);
             }
         }
 
-        Button button = buttonComponents[buttonIdentifier];
+        if (matchingButtons.Count > 0)
+        {
+            // Replace the existing cache with the new list of matching buttons
+            buttonComponents[buttonIdentifier] = matchingButtons;
+        }
+        else
+        {
+            Debug.LogWarning($"No buttons with identifier '{buttonIdentifier}' found in the scene.");
+            return;
+        }
 
+        // Assign the action to all matching buttons
+        foreach (var button in matchingButtons)
+        {
+            if (action != null)
+            {
+                // Assign the action to each button's onClick event
+                button.onClick.RemoveAllListeners();  // Clear previous listeners
+                button.onClick.AddListener(() => action.Execute());   // Add the new action
+            }
+            else
+            {
+                // If no action is provided, clear all listeners
+                button.onClick.RemoveAllListeners();
+            }
+        }
+
+        // Update or remove the action in the dictionary
         if (action != null)
         {
-            // Assign the action to the button's onClick event
-            button.onClick.RemoveAllListeners();  // Clear previous listeners
-            button.onClick.AddListener(() => action.Execute());   // Add the new action
             buttonActions[buttonIdentifier] = action;
         }
         else
         {
-            // If no action is provided, clear all listeners and remove from dictionary
-            button.onClick.RemoveAllListeners();
             buttonActions.Remove(buttonIdentifier);
         }
     }
 
+
     // Clears all button actions and listeners
     public void ClearAllButtonActions()
     {
-        foreach (var button in buttonComponents.Values)
+        foreach (var buttonList in buttonComponents.Values)
         {
-            button.onClick.RemoveAllListeners();
+            foreach (var button in buttonList)
+            {
+                button.onClick.RemoveAllListeners();
+            }
         }
 
         buttonComponents.Clear();

@@ -5,9 +5,9 @@ public class TextVisualizer
 {
     private TextMeshProUGUI textComponent;
 
-    // Thresholds and corresponding colors
-    private readonly Color[] colorStages = { Color.white, Color.yellow, new Color(1f, 0.64f, 0f), Color.red }; // White, Yellow, Orange, Red
-    private readonly float[] thresholds = { 80f, 50f, 20f, 0f }; // Percentages for color transitions
+    // Colors for percentage-based visualization
+    private readonly Color[] percentageColors = { Color.white, Color.yellow, new Color(1f, 0.64f, 0f), Color.red }; // White, Yellow, Orange, Red
+    private readonly float[] percentageThresholds = { 80f, 50f, 20f, 0f }; // Thresholds for percentage transitions
 
     public TextVisualizer(TextMeshProUGUI textComponent)
     {
@@ -15,22 +15,31 @@ public class TextVisualizer
     }
 
     /// <summary>
-    /// Updates the text color based on the given percentage.
+    /// Updates the text color based on a given percentage value.
     /// </summary>
     /// <param name="percentage">The percentage value (0 to 100).</param>
-    public void UpdateTextColor(float percentage)
+    public void SetColorByPercentage(float percentage)
     {
-        if (percentage > 100f) percentage = 100f; // Clamp to maximum
-        if (percentage < 0f) percentage = 0f;     // Clamp to minimum
+        // Clamp the percentage value to be within 0 to 100
+        percentage = Mathf.Clamp(percentage, 0f, 100f);
 
-        // Determine the appropriate color based on thresholds
-        for (int i = 0; i < thresholds.Length; i++)
+        // Determine the appropriate color based on percentage thresholds
+        for (int i = 0; i < percentageThresholds.Length; i++)
         {
-            if (percentage >= thresholds[i])
+            if (percentage >= percentageThresholds[i])
             {
-                textComponent.color = colorStages[i];
+                textComponent.color = percentageColors[i];
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Updates the text color to either green or red based on a condition.
+    /// </summary>
+    /// <param name="isConditionMet">If true, sets the color to green; otherwise, sets the color to red.</param>
+    public void SetColorByCondition(bool isConditionMet)
+    {
+        textComponent.color = isConditionMet ? Color.green : Color.red;
     }
 }

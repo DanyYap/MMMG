@@ -18,6 +18,8 @@ public static class UiElementNames
     {
         public const string MainMenu        = "Main Menu Panel";
         public const string InGame          = "In Game Panel";
+        public const string WinResult       = "Win Result Panel";
+        public const string LoseResult      = "Lose Result Panel";
     }
 
     public static class Buttons
@@ -32,6 +34,10 @@ public static class UiElementNames
         public const string Interact        = "Player Interact Button";
         public const string RotateCamera    = "Rotate Camera Button";
         public const string UseTool         = "Use Tools Button";
+
+        // result
+        public const string NextLevel       = "Next Level Button";
+        public const string RetryLevel      = "Retry Level Button";
     }
 
     public static class Texts
@@ -39,5 +45,6 @@ public static class UiElementNames
         // in game
         public const string FireHealthLeftText  = "Fire Health Left Text";
         public const string CountdownText       = "Countdown Text";
+        public const string ResultText          = "Result Text";
     }
 }

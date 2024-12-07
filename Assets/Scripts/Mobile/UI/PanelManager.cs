@@ -15,6 +15,8 @@ public class PanelManager
         {
             canvas.transform.Find(UiElementNames.Panels.MainMenu)?.gameObject,
             canvas.transform.Find(UiElementNames.Panels.InGame)?.gameObject,
+            canvas.transform.Find(UiElementNames.Panels.WinResult)?.gameObject,
+            canvas.transform.Find(UiElementNames.Panels.LoseResult)?.gameObject,
             // Add more panels here as needed
         };
 

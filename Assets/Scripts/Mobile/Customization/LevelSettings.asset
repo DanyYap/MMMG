@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelSettings
   m_EditorClassIdentifier: 
   countdownTimerSettings:
-    startTimeInSeconds: 120
+    startTimeInSeconds: 300
     decreaseRatePerSecond: 1
   levelDifficulty: 0
   levelName: 
