@@ -69,7 +69,9 @@ public class Countdown : ITextUpdate
 
         if (value is float floatValue)
         {
-            textComponent.text = $"Time Left:\n {floatValue:F1}";
+            // Use F1 format for values less than 10, F0 otherwise
+            textComponent.text = floatValue < 10 ? $"{floatValue:F1}" : $"{floatValue:F0}";
+
             textVisualizer.SetColorByPercentage(floatValue);
         }
         else return;

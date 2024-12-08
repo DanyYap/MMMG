@@ -4,7 +4,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public CinemachineTargetGroup targetGroup;
-    public CameraZoomSettings zoomSettings;
+    public CameraSettings zoomSettings;
     public RotateSettings rotateSettings;
 
     public CameraRotate CameraRotate { get; private set; }

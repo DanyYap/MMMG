@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LevelSettings", menuName = "ScriptableObjects/LevelSettings", order = 1)]
+[CreateAssetMenu(fileName = "LevelSettings", menuName = "Game Settings/Level Settings", order = 1)]
 public class GameLevelSettings : ScriptableObject
 {
     [Header("Time")]

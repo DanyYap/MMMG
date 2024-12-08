@@ -16,25 +16,31 @@ public interface ICameraZoomStrategy
     float GetTargetWidth(float distance);
 }
 
-// Strategy for determining camera zoom based on distance
+// Strategy for determining camera zoom based on distance using CameraSettings ScriptableObject
 public class ConfigurableCameraZoomStrategy : ICameraZoomStrategy
 {
-    private CameraZoomSettings settings;
+    private CameraSettings settings;
 
-    // Constructor to initialize with zoom settings
-    public ConfigurableCameraZoomStrategy(CameraZoomSettings zoomSettings)
+    // Constructor to initialize with CameraSettings
+    public ConfigurableCameraZoomStrategy(CameraSettings cameraSettings)
     {
-        settings = zoomSettings;
+        settings = cameraSettings;
     }
 
     // Get target width based on the distance from targets
     public float GetTargetWidth(float distance)
     {
         if (distance > settings.farDistanceThreshold)
-            return settings.farViewWidth;          // Return far view width
+        {
+            return settings.farViewWidth; // Return far view width
+        }
         else if (distance > settings.middleDistanceThreshold)
-            return settings.middleViewWidth;       // Return middle view width
+        {
+            return settings.middleViewWidth; // Return middle view width
+        }
         else
-            return settings.nearViewWidth;         // Return near view width
+        {
+            return settings.nearViewWidth; // Return near view width
+        }
     }
 }
