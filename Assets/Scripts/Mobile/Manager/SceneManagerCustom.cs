@@ -35,7 +35,7 @@ public class SceneManagerCustom : ISceneManager
 
         currentSceneName = sceneName;
         SceneManager.LoadScene(sceneName);
-        Debug.Log(sceneName + " is loaded!!!!");
+        Debug.Log(sceneName + " is loaded.");
     }
 
     // Load the next scene in the build index

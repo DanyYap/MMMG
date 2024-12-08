@@ -77,12 +77,12 @@ public class InterfaceManageSystem : MonoBehaviour
             { UiElementNames.Buttons.QuitGame, new QuitGameAction() },
             { UiElementNames.Buttons.Interact, new InteractObjectAction() },
             { UiElementNames.Buttons.UseTool, new InteractObjectAction() },
-            { UiElementNames.Buttons.StartGame, new StartGameAction(SceneManageSystem.Instance) },
+            { UiElementNames.Buttons.StartGame, new StartGameAction(SceneManageSystem.Instance, GameManageSystem.Instance) },
             { UiElementNames.Buttons.BackToMenu, new BackMenuAction(SceneManageSystem.Instance, GameManageSystem.Instance) },
             { UiElementNames.Buttons.SwitchPlayer, new SwitchPlayerAction(PlayerManageSystem.Instance) },
             { UiElementNames.Buttons.RotateCamera, new RotateCameraAction(FindAnyObjectByType<CameraController>())},
-            { UiElementNames.Buttons.RetryLevel, new RetryLevelAction(SceneManageSystem.Instance)},
-            { UiElementNames.Buttons.NextLevel, new NextLevelAction(SceneManageSystem.Instance)},
+            { UiElementNames.Buttons.RetryLevel, new RetryLevelAction(SceneManageSystem.Instance, GameManageSystem.Instance)},
+            { UiElementNames.Buttons.NextLevel, new NextLevelAction(SceneManageSystem.Instance, GameManageSystem.Instance)},
         };
 
         buttonManager.InitializeButtonActions(buttonActions);

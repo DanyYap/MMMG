@@ -20,6 +20,7 @@ public static class UiElementNames
         public const string InGame          = "In Game Panel";
         public const string WinResult       = "Win Result Panel";
         public const string LoseResult      = "Lose Result Panel";
+        public const string PauseMenu       = "Pause Menu Panel";
     }
 
     public static class Buttons

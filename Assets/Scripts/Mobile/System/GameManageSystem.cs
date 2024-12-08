@@ -8,17 +8,12 @@ public class GameManageSystem : MonoBehaviour
     [SerializeField]
     private GameLevelSettings levelSettings;
 
-    private HealthSceneManager healthSceneManager = new HealthSceneManager(); // Manages health in the scene
-    private TimeManager timeManager; // Manages time in the scene
+    private GameStateManager gameStateManager = new GameStateManager();
+    private HealthSceneManager healthSceneManager = new HealthSceneManager();
+    private TimeManager timeManager;
 
-    private bool isGameStarted = false;
-
-    public delegate void GameEvent();
-    public event GameEvent OnGameStart;
-    public event GameEvent OnGameEnd;
-
-    // Additional state tracking
-    private bool isGamePaused = false;
+    private bool isUpdating = false;
+    private bool hasWon = false;
 
     private void Awake()
     {
@@ -26,7 +21,9 @@ public class GameManageSystem : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            timeManager = new TimeManager(levelSettings);
+
+            InitializeManagers();
+            InitializeStateHandlers();
         }
         else
         {
@@ -34,17 +31,10 @@ public class GameManageSystem : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        OnGameStart += InitializeLevel;
-        OnGameEnd += HandleGameEnd;
-    }
-
     private void Update()
     {
-        if (!isGameStarted || isGamePaused) return;
+        if (!isUpdating) return;
 
-        // Notify UI with values only if the game is not paused
         timeManager.UpdateGameTime();
         UpdateFireHealthUI();
         UpdateCountdownUI();
@@ -62,52 +52,74 @@ public class GameManageSystem : MonoBehaviour
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
-    public void PauseGame()
+    private void InitializeManagers()
     {
-        isGamePaused = true;
-        // Additional pause logic, e.g., stop time manager
-        timeManager.StopGameTime();
+        timeManager = new TimeManager(levelSettings);
+        gameStateManager.ChangeState(GameState.MainMenu);
     }
 
-    public void UnpauseGame()
+    private void InitializeStateHandlers()
     {
-        isGamePaused = false;
-        // Additional unpause logic, e.g., resume time manager
-        timeManager.StartGameTime();
-    }
+        // Enter State Handlers
+        gameStateManager.AddEnterAction(GameState.MainMenu, () =>
+        {
+            Debug.Log("Enter Action: MainMenu");
+            isUpdating = false;
+            SceneManager.LoadScene(SceneNames.MenuScene);
+        });
 
-    private void InitializeLevel()
-    {
-        if (SceneManager.GetActiveScene().name == SceneNames.MenuScene)
+        gameStateManager.AddEnterAction(GameState.GameStart, () =>
         {
-            isGameStarted = false;
-        }
-        else
+            Debug.Log("Enter Action: GameStart");
+            isUpdating = false;
+            timeManager = new TimeManager(levelSettings);
+            timeManager.StopGameTime();
+            
+        });
+
+        gameStateManager.AddEnterAction(GameState.Playing, () =>
         {
-            isGameStarted = true;
+            Debug.Log("Enter Action: Playing");
+            isUpdating = true;
             timeManager.StartGameTime();
-        }
-    }
+        });
 
-    private void HandleGameEnd()
-    {
-        timeManager.StopGameTime();
-
-        // Show result panel
-        InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.WinResult);
-        InterfaceManageSystem.Instance.InitializeUiElements();
-
-        /*
-        // Optional: Show win/lose panel based on outcome
-        if (healthSceneManager.GetTotalHealthData("object") == 0)
+        gameStateManager.AddEnterAction(GameState.Paused, () =>
         {
-            InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.Win);
-        }
-        else
+            Debug.Log("Enter Action: Paused");
+            isUpdating = false;
+            timeManager.StopGameTime();
+            InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.PauseMenu);
+            InterfaceManageSystem.Instance.InitializeUiElements();
+        });
+
+        gameStateManager.AddEnterAction(GameState.GameEnd, () =>
         {
-            InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.LoseResult);
-        }
-        */
+            Debug.Log("Enter Action: GameEnd");
+            isUpdating = false;
+            InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(
+                hasWon ? UiElementNames.Panels.WinResult : UiElementNames.Panels.LoseResult
+            );
+            InterfaceManageSystem.Instance.InitializeUiElements();
+            InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.ResultText, hasWon);
+        });
+
+        // Exit State Handlers
+        gameStateManager.AddExitAction(GameState.Paused, () =>
+        {
+            Debug.Log("Exit Action: Paused");
+            timeManager.StartGameTime();
+            InterfaceManageSystem.Instance.GetPanelManager().HidePanel(UiElementNames.Panels.PauseMenu);
+        });
+
+        gameStateManager.AddExitAction(GameState.GameEnd, () =>
+        {
+            Debug.Log("Exit Action: GameEnd");
+            healthSceneManager.ClearAllHealthData();
+            InterfaceManageSystem.Instance.GetTextManager().ClearAllTextActions();
+            InterfaceManageSystem.Instance.GetButtonManager().ClearAllButtonActions();
+            InterfaceManageSystem.Instance.GetPanelManager().HideAllPanels();
+        });
     }
 
     private void UpdateFireHealthUI()
@@ -115,7 +127,11 @@ public class GameManageSystem : MonoBehaviour
         var fireHealths = healthSceneManager.GetTotalHealthData("object");
         InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.FireHealthLeftText, fireHealths);
 
-        if (fireHealths == 0) HandleLevelSuccess();
+        if (fireHealths == 0)
+        {
+            hasWon = true;
+            gameStateManager.ChangeState(GameState.GameEnd);
+        }
     }
 
     private void UpdateCountdownUI()
@@ -123,94 +139,51 @@ public class GameManageSystem : MonoBehaviour
         var countdownTime = timeManager.GetCountdownTimer().GetRemainingTime();
         InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.CountdownText, countdownTime);
 
-        if (countdownTime == 0) HandleLevelFailure();
-    }
-
-    private void HandleLevelSuccess()
-    {
-        isGameStarted = false;
-        OnGameEnd += () => InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.WinResult);
-        OnGameEnd += () => InterfaceManageSystem.Instance.InitializeUiElements();
-        OnGameEnd += () => InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.ResultText, true);
-        OnGameEnd?.Invoke();
-
-        OnGameEnd -= () => InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.WinResult);
-        OnGameEnd -= () => InterfaceManageSystem.Instance.InitializeUiElements();
-        OnGameEnd -= () => InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.ResultText, true);
-    }
-
-    private void HandleLevelFailure()
-    {
-        isGameStarted = false;
-        OnGameEnd += () => InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.LoseResult);
-        OnGameEnd += () => InterfaceManageSystem.Instance.InitializeUiElements();
-        OnGameEnd += () => InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.ResultText, false);
-        OnGameEnd?.Invoke();
-
-        OnGameEnd -= () => InterfaceManageSystem.Instance.GetPanelManager().ShowPanel(UiElementNames.Panels.LoseResult);
-        OnGameEnd -= () => InterfaceManageSystem.Instance.InitializeUiElements();
-        OnGameEnd -= () => InterfaceManageSystem.Instance.GetTextManager().UpdateText(UiElementNames.Texts.ResultText, false);
+        if (countdownTime == 0)
+        {
+            hasWon = false;
+            gameStateManager.ChangeState(GameState.GameEnd);
+        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == SceneNames.MenuScene) return;
-
-        // Initialize health and time manager for the new scene
-        healthSceneManager.InitializeHealthDataForScene("player");
-        healthSceneManager.InitializeHealthDataForScene("object");
-        timeManager = new TimeManager(levelSettings);
-
-        OnGameStart?.Invoke();
+        InitializeGameScene();
+        InitializeStateHandlers();
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
-        if (scene.name == SceneNames.MenuScene) return;
-
         healthSceneManager.OnSceneChanged("player");
         healthSceneManager.OnSceneChanged("object");
         timeManager.StopGameTime();
     }
 
+    private void InitializeGameScene()
+    {
+        if (gameStateManager.CurrentState == GameState.GameStart)
+        {
+            healthSceneManager.InitializeHealthDataForScene("player");
+            healthSceneManager.InitializeHealthDataForScene("object");
+            timeManager.StartGameTime();
+            gameStateManager.ChangeState(GameState.Playing);
+        }
+    }
+
+    public GameStateManager GetGameStateManager => gameStateManager;
     public HealthSceneManager GetHealthSceneManager => healthSceneManager;
     public TimeManager GetTimeManager => timeManager;
 
-    // Handle game state persistence
     private void OnApplicationPause(bool paused)
     {
-        if (paused)
-        {
-            PauseGame();
-        }
-        else
-        {
-            UnpauseGame();
-        }
+        if (SceneManager.GetActiveScene().name == SceneNames.MenuScene) return;
+
+        gameStateManager.ChangeState(paused ? GameState.Paused : GameState.Playing);
     }
 
     private void OnDestroy()
     {
-        // Unregister from scene events and game state events
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
-    }
-
-    // Function to reset the game and return to the main menu
-    public void ResetGame()
-    {
-        // Clear game state
-        timeManager.StopGameTime();
-        healthSceneManager.ClearAllHealthData();
-
-        // Clear UI elements
-        InterfaceManageSystem.Instance.GetTextManager().ClearAllTextActions();
-        InterfaceManageSystem.Instance.GetButtonManager().ClearAllButtonActions();
-
-        // Hide all panels
-        InterfaceManageSystem.Instance.GetPanelManager().HideAllPanels();
-
-        // Load the main menu
-        SceneManager.LoadScene(SceneNames.MenuScene);
     }
 }
